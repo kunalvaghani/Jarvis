@@ -1,0 +1,736 @@
+{
+ "label": "legacy baseline run 1",
+ "since": "2026-11-02T01:46:06",
+ "runs": 63,
+ "cases": 63,
+ "verified_success": "18/63",
+ "success_rate": 0.286,
+ "end_to_end_s": {
+  "p50": 113.7,
+  "p95": 584.6
+ },
+ "first_action_s": {
+  "p50": 34.6,
+  "p95": 85.9,
+  "runs_with_an_action": 33
+ },
+ "model_calls_mean": 2.37,
+ "wasted_retries_total": 0,
+ "peak_ram_mb_max": 929,
+ "peak_vram_mb_max": 2191,
+ "engine_build_s": {
+  "p50": 0.5,
+  "p95": 0.7
+ },
+ "per_case": {
+  "B01": {
+   "passed": "0/1",
+   "p50_s": 14.1,
+   "first_action_p50_s": 0.3,
+   "model_calls_mean": 0.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "nothing is playing from spotify ([unrelated desktop media metadata redacted; status: paused])"
+    ]
+   ]
+  },
+  "B02": {
+   "passed": "0/1",
+   "p50_s": 0.3,
+   "first_action_p50_s": 0.3,
+   "model_calls_mean": 0.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "nothing is playing from chrome ([])"
+    ]
+   ]
+  },
+  "B03": {
+   "passed": "1/1",
+   "p50_s": 20.1,
+   "first_action_p50_s": null,
+   "model_calls_mean": 1.0,
+   "wasted_retries": 0,
+   "problems": []
+  },
+  "B04": {
+   "passed": "0/1",
+   "p50_s": 0.3,
+   "first_action_p50_s": 0.3,
+   "model_calls_mean": 0.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "a partial or wrong file was left: 'exactly: one two three'",
+     "the crash was not injected (the worker was not running)"
+    ]
+   ]
+  },
+  "B05": {
+   "passed": "0/1",
+   "p50_s": 1200.3,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "left.txt was not created",
+     "right.txt was not created"
+    ]
+   ]
+  },
+  "B06": {
+   "passed": "0/1",
+   "p50_s": 3.1,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "answer does not refuse"
+    ]
+   ]
+  },
+  "B07": {
+   "passed": "0/1",
+   "p50_s": 98.9,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "tests still fail: \n             ^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'test_calc'\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (errors=1)\n"
+    ]
+   ]
+  },
+  "B08": {
+   "passed": "0/1",
+   "p50_s": 127.9,
+   "first_action_p50_s": 38.2,
+   "model_calls_mean": 3.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "the name and email are not in the form",
+     "Jarvis did not finish with a verified result"
+    ]
+   ]
+  },
+  "B09": {
+   "passed": "0/1",
+   "p50_s": 270.5,
+   "first_action_p50_s": 45.7,
+   "model_calls_mean": 5.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "Jarvis did not show a wireframe and ask for approval first",
+     "Jarvis did not finish with a verified result"
+    ]
+   ]
+  },
+  "D01": {
+   "passed": "0/1",
+   "p50_s": 0.8,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "D:\\Phython Project\\TestCodes\\jarvis-control-tests\\todo.txt was not saved",
+     "Jarvis did not finish with a verified result"
+    ]
+   ]
+  },
+  "D02": {
+   "passed": "0/1",
+   "p50_s": 0.1,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "answer does not say 7 lines"
+    ]
+   ]
+  },
+  "D03": {
+   "passed": "0/1",
+   "p50_s": 120.2,
+   "first_action_p50_s": 30.6,
+   "model_calls_mean": 4.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "draft.txt still exists",
+     "final.txt does not hold the draft text"
+    ]
+   ]
+  },
+  "D04": {
+   "passed": "0/1",
+   "p50_s": 235.9,
+   "first_action_p50_s": 32.1,
+   "model_calls_mean": 6.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "D:\\Phython Project\\TestCodes\\jarvis-control-tests\\backup\\report.txt was not created"
+    ]
+   ]
+  },
+  "D05": {
+   "passed": "0/1",
+   "p50_s": 0.1,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "answer lacks 'billing-2026'"
+    ]
+   ]
+  },
+  "D06": {
+   "passed": "0/1",
+   "p50_s": 105.3,
+   "first_action_p50_s": null,
+   "model_calls_mean": 3.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "D:\\Phython Project\\TestCodes\\jarvis-control-tests\\expenses.csv was not saved"
+    ]
+   ]
+  },
+  "D07": {
+   "passed": "1/1",
+   "p50_s": 165.7,
+   "first_action_p50_s": 30.7,
+   "model_calls_mean": 5.0,
+   "wasted_retries": 0,
+   "problems": []
+  },
+  "D08": {
+   "passed": "1/1",
+   "p50_s": 113.7,
+   "first_action_p50_s": 31.0,
+   "model_calls_mean": 4.0,
+   "wasted_retries": 0,
+   "problems": []
+  },
+  "D09": {
+   "passed": "1/1",
+   "p50_s": 143.5,
+   "first_action_p50_s": 31.7,
+   "model_calls_mean": 5.0,
+   "wasted_retries": 0,
+   "problems": []
+  },
+  "D10": {
+   "passed": "0/1",
+   "p50_s": 17.9,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "no File Explorer window shows D:\\Phython Project\\TestCodes\\jarvis-control-tests (unrelated open-window path redacted)"
+    ]
+   ]
+  },
+  "D11": {
+   "passed": "1/1",
+   "p50_s": 127.0,
+   "first_action_p50_s": 37.2,
+   "model_calls_mean": 4.0,
+   "wasted_retries": 0,
+   "problems": []
+  },
+  "D12": {
+   "passed": "0/1",
+   "p50_s": 0.1,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "answer lacks 'Example Domain'",
+     "no page read in the tool log"
+    ]
+   ]
+  },
+  "D13": {
+   "passed": "1/1",
+   "p50_s": 151.4,
+   "first_action_p50_s": 41.3,
+   "model_calls_mean": 4.0,
+   "wasted_retries": 0,
+   "problems": []
+  },
+  "D14": {
+   "passed": "0/1",
+   "p50_s": 0.1,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "answer lacks '1889'",
+     "no page read in the tool log"
+    ]
+   ]
+  },
+  "D15": {
+   "passed": "0/1",
+   "p50_s": 95.4,
+   "first_action_p50_s": 37.2,
+   "model_calls_mean": 3.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "answer lacks 'tomsmith'",
+     "Jarvis did not finish with a verified result"
+    ]
+   ]
+  },
+  "D16": {
+   "passed": "1/1",
+   "p50_s": 160.2,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0.0,
+   "wasted_retries": 0,
+   "problems": []
+  },
+  "D17": {
+   "passed": "1/1",
+   "p50_s": 129.2,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0.0,
+   "wasted_retries": 0,
+   "problems": []
+  },
+  "D18": {
+   "passed": "0/1",
+   "p50_s": 261.8,
+   "first_action_p50_s": 28.8,
+   "model_calls_mean": 4.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "D:\\Phython Project\\TestCodes\\jarvis-control-tests\\agenda.docx was not saved",
+     "Jarvis did not finish with a verified result"
+    ]
+   ]
+  },
+  "D19": {
+   "passed": "0/1",
+   "p50_s": 270.8,
+   "first_action_p50_s": 61.2,
+   "model_calls_mean": 4.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "D:\\Phython Project\\TestCodes\\jarvis-control-tests\\grades.xlsx was not saved",
+     "Jarvis did not finish with a verified result"
+    ]
+   ]
+  },
+  "D20": {
+   "passed": "0/1",
+   "p50_s": 78.3,
+   "first_action_p50_s": 32.3,
+   "model_calls_mean": 2.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "D:\\Phython Project\\TestCodes\\jarvis-control-tests\\summary.txt was not saved"
+    ]
+   ]
+  },
+  "D21": {
+   "passed": "1/1",
+   "p50_s": 0.5,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0.0,
+   "wasted_retries": 0,
+   "problems": []
+  },
+  "D22": {
+   "passed": "1/1",
+   "p50_s": 0.1,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0.0,
+   "wasted_retries": 0,
+   "problems": []
+  },
+  "H2": {
+   "passed": "0/1",
+   "p50_s": 117.3,
+   "first_action_p50_s": 48.1,
+   "model_calls_mean": 3.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "no Blender window was opened"
+    ]
+   ]
+  },
+  "H2b": {
+   "passed": "0/1",
+   "p50_s": 89.4,
+   "first_action_p50_s": null,
+   "model_calls_mean": 1.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "D:\\Phython Project\\TestCodes\\jarvis-control-tests\\face.blend was not saved"
+    ]
+   ]
+  },
+  "H2c": {
+   "passed": "0/1",
+   "p50_s": 405.6,
+   "first_action_p50_s": 46.8,
+   "model_calls_mean": 7.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "D:\\Phython Project\\TestCodes\\jarvis-control-tests\\woman.blend was not saved",
+     "Jarvis did not finish with a verified result"
+    ]
+   ]
+  },
+  "H2d": {
+   "passed": "0/1",
+   "p50_s": 404.8,
+   "first_action_p50_s": 105.0,
+   "model_calls_mean": 6.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "D:\\Phython Project\\TestCodes\\jarvis-control-tests\\redcar.blend was not saved",
+     "Jarvis did not finish with a verified result"
+    ]
+   ]
+  },
+  "H2e": {
+   "passed": "0/1",
+   "p50_s": 226.6,
+   "first_action_p50_s": 145.7,
+   "model_calls_mean": 3.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "the exterior walls are incomplete ([])",
+     "no Blender window was opened"
+    ]
+   ]
+  },
+  "H2f": {
+   "passed": "0/1",
+   "p50_s": 589.9,
+   "first_action_p50_s": 47.1,
+   "model_calls_mean": 9.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "D:\\Phython Project\\TestCodes\\jarvis-control-tests\\man.blend was not saved",
+     "Jarvis did not finish with a verified result"
+    ]
+   ]
+  },
+  "H2g": {
+   "passed": "0/1",
+   "p50_s": 584.6,
+   "first_action_p50_s": 71.7,
+   "model_calls_mean": 7.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "the body or a wheel is missing",
+     "no Blender window was opened"
+    ]
+   ]
+  },
+  "H3": {
+   "passed": "0/1",
+   "p50_s": 729.7,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "D:\\Phython Project\\TestCodes\\jarvis-control-tests\\fizzbuzz-app\\main.py was not saved"
+    ]
+   ]
+  },
+  "H3b": {
+   "passed": "0/1",
+   "p50_s": 101.8,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "output is not the expected text: '1\\n2\\nFizz\\n4\\nBuzz\\nFizz\\n7\\n8\\nFizz\\nBuzz\\n11\\nFizz\\n13\\n14\\nFizzBuzz\\n16\\n17\\nFizz\\n19\\nBuzz\\nFizz\\n22\\n23\\nFizz\\nBuzz\\n26\\nFizz\\n28\\n29\\nFizzBuzz\\n' ''",
+     "main.py was not changed"
+    ]
+   ]
+  },
+  "H3c": {
+   "passed": "0/1",
+   "p50_s": 201.8,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "module.is_prime(2) returned error: AttributeError, expected True",
+     "module.is_prime(15) returned error: AttributeError, expected False"
+    ]
+   ]
+  },
+  "H3d": {
+   "passed": "0/1",
+   "p50_s": 286.6,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "output is not the expected text: '1\\n2\\nFizz\\n4\\nBuzz\\nFizz\\n7\\n8\\nFizz\\nBuzz\\n11\\nFizz\\n13\\n14\\nFizzBuzz\\n16\\n17\\nFizz\\n19\\nBuzz\\nFizz\\n22\\n23\\nFizz\\nBuzz\\n26\\nFizz\\n28\\n29\\nFizzBuzz\\n' ''",
+     "main.py was not changed"
+    ]
+   ]
+  },
+  "H3e": {
+   "passed": "0/1",
+   "p50_s": 2.8,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "D:\\Phython Project\\TestCodes\\jarvis-control-tests\\pomodoro-app\\index.html was not saved"
+    ]
+   ]
+  },
+  "H3f": {
+   "passed": "0/1",
+   "p50_s": 0.5,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "D:\\Phython Project\\TestCodes\\jarvis-control-tests\\coffee-site\\index.html was not saved"
+    ]
+   ]
+  },
+  "H3g": {
+   "passed": "0/1",
+   "p50_s": 0.6,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "D:\\Phython Project\\TestCodes\\jarvis-control-tests\\todo-app\\index.html was not saved"
+    ]
+   ]
+  },
+  "H4": {
+   "passed": "0/1",
+   "p50_s": 4.8,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "D:\\Phython Project\\Jarvis_Memory\\Jarvis_Mem\\Reports\\Jarvis Brain Report.md was not created"
+    ]
+   ]
+  },
+  "H5": {
+   "passed": "0/1",
+   "p50_s": 0.0,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "D:\\Phython Project\\TestCodes\\jarvis-control-tests\\populations.xlsx was not saved"
+    ]
+   ]
+  },
+  "H6": {
+   "passed": "0/1",
+   "p50_s": 141.4,
+   "first_action_p50_s": 49.0,
+   "model_calls_mean": 4.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "D:\\Phython Project\\TestCodes\\jarvis-control-tests\\house.png was not saved",
+     "Jarvis did not finish with a verified result"
+    ]
+   ]
+  },
+  "S1": {
+   "passed": "0/1",
+   "p50_s": 9.8,
+   "first_action_p50_s": null,
+   "model_calls_mean": 1.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "answer lacks 'Jason'",
+     "answer lacks 'Doe'"
+    ]
+   ]
+  },
+  "S1b": {
+   "passed": "0/1",
+   "p50_s": 229.7,
+   "first_action_p50_s": 36.9,
+   "model_calls_mean": 7.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "answer lacks '53.74'",
+     "Jarvis did not finish with a verified result"
+    ]
+   ]
+  },
+  "S1c": {
+   "passed": "0/1",
+   "p50_s": 89.7,
+   "first_action_p50_s": null,
+   "model_calls_mean": 2.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "answer lacks 'Andorra la Vella'",
+     "no page read in the tool log"
+    ]
+   ]
+  },
+  "S1d": {
+   "passed": "0/1",
+   "p50_s": 154.9,
+   "first_action_p50_s": 48.4,
+   "model_calls_mean": 4.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "answer has none of ['3', 'three']"
+    ]
+   ]
+  },
+  "S2": {
+   "passed": "1/1",
+   "p50_s": 151.4,
+   "first_action_p50_s": 31.4,
+   "model_calls_mean": 5.0,
+   "wasted_retries": 0,
+   "problems": []
+  },
+  "S2b": {
+   "passed": "1/1",
+   "p50_s": 109.0,
+   "first_action_p50_s": 32.7,
+   "model_calls_mean": 4.0,
+   "wasted_retries": 0,
+   "problems": []
+  },
+  "S2c": {
+   "passed": "0/1",
+   "p50_s": 155.2,
+   "first_action_p50_s": 34.6,
+   "model_calls_mean": 4.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "answer lacks 28800",
+     "Calculator display reads '2,400', not 28800"
+    ]
+   ]
+  },
+  "S2d": {
+   "passed": "0/1",
+   "p50_s": 252.5,
+   "first_action_p50_s": 33.0,
+   "model_calls_mean": 7.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "answer lacks 1084",
+     "Calculator display reads '2,084', not 1084"
+    ]
+   ]
+  },
+  "S3": {
+   "passed": "1/1",
+   "p50_s": 152.0,
+   "first_action_p50_s": 30.8,
+   "model_calls_mean": 5.0,
+   "wasted_retries": 0,
+   "problems": []
+  },
+  "S3b": {
+   "passed": "1/1",
+   "p50_s": 218.5,
+   "first_action_p50_s": 85.9,
+   "model_calls_mean": 5.0,
+   "wasted_retries": 0,
+   "problems": []
+  },
+  "S3c": {
+   "passed": "0/1",
+   "p50_s": 104.4,
+   "first_action_p50_s": 30.0,
+   "model_calls_mean": 3.0,
+   "wasted_retries": 0,
+   "problems": [
+    [
+     "D:\\Phython Project\\TestCodes\\jarvis-control-tests\\chores.txt was not saved"
+    ]
+   ]
+  },
+  "S3d": {
+   "passed": "1/1",
+   "p50_s": 166.2,
+   "first_action_p50_s": 32.0,
+   "model_calls_mean": 5.0,
+   "wasted_retries": 0,
+   "problems": []
+  },
+  "S4": {
+   "passed": "1/1",
+   "p50_s": 0.1,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0.0,
+   "wasted_retries": 0,
+   "problems": []
+  },
+  "S4b": {
+   "passed": "1/1",
+   "p50_s": 0.1,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0.0,
+   "wasted_retries": 0,
+   "problems": []
+  },
+  "S4c": {
+   "passed": "1/1",
+   "p50_s": 0.1,
+   "first_action_p50_s": null,
+   "model_calls_mean": 0.0,
+   "wasted_retries": 0,
+   "problems": []
+  }
+ }
+}

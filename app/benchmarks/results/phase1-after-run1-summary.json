@@ -1,0 +1,62 @@
+{
+ "S1": {
+  "runs": 3,
+  "pass": 2,
+  "p50_s": 121.8,
+  "model_s": 108.1,
+  "prompt_tok": 17203,
+  "calls_9b": 4.7,
+  "steps": 2.0,
+  "wait_s": 0
+ },
+ "S2": {
+  "runs": 3,
+  "pass": 3,
+  "p50_s": 115.7,
+  "model_s": 93.2,
+  "prompt_tok": 25645,
+  "calls_9b": 5.7,
+  "steps": 3.7,
+  "wait_s": 0.8
+ },
+ "S3": {
+  "runs": 3,
+  "pass": 0,
+  "p50_s": 212.0,
+  "model_s": 185.2,
+  "prompt_tok": 28552,
+  "calls_9b": 8.0,
+  "steps": 5.0,
+  "wait_s": 0.5
+ },
+ "S4": {
+  "runs": 3,
+  "pass": 3,
+  "p50_s": 0.1,
+  "model_s": 0,
+  "prompt_tok": 0,
+  "calls_9b": 0,
+  "steps": 0,
+  "wait_s": 0
+ },
+ "H2": {
+  "runs": 3,
+  "pass": 0,
+  "p50_s": 419.5,
+  "model_s": 344.7,
+  "prompt_tok": 23286,
+  "calls_9b": 6.7,
+  "steps": 2.0,
+  "wait_s": 0
+ },
+ "H3": {
+  "runs": 3,
+  "pass": 0,
+  "p50_s": 619.4,
+  "model_s": 0,
+  "prompt_tok": 0,
+  "calls_9b": 0,
+  "steps": 0,
+  "wait_s": 0
+ }
+}

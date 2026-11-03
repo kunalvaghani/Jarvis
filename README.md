@@ -1,5 +1,7 @@
 # Jarvis — local Windows voice assistant
 
+Repository branches (2026-11-04 IST): `main` holds the combined history, with `codex` and `claude` as working branches. See the [consolidation note](app/README.md#repository-consolidation--2026-11-04-ist) for historical benchmark context and acceptance limits.
+
 [Complete Jarvis technical context — 2026-10-30](app/docs/JARVIS_FULL_CONTEXT.md): architecture, request flow, source-declared tools, MCP allowlists, APIs, models, memory, dependencies, recorded benchmarks, failed acceptance gates and known limitations. Documentation snapshot only; no fresh runtime tests or campaign resume.
 
 **Neural brain (BNEG), phases 1–5 implemented, 2026-11-02 IST. Ships off.** Jarvis has a brain made of neurons and synapses that works on stimulus:

@@ -1,5 +1,11 @@
 # Cumulative Claude handoff
 
+## Repository consolidation — 2026-11-04 IST
+
+The user requested all development history on `main`, retaining `codex` and `claude` as the two working branches. Every previous local and fetched remote branch tip is an ancestor of `brain/scouts-web` at `4b81f99`; no conflict resolution or application-code change is needed. Retained uncommitted evidence includes benchmark boundary timestamps, the legacy baseline (18/63), the earlier Phase 1 summary (8/18), and updated simulated Blender parsing timings. Unrelated desktop observations in the legacy baseline are redacted. These are historical measurements, not fresh verification or release acceptance.
+
+Verification scope: Git ancestry, JSON/timestamp validity and whitespace checks. No live feature tests or campaign resume. All unresolved defects and unexecuted acceptance gates below and in the later [brain progress](brain/PROGRESS.md) and [control issues](control/ISSUES.md) remain open; next action is to select and execute the applicable outstanding acceptance gates under their existing authorization requirements.
+
 ## Upgrade v2 Phase 1: speed, fixed routes, live models, checked web apps — 2026-11-02 IST
 
 Phase 1 of the master prompt v2 ([plan](rework/upgrade-v2/phase-1-plan.md), [ADR 0006](adr/0006-upgrade-v2-phase1-speed-and-app-routes.md), [PROGRESS](rework/PROGRESS.md#upgrade-v2-learn-it-myself-loop-fast-path-unified-memory)). The first gate failed; the user then asked for a different task on every run, live Blender modelling (realistic humans, houses with interiors, cars), varied web apps with an animated UI library, and image references. All of it is behind flags that ship off.
