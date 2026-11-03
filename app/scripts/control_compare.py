@@ -53,7 +53,7 @@ def bootstrap_median_diff(a: List[float], b: List[float], n: int = 2000) -> Opti
 
 def rows(start: str, end: str) -> List[Dict[str, Any]]:
     found = []
-    for path in sorted(LIVE.glob('C*.jsonl')):
+    for path in sorted(LIVE.glob('*.jsonl')):  # control C*, Blender H*, web D*/S*
         for line in path.read_text(encoding='utf-8').splitlines():
             try:
                 row = json.loads(line)
@@ -65,7 +65,11 @@ def rows(start: str, end: str) -> List[Dict[str, Any]]:
 
 
 def category(cid: str) -> str:
-    number = int(cid[1:3]) if cid[1:3].isdigit() else 0
+    if cid.startswith('H2'):
+        return 'blender'
+    if cid[:1] in ('D', 'S') and cid not in ('D01', 'D02'):
+        return 'web reading'
+    number = int(cid[1:3]) if cid[1:3].isdigit() and cid.startswith('C') else 0
     return next((name for name, span in CATEGORIES.items() if number in span), 'other')
 
 
@@ -117,7 +121,7 @@ def main(argv: List[str]) -> int:
                if lat else 'Latency difference: not enough runs.'), '',
               '## By category', '', '| Category | A success | B success | Δ (95% CI) | A p50 s | B p50 s | Rule |',
               '|---|---|---|---|---|---|---|']
-    for name in list(CATEGORIES) + ['other']:
+    for name in list(CATEGORIES) + ['blender', 'web reading', 'other']:
         ca = summary([r for r in arm_a if category(r['case']) == name])
         cb = summary([r for r in arm_b if category(r['case']) == name])
         if not ca['n'] and not cb['n']:
