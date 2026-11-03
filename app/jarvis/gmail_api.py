@@ -11,7 +11,9 @@ import re
 
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly',
           'https://www.googleapis.com/auth/gmail.compose',
-          'https://www.googleapis.com/auth/gmail.modify']
+          'https://www.googleapis.com/auth/gmail.modify',
+          # Google Drive/Docs/Sheets, only files Jarvis creates or the user opens with it (jarvis/google_files.py).
+          'https://www.googleapis.com/auth/drive.file']
 BASE = 'https://gmail.googleapis.com/gmail/v1/users/me/'
 # Labels a user may add/remove besides their own; TRASH/SPAM/SENT/DRAFT stay out.
 SYSTEM_LABELS = {'INBOX', 'UNREAD', 'STARRED', 'IMPORTANT'}
@@ -54,9 +56,28 @@ def configured(base=None):
             text=handle.read(32769)
         if len(text)>32768:return False
         state = json.loads(text)
-        return isinstance(state,dict) and (root / 'token.dpapi').exists() and state.get('adapter_hash') == hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+        return (isinstance(state,dict) and (root / 'token.dpapi').exists()
+                and state.get('adapter_hash') == hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+                and account_matches(base, state))
     except (OSError, ValueError, RecursionError):
         return False
+
+
+def wanted_account(base=None):
+    """The Google account Jarvis must act as (config google.account: the user's Chrome Person 1); '' = any."""
+    try:
+        path = Path(base or Path(__file__).resolve().parent.parent) / 'config' / 'config.json'
+        section = json.loads(path.read_text(encoding='utf-8')).get('google') or {}
+    except (OSError, ValueError, TypeError):
+        return ''
+    return str(section.get('account', '') if isinstance(section, dict) else '').strip().casefold()
+
+
+def account_matches(base, state):
+    """A sign-in for another Google account (2026-11-03: the consent page signed in as the project owner, not
+    Person 1) must not be used: drafts, mail and files would go to the wrong account."""
+    wanted = wanted_account(base)
+    return not wanted or str(state.get('email', '')).casefold() == wanted
 
 
 RECONNECT = 'Run launchers/Connect Jarvis Gmail API.cmd once and approve the Google sign-in; then reload Jarvis.'
@@ -67,7 +88,15 @@ def status(base=None):
     root = directory(base or Path(__file__).resolve().parent.parent)
     if not (root / 'token.dpapi').exists():
         return 'not_connected'
-    return 'connected' if configured(base) else 'adapter_changed'
+    if configured(base):
+        return 'connected'
+    try:
+        state = json.loads((root / 'verified.json').read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        state = {}
+    if isinstance(state, dict) and state.get('email') and not account_matches(base, state):
+        return 'wrong_account'
+    return 'adapter_changed'
 
 
 def unavailable(base=None):
@@ -77,6 +106,9 @@ def unavailable(base=None):
         return ('Gmail is not available right now: the Gmail adapter was updated since its last check. Run '
                 'launchers/Connect Jarvis Gmail API.cmd --verify-existing (read-only, no new consent); if Google '
                 'rejects the saved sign-in, run it without the option to sign in again.')
+    if state == 'wrong_account':
+        return ('Gmail is not available through the API: it is signed in to a different Google account than '
+                'Jarvis uses (config google.account). ' + RECONNECT + ' Choose that account on the Google page.')
     if state == 'not_connected':
         return 'Gmail is not available right now: it is not connected yet. ' + RECONNECT
     return 'Gmail is not available in this task: it is connected, but its tools were not loaded. Reload Jarvis.'

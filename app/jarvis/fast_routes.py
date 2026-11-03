@@ -18,6 +18,7 @@ Anything a parser is not sure of returns None before any action, and the normal 
 from __future__ import annotations
 
 from fractions import Fraction
+from pathlib import Path
 import json
 import re
 import time
@@ -291,6 +292,11 @@ def run(actions: Any, goal: str, cancelled: Cancelled) -> Optional[str]:
     edit = gmail_edit_draft(goal)
     if edit is not None:
         return _gmail_edit_draft(actions, edit, cancelled)
+    google = google_files_request(goal)
+    if google is not None:
+        from . import google_files
+        if google_files.available(getattr(actions, 'base', None)):
+            return _google_files(actions, google, goal, cancelled)
     folder = drive_folder(goal)
     if folder is not None:
         return _drive_folder(actions, folder, cancelled)
@@ -392,6 +398,113 @@ def _close_current_tab(control: Any, cancelled: Cancelled) -> None:
     if active:
         actions_tab = str(active[0].get('tab_id'))
         control.web_act('close_tab', {'tab': actions_tab}, cancelled)
+
+
+# ---- Google Drive / Docs / Sheets through the Google API (google_files; drive.file) ------------------------------
+Q = r'["“]([^"”]{1,150})["”]'
+IN_FOLDER = re.compile(r'\b(?:in|into|to)\s+(?:the\s+|my\s+)?' + Q + r'\s+folder', re.I)
+DOC_REQUEST = re.compile(r'\bgoogle docs?\b.*?\b(?:document|doc)\s+(?:named|called|titled)\s+' + Q + r'.*?'
+                         r'\b(?:containing|with|saying|that says)\s+(?:the\s+)?(?:sentence|text|words?|line)?\s*' + Q, re.I)
+SHEET_REQUEST = re.compile(r'\bgoogle sheets?\b.*?\b(?:spreadsheet|sheet)\s+(?:named|called|titled)\s+' + Q, re.I)
+SHEET_VALUES = re.compile(r'\bwith\s+(?P<nums>-?\d+(?:\.\d+)?(?:\s*(?:,|and)\s*-?\d+(?:\.\d+)?)*)\s+in\s+'
+                          r'(?P<col>[A-Z])(?P<r1>\d+)\s+(?:to|through|-)\s+(?P=col)(?P<r2>\d+)'
+                          r'(?:\s+and\s+a\s+(?P<fn>sum|total|average|mean|max|min)\s+in\s+(?P=col)(?P<r3>\d+))?', re.I)
+UPLOAD_REQUEST = re.compile(r'^\s*(?:please\s+)?upload\s+(?P<file>[\w .()-]+\.\w{1,6})\b.*?\bto\s+(?:the\s+|my\s+)?'
+                            + Q + r'\s+folder\b.*\bgoogle drive\b', re.I)
+FUNCTIONS = {'sum': 'SUM', 'total': 'SUM', 'average': 'AVERAGE', 'mean': 'AVERAGE', 'max': 'MAX', 'min': 'MIN'}
+
+
+def google_files_request(goal: str) -> Optional[Dict[str, Any]]:
+    """Folder / Doc / Sheet / upload requests the Google API route can do exactly; None for anything else."""
+    folder = IN_FOLDER.search(goal)
+    doc = DOC_REQUEST.search(goal)
+    if doc and folder:
+        return {'kind': 'doc', 'name': doc.group(1).strip(), 'text': doc.group(2), 'folder': folder.group(1).strip()}
+    sheet = SHEET_REQUEST.search(goal)
+    values = SHEET_VALUES.search(goal)
+    if sheet and folder and values:
+        nums = re.findall(r'-?\d+(?:\.\d+)?', values.group('nums'))
+        first, last = int(values.group('r1')), int(values.group('r2'))
+        if len(nums) != last - first + 1 or first < 1 or values.group('col').upper() != 'A':
+            return None
+        rows = [[''] for _ in range(first - 1)] + [[n] for n in nums]
+        fn = values.group('fn')
+        if fn:
+            target = int(values.group('r3'))
+            rows += [[''] for _ in range(target - len(rows) - 1)]
+            rows.append([f'={FUNCTIONS[fn.lower()]}(A{first}:A{last})'])
+        return {'kind': 'sheet', 'name': sheet.group(1).strip(), 'rows': rows, 'folder': folder.group(1).strip(),
+                'result_cell': int(values.group('r3')) if fn else 0}
+    upload = UPLOAD_REQUEST.search(goal)
+    if upload:
+        return {'kind': 'upload', 'file': upload.group('file').strip(), 'folder': upload.group(2).strip()}
+    drive = drive_folder(goal)
+    if drive:
+        return {'kind': 'folder', 'folder': drive}
+    return None
+
+
+def _google_files(actions: Any, request: Dict[str, Any], goal: str, cancelled: Cancelled) -> str:
+    """Do the request through the Google API: approved once, made once, verified by reading it back."""
+    from .google_files import DOC, SHEET, Files
+    kind, folder_name = request['kind'], request['folder']
+    what = {'folder': f'the Drive folder "{folder_name}"',
+            'doc': f'the Google Doc "{request.get("name")}" in "{folder_name}"',
+            'sheet': f'the Google Sheet "{request.get("name")}" in "{folder_name}"',
+            'upload': f'an upload of {request.get("file")} to "{folder_name}"'}[kind]
+    actions.report('brain', f'Fixed route: Google API, {what}')
+    path = None
+    if kind == 'upload':
+        from .brain import folders_in_goal
+        roots = list(folders_in_goal(actions.base, goal).values())
+        if len(roots) != 1:
+            return f'Which folder is {request["file"]} in? Name one of your folders (for example "my Jarvis test folder").'
+        path = actions.control().policy.check_path(Path(roots[0]) / request['file'])  # approved directories only
+        if not Path(path).is_file():
+            return f'{request["file"]} is not in {roots[0]}, so nothing was uploaded.'
+    files = Files(actions.base)
+    try:
+        existing = files.find(folder_name, 'application/vnd.google-apps.folder')
+        if kind == 'folder' and existing:
+            return f'Finished: the Drive folder "{folder_name}" already exists (checked through the Google API).'
+        if not _approved(actions, 'google drive', f'Create {what} in your Google Drive', cancelled):
+            return f'Did not create {what}: it was not approved. Nothing was written.'
+        actions.report('tool', f'google_api: folder "{folder_name}"')
+        folder = files.folder(folder_name)
+        if kind == 'folder':
+            return f'Finished: created the Drive folder "{folder_name}" (checked: Drive lists it).'
+        if kind == 'doc':
+            actions.report('tool', f'google_api: create Doc "{request["name"]}"')
+            made = files.create_doc(request['name'], request['text'], folder['id'])
+            text = files.text_of(made['id'])
+            if made.get('mimeType') != DOC or same_words(request['text'], text) is False:
+                return (f'I created the Doc "{request["name"]}", but reading it back shows {text[:80]!r}. Please '
+                        'check it.')
+            return (f'Finished: created the Google Doc "{request["name"]}" in "{folder_name}" with the text '
+                    f'"{request["text"]}" (checked: Drive\'s copy of it reads that text). {made.get("webViewLink", "")}')
+        if kind == 'sheet':
+            actions.report('tool', f'google_api: create Sheet "{request["name"]}"')
+            made = files.create_sheet(request['name'], request['rows'], folder['id'])
+            cells = files.cells_of(made['id'])
+            if made.get('mimeType') != SHEET:
+                return f'I uploaded "{request["name"]}", but Drive did not make it a Google Sheet. Please check it.'
+            result = ''
+            if request['result_cell']:
+                row = cells[request['result_cell'] - 1] if len(cells) >= request['result_cell'] else []
+                result = row[0] if row else ''
+                if not result:
+                    return f'The Sheet "{request["name"]}" was created, but A{request["result_cell"]} reads empty. Please check it.'
+            told = f' A{request["result_cell"]} computes {result}.' if result else ''
+            return (f'Finished: created the Google Sheet "{request["name"]}" in "{folder_name}".{told} (checked: '
+                    f'read back from Google Sheets). {made.get("webViewLink", "")}')
+        actions.report('tool', f'google_api: upload {request["file"]}')
+        made = files.upload(Path(str(path)), folder['id'])
+        listed = files.find(Path(str(path)).name, parent=folder['id'])
+        if not listed:
+            return f'I uploaded {request["file"]}, but Drive does not list it in "{folder_name}" yet. Please check.'
+        return f'Finished: uploaded {request["file"]} to "{folder_name}" (checked: Drive lists it there).'
+    finally:
+        files.close()
 
 
 # ---- Google Drive folder ----------------------------------------------------------------------------------------

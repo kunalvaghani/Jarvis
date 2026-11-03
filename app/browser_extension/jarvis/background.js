@@ -30,8 +30,17 @@ const leaveBlocked = new Set(); // tabs whose page asked to stay (unsaved change
 let jarvisTabs = new Set();    // tabs Jarvis created; a tab the user opens in the group is never read or driven
 const tabSession = new Map();  // tabId -> the Jarvis task (session) that opened it, for its end-of-task clean-up
 let renderMode = 'screencast'; // keep hidden tabs drawing ('off' to compare)
-const restored = chrome.storage.session.get('jarvisTabs').then((saved) => {
+const restored = chrome.storage.session.get('jarvisTabs').then(async (saved) => {
   jarvisTabs = new Set([...(saved.jarvisTabs || []), ...jarvisTabs]);
+  // Empty tabs left in the Jarvis group by an earlier run (a reload forgets which tabs were Jarvis's): a blank tab
+  // there holds nothing of the user's, so it is closed. Tabs with a page stay, Jarvis's or not.
+  for (const group of await chrome.tabGroups.query({title: GROUP_TITLE})) {
+    for (const tab of await chrome.tabs.query({groupId: group.id})) {
+      if (!jarvisTabs.has(tab.id) && (!tab.url || tab.url === 'about:blank') && tab.status === 'complete') {
+        await chrome.tabs.remove(tab.id).catch(() => {});
+      }
+    }
+  }
 });
 
 function remember() {

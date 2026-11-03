@@ -23,20 +23,20 @@ def main():
     credentials=flow.run_local_server(host='127.0.0.1',port=0,open_browser=True,timeout_seconds=300,
         authorization_prompt_message='Complete the Google authorization in your browser.',
         success_message='Jarvis Gmail API is connected. You can close this tab.',access_type='offline',prompt='consent')
-    if not credentials.has_scopes(SCOPES):raise ValueError('Google did not grant the required read, compose and modify scopes.')
+    if not credentials.has_scopes(SCOPES):raise ValueError('Google did not grant the required Gmail and Drive (drive.file) scopes.')
     save_credentials(base,credentials)
     verify_existing(base)
-    print('Gmail API connected locally. Read, draft, send, Trash and label tools available; nothing was sent.')
+    print('Google API connected locally: Gmail (read, draft, send, Trash, labels) and Drive/Docs/Sheets for files Jarvis creates. Nothing was sent or written.')
 
 
 def verify_existing(base):
     """Explicit maintenance check after a reviewed adapter update, never recovery."""
     api=API(base)
-    try:api.call('GET','profile')
+    try:profile=api.call('GET','profile')
     finally:api.close()
     root=directory(base)
     temporary=root/'verified.tmp'
-    temporary.write_text(json.dumps({'adapter_hash':hashlib.sha256(Path(adapter.__file__).read_bytes()).hexdigest(),'profile_verified':True}))
+    temporary.write_text(json.dumps({'adapter_hash':hashlib.sha256(Path(adapter.__file__).read_bytes()).hexdigest(),'profile_verified':True,'email':str(profile.get('emailAddress',''))}))
     temporary.replace(root/'verified.json')
 
 

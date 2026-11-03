@@ -293,17 +293,22 @@ def draft_body(subject: str, text: str) -> Callable[[Any], List[str]]:
 
 
 def composed_draft(run: Any) -> List[str]:
-    """A written email: the answer shows the subject and body Jarvis wrote; that draft opens in Gmail with that body."""
+    """A written email: the answer names the subject Jarvis wrote, and that draft opens in Gmail with a real body
+    (the browser route's answer shows the body: its start must be there). Works for the Gmail API answer too
+    ("Draft saved in Gmail. Subject: X. Recipient: ...")."""
     answer = str(getattr(run, 'answer', ''))
-    subject = re.search(r'^Subject: (.+)$', answer, re.M)
-    body = answer.split('\n\n', 1)[1].strip() if '\n\n' in answer else ''
-    if not subject or len(body) < 40:
-        return [f'no written subject and body in the answer ({answer[:80]!r})']
+    subject = re.search(r'^Subject: (.+)$', answer, re.M) or re.search(r'Subject: (.+?)\.?\s+Recipient:', answer)
+    if not subject:
+        return [f'no written subject in the answer ({answer[:80]!r})']
     saved = READERS['gmail_draft_body'](subject.group(1).strip())
     if saved is None:
         return [f'no Gmail draft "{subject.group(1).strip()}" could be opened']
-    first = body.splitlines()[0].strip()[:40]
-    return [] if first and first.lower() in saved.lower() else [f'the draft body does not start with {first!r}']
+    words = ' '.join(re.sub(r'(?i)text "|press / for help me write|\\n|"', ' ', saved).split())
+    if len(words) < 40:
+        return [f'the draft body is nearly empty ({words[:60]!r})']
+    shown = answer.split('\n\n', 1)[1].strip() if '\n\n' in answer else ''
+    first = shown.splitlines()[0].strip()[:40] if shown else ''
+    return [] if not first or first.lower() in saved.lower() else [f'the draft body does not start with {first!r}']
 
 
 def answer_mentions(*needles: str, any_of: Tuple[str, ...] = ()) -> Callable[[Any], List[str]]:
