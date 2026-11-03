@@ -197,7 +197,8 @@ def site_question(goal: str) -> Optional[Tuple[str, str]]:
     gmail = gmail_question(goal)
     if gmail:
         return gmail
-    if not goal.rstrip().endswith('?') and not re.match(r'\s*(?:what|who|which|how)\b', goal, re.I):
+    if not goal.rstrip().endswith('?') and not re.match(r'\s*(?:what|who|which|how)\b', goal, re.I) \
+            and not re.search(r'\btell me\b', goal, re.I):
         return None
     sites = SITE.findall(goal)
     wiki = WIKIPEDIA.match(goal)
@@ -360,6 +361,11 @@ def _calculator(actions: Any, calc: Tuple[str, Fraction], cancelled: Cancelled) 
     return f'Finished: Calculator shows {display} ({keys.rstrip("=")}).'
 
 
+REJECT_COOKIES = re.compile(r'button "(?P<label>(?:reject|decline|refuse)(?: all| additional| non-essential| optional)?'
+                            r'(?: cookies)?|(?:use |allow )?(?:only )?(?:strictly )?necessary(?: cookies)?(?: only)?)"'
+                            r'[^\n]*?\[(?P<ref>ref_\d+)\]', re.I)
+
+
 def _website(actions: Any, page: str, question: str, cancelled: Cancelled) -> Optional[str]:
     control = actions.control()
     actions.report('brain', 'Fixed route: read ' + page + ' and answer from it')
@@ -370,6 +376,21 @@ def _website(actions: Any, page: str, question: str, cancelled: Cancelled) -> Op
     if head.get('ok') is False or len(text) < 50:
         actions.report('brain', f'Fixed route gave up: the page did not open or read ({len(text)} characters)')
         return None  # The page did not open or read; the planner can try another way.
+    if re.search(r'\bcookies?\b', question, re.I) and re.search(r'\b(?:reject|decline|refuse|necessary|essential)\b',
+                                                               question, re.I):
+        # "reject non-essential cookies if a banner appears": the privacy-protective button, clicked once, then
+        # a fresh read. No banner (the choice is already saved in the user's Chrome): nothing to do.
+        found = REJECT_COOKIES.search(text)
+        done = 'No cookie banner was showing, so nothing needed rejecting.'
+        if found:
+            done = f'The cookie banner was dismissed with its "{found.group("label")}" button.'
+            actions.report('tool', f'control: web_act click {found.group("label")}')
+            control.web_act('click', {'ref': found.group('ref')}, cancelled)
+            time.sleep(1.0)
+            control.web_read(cancelled, 'all')
+            text = str(getattr(control, 'last_web', '') or text)
+        question = (f'{question}\n(Already done by Jarvis: {done} '
+                    'Answer only the rest, and say this in one short sentence.)')
     from . import flags
     if flags.enabled(getattr(actions, 'config', None), 'control', 'web_scouts'):
         from .control.web.scouts import brief

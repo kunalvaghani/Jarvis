@@ -226,6 +226,11 @@ def page_shows(url: str, *needles: str) -> Callable[[Any], List[str]]:
 
 def answer_mentions(*needles: str, any_of: Tuple[str, ...] = ()) -> Callable[[Any], List[str]]:
     def oracle(run: Any) -> List[str]:
+        row = getattr(run, 'row', None)
+        if isinstance(row, dict) and not row.get('answer'):
+            # Run.answer falls back to the error text: a crash ("SyntaxError: ... (fast_routes.py ...)") must not
+            # pass a check on the answer's wording.
+            return [f'Jarvis gave no answer ({str(row.get("error") or "nothing")[:80]})']
         answer = str(getattr(run, 'answer', '')).lower()
         problems = [f'answer lacks {n!r}' for n in needles if n.lower() not in answer]
         if any_of and not any(a.lower() in answer for a in any_of):
