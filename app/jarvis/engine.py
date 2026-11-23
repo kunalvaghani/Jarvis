@@ -125,7 +125,7 @@ class Engine:
             if final:
                 self._reset_segment()
             return
-        elif self.active and now - self.last_speech > self.timeout:
+        elif self.active and self.timeout and now - self.last_speech > self.timeout:  # 0 = continuous conversation
             self.active = False
             self.report("state", "Listening for Jarvis")
         if not self.active:

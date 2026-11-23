@@ -22,13 +22,13 @@ def catalog():
     # Every spoken/typed command is matched against this catalog. Re-reading, hashing and parsing both files cost
     # ~5 ms per command; the verified rows are reused until either file changes (any change is re-verified).
     now = time.monotonic()
-    if 'rows' in _CATALOG and now - _CATALOG['checked'] < 1.0:
+    if 'rows' in _CATALOG and _CATALOG.get('root') == ROOT and now - _CATALOG['checked'] < 1.0:
         return _CATALOG['rows']  # file metadata is re-read at most once a second (a Windows stat is ~0.13 ms)
     stamp = tuple((s.st_mtime_ns, s.st_size) for s in ((ROOT / 'catalog.json').stat(),
                                                        (ROOT / 'Jarvis_Windows_11_Commands.json').stat()))
-    if _CATALOG.get('stamp') != stamp:
+    if _CATALOG.get('stamp') != stamp or _CATALOG.get('root') != ROOT:
         _CATALOG.pop('rows', None)
-        _CATALOG.update(stamp=stamp, rows=_verified_catalog())
+        _CATALOG.update(stamp=stamp, root=ROOT, rows=_verified_catalog())
     _CATALOG['checked'] = now
     return _CATALOG['rows']
 

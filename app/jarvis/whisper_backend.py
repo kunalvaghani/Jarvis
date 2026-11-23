@@ -16,7 +16,8 @@ def settings(options=None):
         'partial_interval_seconds':1., 'silence_seconds':.8, 'vad_threshold':.45,
         'frame_ms':100, 'streaming_enabled':True, 'adaptive_endpointing':False,
         'endpoint_mode':'balanced', 'max_utterance_seconds':120,
-        'language_confidence':.8, 'language_confirmations':2}, **(options or {})}
+        'language_confidence':.8, 'language_confirmations':2,
+        'speculative_final':True, 'speculative_after_seconds':.25, 'gpu_lease':True}, **(options or {})}
     if result['device'] not in ('cuda', 'cpu'):
         raise ValueError('whisper.device must be cuda or cpu')
     if not isinstance(result['compute_type'], str) or not result['compute_type'].strip() or len(result['compute_type'])>32:
@@ -27,9 +28,12 @@ def settings(options=None):
         value = result[name]
         if type(value) not in (int,float) or not math.isfinite(value) or not low<=value<=high:
             raise ValueError('whisper.'+name+' is outside its finite capture range')
-    if result['endpoint_mode'] not in {'fast', 'balanced', 'careful'}:
+    if result['endpoint_mode'] not in {'fast', 'balanced', 'careful', 'conversation'}:
         raise ValueError('Invalid endpoint mode')
-    for name in ('streaming_enabled', 'adaptive_endpointing'):
+    value = result['speculative_after_seconds']
+    if type(value) not in (int, float) or not math.isfinite(value) or not .1 <= value <= 2:
+        raise ValueError('whisper.speculative_after_seconds must be between 0.1 and 2')
+    for name in ('streaming_enabled', 'adaptive_endpointing', 'speculative_final', 'gpu_lease'):
         if type(result[name]) is not bool:
             raise ValueError('whisper.' + name + ' must be boolean')
     for name, low, high in (('frame_ms', 20, 100), ('max_utterance_seconds', 20, 300)):
@@ -89,20 +93,27 @@ def load_model(path, options):
         model = WhisperModel(str(path), device=device,
                              compute_type=options.get("compute_type", "int8_float16"),
                              local_files_only=True, cpu_threads=4, num_workers=1)
-    return CoordinatedWhisper(model) if device == 'cuda' else model
+    return CoordinatedWhisper(model, options['gpu_lease']) if device == 'cuda' else model
 
 
 class CoordinatedWhisper:
-    """Whisper returns lazy segments: hold the lease until decoding is consumed."""
-    def __init__(self, wrapped):
+    """Whisper returns lazy segments: hold the lease until decoding is consumed.
+
+    With gpu_lease false each utterance decodes alongside a running LLM request instead of waiting for it to finish:
+    measured 1.2 s instead of 0.95 s, where waiting took as long as the whole generation (145 s in that test). The
+    model stays resident, so the scheduler already sizes LLM layers around its memory; loading still takes the lease.
+    """
+    def __init__(self, wrapped, lease=True):
         self.wrapped = wrapped
+        self.lease = lease
         self.cancelled = lambda: False
 
     def __getattr__(self, name):
         return getattr(self.wrapped, name)
 
     def transcribe(self, *args, **kwargs):
+        from contextlib import nullcontext
         from .gpu_scheduler import native_turn
-        with native_turn('recognition', 'native/whisper', self.cancelled):
+        with native_turn('recognition', 'native/whisper', self.cancelled) if self.lease else nullcontext():
             segments, info = self.wrapped.transcribe(*args, **kwargs)
             return iter(list(segments)), info

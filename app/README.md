@@ -1,5 +1,54 @@
 # Jarvis — local Windows voice assistant
 
+## Continuous voice conversation and faster hand-offs — 2026-11-24 IST
+
+Click **Start listening** once and talk: Jarvis stays awake with no wake word until you say "go to sleep" or "stop listening". Talk over it at any time: on speakers its voice stops once you have said about three words that are not its own reply (two on headphones), and your finished sentence is the next request. Conversation and tasks are told apart before any planning; tasks run in the background queue while the conversation continues, a task still running after 1.2 s gets a spoken "On it." (from the voice cache, instant), and the result is spoken when it is done.
+
+**Languages:** English, Hindi and Hinglish, by speech and by reply. Speech is recognised by the installed, previously approved `large-v3-turbo` multilingual model with automatic language. Hinglish commands ("YouTube kholo", "Spotify band karo", "gaane bajao", "Chrome kholo aur Python tutorial search karo") become the commands Jarvis already knows, and common Hinglish chat or command phrases are classified with no model call. Hindi replies are written in Devanagari and spoken by Kokoro's Hindi voice in the same warm worker. English words inside Hindi get English phonemes, so "मैं YouTube पर Python tutorial खोल रहा हूँ" is pronounced correctly; transcribing the generated audio back gave the same sentence.
+
+**Measured on this PC** (RTX 3050 4 GB), with `scripts/verification/benchmark_voice_endpoint.py` (a recording played into the real capture loop, Silero VAD, endpointing, Whisper and Engine) and `benchmark_voice_latency.py`:
+
+| From end of speech to command sent | Before | Now |
+|---|---|---|
+| English command, English-only model, fixed 0.8 s pause | 1.43 s | — |
+| English command, multilingual (current default) | — | **1.35 s** |
+| Hindi sentence, multilingual (current default) | not supported | **1.30 s** |
+| English command, English-only model (option) | 1.43 s | **0.79 s** |
+
+| Step | Before | Now |
+|---|---|---|
+| Chat-or-task decision when no rule matches | 3.0 s (always timed out) | ~0.32 s |
+| First audio of a reply beginning "Sure." | 1.12 s | 0.7 ms (cached) |
+| First audio of a Hindi sentence | 5.1 s, mispronounced | 1.6 s, correct |
+| GPU memory check per scheduled model request | 92 ms (1.5 s from idle) | 0.1 ms |
+| Parsing one command | 4.1 ms | 0.48 ms |
+| Task queue hand-off to its lane | up to 25 ms polling | woken immediately |
+
+What changed:
+- The final transcription starts after 0.25 s of silence and is reused when only silence followed.
+- Turn-taking: 0.55 s of silence ends a turn. "and", "then", "aur", "phir" at the end wait 1.8 s.
+- The CPU helper models stay loaded; they were unloaded after every call, which also unloaded the chat model.
+- GPU memory is read in-process through NVML, with `nvidia-smi` as fallback.
+- Replies are spoken from the producing thread instead of the 16 ms UI loop.
+- Each utterance is decoded alongside a running LLM request instead of waiting for its GPU lease: 1.2 s instead of 0.95 s, where waiting lasted the whole generation (145 s in the test).
+- The verified Windows command catalog is reused until its files change.
+
+**Limits:**
+- These latencies cannot be near zero. Jarvis must hear a pause before it knows you have finished, and recognition of a phrase takes 0.45 s (English-only) to 0.9 s (multilingual) on this GPU. Hindi support therefore costs about 0.55 s per turn.
+- On speakers there is no acoustic echo cancellation: Jarvis's own voice is recognised by its words. A user sentence made mostly of the words Jarvis just said is treated as echo.
+- Accuracy depends on the microphone and accent. On public Hindi clips the multilingual model made 22–38% word errors, and it can mishear names in Hinglish.
+- No physical microphone or speaker test was run for this change.
+
+**Settings** (`config/config.json`):
+- **Continuous conversation:** `wake_timeout_seconds: 0` (any positive number of seconds restores the timeout).
+- **Talking over Jarvis:** `voice.full_duplex.enabled` and `speaker_barge_in`.
+- **Acknowledgement delay:** `voice.acknowledge_seconds` (0 turns "On it." off).
+- **Turn-taking and early decode:** `whisper.endpoint_mode: "conversation"`, `speculative_final` and `speculative_after_seconds`.
+- **English-only and fastest:** set `model_path` to `models/faster-whisper-medium.en`, `whisper.model` to `medium.en`, `whisper.repo` to `Systran/faster-whisper-medium.en`, and `whisper.language` to `en`.
+- **Previous fixed pause:** `whisper.adaptive_endpointing: false`.
+- **Reply language:** `knowledge.answer_language` and `speech.language` are `auto`. Set them to `en` for English-only replies.
+
+
 <!-- A1 REGRESSION 21 BEGIN -->
 **Historical A1 attempt21 regression — 6 November 2026 IST:** **64 targeted checks passed /0 failed/skipped** on unchanged v5 source `c72ebec0f97a…`. Real normal-ingress A1 attempt21 stopped after **21.25s**, zero model calls, four verified stages, blocked at `inspect_asset`: the active vehicle route has no engineering-qualified acquired asset and the new general acquisition subtask is not yet connected to it. No surrogate permission was added, no geometry/physics result produced, no solver call consumed (Chrono27→27; mechanics9/50), no shipped flag changed. **Full A1 remains UNMET.** Next: connect actual acquisition and source-informed mechanical binding, then independent maneuver evidence and rerun. [Actual regression/live evidence](../docs/lab/evidence/scenario-a1-attempt-21-regression.json).
 <!-- A1 REGRESSION 21 END -->
@@ -2161,7 +2210,7 @@ Clicking **Start listening** also wakes Jarvis once microphone capture is ready.
 - `partial_interval_seconds: 1.0`: request a new partial transcription about once per second. Actual update delay also depends on GPU decoding time.
 - `silence_seconds: 0.8`: finalize after detected speech ends. This does not pause microphone capture.
 - `vad_threshold: 0.45`: Silero speech detection threshold. Lower values accept quieter speech but more background noise.
-- `language: "en"`: transcribe speech as English without language detection. The English-only `medium.en` model is downloaded by `scripts/setup/setup.ps1`.
+- `language: "en"`: transcribe speech as English without language detection. The English-only `medium.en` model is downloaded by `scripts/setup/setup.ps1`. Since 2026-11-24 the default is `language: "auto"` with the multilingual `large-v3-turbo` model (English, Hindi, Hinglish); see Continuous voice conversation above to switch back.
 
 The installed `models/faster-whisper-small.en` is a smaller, faster English-only fallback. To use it, set `whisper.model` to `small.en`, remove `whisper.repo`, and set `model_path` to `models/faster-whisper-small.en`. Medium.en decoded the included synthetic command in about 0.67 seconds and recognized `notes.txt` directly. Live accuracy depends on the selected microphone, accent, background noise, and phrasing.
 
@@ -2182,7 +2231,7 @@ Say **then**, **and then**, or **next command** between tasks to execute complet
 
 There was no dictation mode as of 2026-10-10. Since 2026-10-11, "start dictation" starts hands-free writing until "stop writing" (see [screen pre-awareness](docs/screen-awareness.md)). After an app-opening command, **and write** / **and type** write into that app, including when recognition splits the sentence into separate segments; a “then” inside a write command is part of the text. See [writing by voice and push-to-write](docs/push-to-write.md).
 
-Deletion and renaming wait for a finalized speech segment, even when “then” is spoken; subsequent tasks stay behind them. Each deletion now needs a separate approval dialog showing the exact file path. Approved files go to the Windows Recycle Bin. Silence for 90 seconds returns to wake-word mode. The microphone remains active for wake detection until you click Stop listening, Stop all tasks, or close the window. No background Windows service or startup registration is installed.
+Deletion and renaming wait for a finalized speech segment, even when “then” is spoken; subsequent tasks stay behind them. Each deletion now needs a separate approval dialog showing the exact file path. Approved files go to the Windows Recycle Bin. With `wake_timeout_seconds: 0` (the default since 2026-11-24) Jarvis stays in conversation until you say go to sleep; a positive value returns to wake-word mode after that many quiet seconds. The microphone remains active for wake detection until you click Stop listening, Stop all tasks, or close the window. No background Windows service or startup registration is installed.
 
 ## Desktop and files
 

@@ -94,10 +94,16 @@ class Stabilizer:
 
 
 def endpoint_delay(mode, text='', stable=False, writing=False, base=.8):
-    delay = {'fast': .5, 'balanced': base, 'careful': 1.4}[mode]
-    unfinished = re.search(r'\b(?:and|then|or|for|to|with|aur|ane|et|pour|uh|um)\W*$', text, re.I)
+    delay = {'fast': .5, 'balanced': base, 'careful': 1.4, 'conversation': .55}[mode]
+    unfinished = re.search(r'(?:\b(?:and|then|or|for|to|with|aur|ane|et|pour|uh|um|phir|ki|ke|toh|ya)|और|फिर|कि)\W*$',
+                           text, re.I)
     if writing or unfinished:
         delay = max(delay, 1.8)
+    elif mode == 'conversation':
+        # Talking turn-taking: a short pause ends the turn. The final transcription is decoded early (during this
+        # pause) and is what Jarvis acts on, so unstable partial captions need no extra wait; long turns get a bit more.
+        if len(text.split()) > 14:
+            delay = max(delay, .9)
     elif len(text.split()) > 14 or not stable:
         delay = max(delay, 1.1)
     return delay
@@ -149,24 +155,53 @@ class LanguageTracker:
 def response_instruction(language='auto'):
     if language == 'en':
         return 'Respond only in English regardless of the question language. '
+    if language == 'hi':
+        return 'Respond in natural Hindi. ' + DEVANAGARI
     if language in LANGUAGES:
         return 'Respond in natural ' + LANGUAGES[language] + '. '
     return ('Understand English, Hindi, Gujarati, French and mixed-language requests. '
-            'Reply in the language of the user, preserving technical names. '
+            'Reply in the language of the user, preserving technical names. ' + DEVANAGARI +
             'An explicit requested response language overrides automatic detection. ')
+
+
+# The reply is spoken: Hindi words in Latin letters ("main abhi khol raha hoon") cannot be pronounced correctly,
+# Devanagari can. English names/terms may stay in English; the voice pronounces them as English.
+DEVANAGARI = ('When you reply in Hindi or Hinglish, write the Hindi words in Devanagari script (for example '
+              '"ठीक है, मैं YouTube खोल रहा '
+              'हूँ"), not Hindi in Latin letters. ')
+
+
+# App and site names the multilingual recognizer writes in Devanagari when the sentence is Hindi/Hinglish.
+DEVANAGARI_NAMES = {'यूट्यूब': 'YouTube', 'क्रोम': 'Chrome', 'नोटपैड': 'Notepad', 'स्पॉटिफाई': 'Spotify',
+                    'स्पोटिफाई': 'Spotify', 'कैलकुलेटर': 'Calculator', 'व्हाट्सएप': 'WhatsApp', 'व्हाट्सऐप': 'WhatsApp',
+                    'जीमेल': 'Gmail', 'गूगल': 'Google', 'एक्सप्लोरर': 'Explorer', 'पेंट': 'Paint', 'वर्ड': 'Word',
+                    'एक्सेल': 'Excel', 'ब्लेंडर': 'Blender', 'डिस्कॉर्ड': 'Discord', 'सेटिंग्स': 'Settings'}
+# Hinglish command verbs (Latin or Devanagari) -> the English command the parser already knows.
+HINGLISH = (
+    (r'(?P<app>[\w .+-]+?)\s+(?:kholo|khol do|open karo|खोलो|खोल दो|ખોલ)', 'open {app}'),
+    (r'(?:खोलो|ખોલ)\s+(?P<app>[\w .+-]+)', 'open {app}'),
+    (r'(?:ouvre|ouvrez)\s+(?P<app>[\w .+-]+)', 'open {app}'),
+    (r'(?P<app>[\w .+-]+?)\s+(?:band karo|band kar do|band kardo|close karo|बंद करो|बंद कर दो)', 'close {app}'),
+    (r'(?P<app>[\w .+-]+?)\s+(?:bajao|baja do|chalao|chala do|play karo|बजाओ|बजा दो|चलाओ|चला दो)', 'play {app}'),
+    (r'(?P<app>[\w .+-]+?)\s+(?:search karo|search kar do|dhundo|dhoondo|सर्च करो|ढूंढो|खोजो)', 'search for {app}'),
+)
 
 
 def normalize_intent(text):
     """Narrow whole-command aliases only; preserve literals and complex requests."""
-    patterns = (
-        r'(?P<app>[\w .+-]+)\s+(?:kholo|खोलो|ખોલ)',
-        r'(?:ouvre|ouvrez)\s+(?P<app>[\w .+-]+)',
-        r'(?:खोलो|ખોલ)\s+(?P<app>[\w .+-]+)',
-    )
-    for pattern in patterns:
-        match = re.fullmatch(pattern, text, re.I)
-        if match and not re.search(r'\b(?:et|and|then|aur|ane)\b', match['app'], re.I):
-            return 'open ' + match['app'].strip()
+    named = text
+    for hindi, english in DEVANAGARI_NAMES.items():
+        named = named.replace(hindi, english)
+    parts = re.split(r'\s+(?:aur|और)\s+', named.strip(' .!?।'), flags=re.I)
+    if len(parts) > 1:
+        # "Chrome kholo aur Python tutorial search karo": every part a known Hinglish command -> spoken steps.
+        steps = [normalize_intent(part) for part in parts]
+        return ' then '.join(steps) if all(step != part for step, part in zip(steps, parts)) else text
+    for pattern, command in HINGLISH:
+        match = re.fullmatch(pattern, named.strip(' .!?।'), re.I)
+        if match and match['app'].strip() and not re.search(r'\b(?:et|and|then|aur|ane|और)\b', match['app'], re.I) \
+                and not re.match(r'(?:write|type|likho)\b', match['app'].strip(), re.I):
+            return command.format(app=match['app'].strip())
     return text
 
 

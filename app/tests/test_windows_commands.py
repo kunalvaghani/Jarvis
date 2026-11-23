@@ -116,6 +116,8 @@ class ReferenceTests(unittest.TestCase):
         self.assertEqual(parse('windows command 1').kind,'windows_command')
 
     def test_hash_mismatch_rejects_modified_recipes(self):
+        from jarvis import windows_commands
+        windows_commands._CATALOG.clear()  # verified rows are reused only until the files change
         with patch.object(Path,'read_bytes',return_value=b'[]'):
             with self.assertRaises(ValueError):catalog()
 

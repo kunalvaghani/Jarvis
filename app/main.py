@@ -377,6 +377,8 @@ class App:
             self.actions.suggest_until = time.monotonic() + self.config.get("suggestion_seconds", 90)
         if kind in App.SPOKEN_NOW:
             App._speak_now(self, kind, message)
+        elif kind == 'task_received' and isinstance(message, dict):
+            App._acknowledge_later(self, message.get('id'))
         if _guard is not None:
             self.events.put(('response_guard', (kind, message, _guard)))
         else:
@@ -385,6 +387,32 @@ class App:
     # Replies are spoken from the thread that produced them (Speech is thread-safe), not from the UI event drain:
     # that added up to 16 ms (more while the island animates) before the first word. The drain still updates the UI.
     SPOKEN_NOW = frozenset({'answer_stream', 'answer_error', 'answer', 'spoken_reply'})
+
+    def _acknowledge_later(self, identity):
+        """A task still running after a moment, with nothing said yet, gets a short spoken "On it." (from the voice
+        cache, so it is instant) while the work carries on in the background. Quick tasks answer before it fires."""
+        delay = (getattr(self, 'config', {}) or {}).get('voice', {}).get('acknowledge_seconds', 0)
+        if not identity or type(delay) not in (int, float) or not 0 < delay <= 10:
+            return
+        asked = time.monotonic()
+
+        def check():
+            try:
+                ingress = getattr(getattr(self, 'actions', None), 'ingress', None)
+                speech = getattr(self, 'speech', None)
+                row = ingress.store.get(identity) if ingress is not None else None
+                if (row is None or speech is None or row['command'].get('kind') in {'ask'} or App._quiet(self)
+                        or row['state'] not in {'CLASSIFYING', 'QUEUED', 'READY', 'RUNNING', 'VERIFYING'}
+                        or speech.output_recent() or getattr(speech, 'last_said', 0.) >= asked):
+                    return
+                listener = getattr(self, 'listener', None)
+                hindi = getattr(listener, 'language', 'en') == 'hi'
+                speech.say('हाँ, कर रहा हूँ।' if hindi else 'On it.')
+            except Exception:
+                return  # An acknowledgement is a courtesy; never let it disturb the task.
+        timer = threading.Timer(delay, check)
+        timer.daemon = True
+        timer.start()
 
     def _quiet(self):
         ingress = getattr(getattr(self, 'actions', None), 'ingress', None)
@@ -702,7 +730,7 @@ class App:
                 if text:
                     self.report('spoken_reply', text)
         voice_input = VoiceInput(self.speech, duplex,
-            awake=lambda: engine.active and time.monotonic() - engine.last_speech < engine.timeout,
+            awake=lambda: engine.active and (not engine.timeout or time.monotonic() - engine.last_speech < engine.timeout),
             interrupt=interrupt_response, report=self.report,
             responding=lambda: self.speech.output_recent() or self.actions.knowledge.active_generation is not None)
         push_to_write = writer = None

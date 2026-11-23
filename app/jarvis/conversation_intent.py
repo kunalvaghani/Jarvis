@@ -93,10 +93,27 @@ def needs_page(text):
                 or re.search(r'\b(?:gmail|my inbox|google (?:drive|docs?|documents?|sheets?|spreadsheets?|slides)|my drive)\b', str(text or ''), re.I))
 
 
+# Hinglish/Hindi: a command verb at the end ("YouTube kholo", "gaana bajao", "email bhej do") is a task; a question
+# or feeling ("kaise ho", "kya haal hai", "main thak gaya") is conversation. Decided here with no model call.
+HINDI_TASK = re.compile(r"(?:\b|^)(?:kholo|khol do|band karo|band kar do|band kardo|bajao|baja do|chalao|chala do|chalu karo|"
+                        r"search karo|search kar do|dhundo|dhoondo|bhejo|bhej do|likho|likh do|save karo|delete karo|"
+                        r"hatao|download karo|set karo|lagao|laga do|start karo|play karo|pause karo|open karo|"
+                        r"खोलो|खोल दो|बंद करो|बंद कर दो|बजाओ|बजा दो|चलाओ|चला दो|भेजो|भेज दो|लिखो|लिख दो|सर्च करो|ढूंढो|"
+                        r"खोजो|डाउनलोड करो|सेव करो)[\s.!?।]*$", re.I)
+HINDI_CHAT = re.compile(r"(?:kaise ho|kaisa hai|kya haal|kya chal raha|kya kar rahe|main thak|mai thak|thak gaya|"
+                        r"thak gayi|accha laga|bura laga|mujhe lagta|tum kaun|aap kaun|shukriya|dhanyavaad|joke sunao|"
+                        r"कैसे हो|कैसा है|क्या हाल|धन्यवाद|शुक्रिया)|^(?:haan|han|nahi|nahin|accha|acha|theek hai|thik hai|"
+                        r"हाँ|हां|नहीं|अच्छा|ठीक है)\b", re.I)
+
+
 def quick_kind(text):
     """Cheap rules first: 'task', 'chat' or None when a model must decide."""
     if action_text(text) is not None or CORRECTION.fullmatch(text.strip().strip(' .!?')):
         return 'task'
+    if HINDI_TASK.search(text.strip()):
+        return 'task'
+    if HINDI_CHAT.search(text.strip()):
+        return 'chat'
     if SITE.search(text):
         return 'task'  # Varied live gate 2026-10-31: these questions were answered as small talk, unread.
     text = FILLER.sub('', text.strip())

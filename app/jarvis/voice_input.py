@@ -24,12 +24,22 @@ def echo_match(text, references):
     return False
 
 
+def echo_likely(text, references):
+    """Our own voice heard back through the speakers: an exact/near match, or mostly words we just said."""
+    if echo_match(text, references):
+        return True
+    words = command_text(text).split()
+    spoken = set(' '.join(command_text(r) for r in references).split())
+    return bool(words) and len(words) >= 3 and sum(w in spoken for w in words) / len(words) >= .6
+
+
 class VoiceInput:
     def __init__(self, speech, options=None, awake=None, interrupt=None, report=None, responding=None):
         self.speech = speech
         self.options = {} if options is None else options
         if (not isinstance(self.options, dict)
-                or any(type(self.options.get(key, default)) is not bool for key, default in (('enabled', False), ('barge_in', True)))
+                or any(type(self.options.get(key, default)) is not bool for key, default in
+                       (('enabled', False), ('barge_in', True), ('speaker_barge_in', False)))
                 or self.options.get('audio_mode', 'speakers') not in {'speakers', 'headphones'}):
             raise ValueError('Invalid full-duplex configuration')
         self.awake = awake or (lambda: False)
@@ -50,11 +60,20 @@ class VoiceInput:
         if protected and echo_match(normalized, references):
             return None
         wake = WAKE.search(normalized)
-        duplex = (self.options.get('enabled', False) and self.options.get('barge_in', True)
-                  and self.options.get('audio_mode') == 'headphones' and self.awake())
+        speakers = self.options.get('audio_mode', 'speakers') == 'speakers'
+        duplex = (self.options.get('enabled', False) and self.options.get('barge_in', True) and self.awake()
+                  and (not speakers or self.options.get('speaker_barge_in', False)))
         if protected and not wake and not duplex:
             return None
-        if protected and not wake and (not final or duration < .25 or not normalized):
+        if protected and not wake and speakers and echo_likely(normalized, references):
+            return None  # Our own reply coming back through the speakers (no acoustic echo cancellation).
+        if protected and not wake and not final:
+            # Talking over Jarvis: stop the voice as soon as a few words of real speech are heard, not after the
+            # sentence ends. The command itself still waits for the final transcript (no partial ever acts).
+            if len(normalized.split()) >= (3 if speakers else 2):
+                self.speech.interrupt()
+            return None
+        if protected and not wake and (duration < .25 or not normalized):
             return None
         candidate = normalized[wake.end():].strip() if wake else normalized
         control = interruption_kind(candidate)

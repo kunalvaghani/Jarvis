@@ -16,6 +16,7 @@ import json
 import math
 import queue
 import random
+import re
 import sys
 import threading
 import time
@@ -30,6 +31,7 @@ def speed(value):
         return 1.0
 
 
+LATIN = re.compile(r"([A-Za-z][A-Za-z'.-]*(?:\s+[A-Za-z][A-Za-z'.-]*)*)")
 CACHE_LIMIT, CACHE_TEXT = 96, 48
 _cache = collections.OrderedDict()  # (text, voice, speed) -> (audio, rate): short phrases replay with no synthesis
 # Said often enough that their audio is prepared once the worker is ready (no synthesis delay when needed).
@@ -51,7 +53,16 @@ def synthesize(voice, text, options):
     adapter = getattr(voice, "_jarvis_speed_session", None)
     if adapter is not None:
         adapter.pacing = pacing
-    audio, rate = voice.create(text, voice=style, speed=pacing, lang=language_for(selected))
+    lang = language_for(selected)
+    if lang == 'hi' and LATIN.search(text) and hasattr(voice, 'tokenizer'):
+        # Hindi with English words ("main YouTube khol raha hoon" in Devanagari + Latin): each part gets its own
+        # language's phonemes, spoken in one go by the Hindi voice. Reading Latin letters with Hindi rules garbled
+        # them; switching voices mid-sentence was choppy (checked by transcribing the audio back).
+        phonemes = ' '.join(p for p in (voice.tokenizer.phonemize(part, 'en-us' if index % 2 else 'hi')
+                                        for index, part in enumerate(LATIN.split(text)) if part.strip()) if p)
+        audio, rate = voice.create(phonemes, voice=style, speed=pacing, lang=lang, is_phonemes=True)
+    else:
+        audio, rate = voice.create(text, voice=style, speed=pacing, lang=lang)
     if not audio.size:
         raise ValueError("Kokoro produced no audio.")
     if key is not None:

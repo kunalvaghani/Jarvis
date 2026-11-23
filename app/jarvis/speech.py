@@ -124,6 +124,7 @@ class Speech:
         self.restart_required = False
         self.trace_id = uuid.uuid4().hex
         self.streamed = None  # Text of the answer being spoken while it is written.
+        self.last_said = 0.
         self.thread = threading.Thread(target=self._run, daemon=True)
 
     def start(self):
@@ -266,6 +267,7 @@ class Speech:
 
     # --- internals ---
     def _enqueue(self, content):
+        self.last_said = time.monotonic()  # main.py's "On it." acknowledgement stays quiet once anything was said
         try:
             self.queue.put_nowait((self.generation, content))
         except queue.Full:

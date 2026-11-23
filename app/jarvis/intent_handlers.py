@@ -198,6 +198,10 @@ BEHAVIOR = {
 
 def behavior(actions, key):
     config = getattr(actions, "config", {})
+    if key == "conversation_mode" and not config.get("wake_timeout_seconds", 90):
+        return ("We're in continuous conversation: once you start listening I stay awake, with no wake word, until you "
+                "say go to sleep or stop listening. Talk over me any time: I stop and listen. Tasks run in the "
+                "background while we keep talking, and I tell you when they finish.")
     return BEHAVIOR.get(key, "I'm not sure how to help with that yet.").format(
         wake=config.get("wake_timeout_seconds", 90), warm=int(config.get("gpu_scheduler", {}).get("warm_seconds", 1800) / 60),
         weather=config.get("weather_alerts", {}).get("interval_minutes", 30))

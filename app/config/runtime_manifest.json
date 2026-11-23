@@ -99,16 +99,20 @@
     "acceptance": "Foundation candidate: operator-assisted ngspice golden/three verified brain uses/fresh-process reuse passed. Synthetic spoken-file ASR proof passed; live microphone/UI, general autonomous tool acquisition, full scientific A-H and release acceptance remain open."
   },
   "realtime_voice": {
-    "date": "2026-10-23 IST",
+    "date": "2026-11-24 IST",
     "modules": [
       "jarvis.voice_runtime",
-      "jarvis.voice_registry"
+      "jarvis.voice_registry",
+      "jarvis.voice_input",
+      "jarvis.audio",
+      "jarvis.kokoro_speech"
     ],
     "services": "Extends the existing listener and speech workers; no additional service or dependency.",
-    "asr": "Existing medium.en decoder retained. User-requested pre-multilingual capture profile: 100 ms frames and fixed 0.8 second silence endpoint; optional transcript metadata and final-only effects retained. Not native streaming.",
-    "duplex": "Headphone no-wake barge-in is opt-in. Speaker mode retains wake gating without acoustic AEC.",
-    "languages": "en/hi/gu/fr routing; English medium.en remains selected. Two approved optional multilingual models failed Gujarati acceptance; existing French Kokoro is reused.",
-    "rollback": "Set whisper.streaming_enabled=false, adaptive_endpointing=false, frame_ms=100; voice.full_duplex.enabled=false. Final-only safety remains enabled."
+    "asr": "Approved local large-v3-turbo multilingual decoder (automatic language) for English/Hindi/Hinglish. Conversation endpointing (0.55 s; 1.8 s after a trailing conjunction) and a speculative final decode after 0.25 s of silence that is reused when only silence followed; partial captions unchanged. Per-utterance decoding does not wait for the GPU lease (whisper.gpu_lease=false); loading still does. Final-only effects retained. Not native streaming.",
+    "duplex": "Continuous conversation (wake_timeout_seconds=0). Talking over a reply stops it after a few non-echo words on speakers (speaker_barge_in) or headphones; the command waits for the final transcript. Speaker echo is rejected by matching Jarvis's own recent words; no acoustic AEC.",
+    "languages": "en/hi/Hinglish in and out: Hindi replies in Devanagari via Kokoro hm_omega in the warm worker, English words inside Hindi get English phonemes. Gujarati recognition/synthesis remains unaccepted; French Kokoro reused.",
+    "rollback": "English-only: model_path models/faster-whisper-medium.en, whisper.model medium.en, whisper.language en. Fixed 0.8 s endpoint: whisper.adaptive_endpointing=false. No early decode: whisper.speculative_final=false. Serialized GPU decoding: whisper.gpu_lease=true. Wake timeout: wake_timeout_seconds 600. Speaker interruption: voice.full_duplex.speaker_barge_in=false. English replies only: knowledge.answer_language and speech.language en.",
+    "latency": "scripts/verification/benchmark_voice_endpoint.py and benchmark_voice_latency.py; end of speech to command 1.43 s before, 1.35 s now (multilingual), 0.79 s with the English-only option."
   },
   "phase2_gpu_voice_ui": {
     "date": "2026-10-15 IST",

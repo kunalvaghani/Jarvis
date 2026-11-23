@@ -38,6 +38,10 @@ class DecodeJob:
     write: bool = False  # Spoken while the push-to-write keys were held: typed, not a command.
     session: int = 0
     queued_at: float = field(default_factory=time.monotonic)
+    # Decoded during the end-of-speech silence with the final settings; a final job whose reuse equals that
+    # job's sample count takes its result instead of decoding again (nothing but silence was added since).
+    speculative: bool = False
+    reuse: int = 0
 
 
 class DecodeQueue:
@@ -53,13 +57,14 @@ class DecodeQueue:
                 or type(job.session) is not int or not 0<=job.session<2**63
                 or type(job.offset) not in (int,float) or not math.isfinite(job.offset) or job.offset<0
                 or type(job.queued_at) not in (int,float) or not math.isfinite(job.queued_at) or job.queued_at < 0
-                or any(type(value) is not bool for value in (job.final,job.rollover,job.playback,job.write))):
+                or any(type(value) is not bool for value in (job.final,job.rollover,job.playback,job.write,job.speculative))
+                or type(job.reuse) is not int or job.reuse < 0):
             raise ValueError('Invalid Whisper decode job metadata')
         with self.lock:
             if self.items:
                 last = self.items[-1]
                 if (last.utterance == job.utterance and last.offset == job.offset
-                        and not last.final and not last.rollover):
+                        and not last.final and not last.rollover and not last.speculative):
                     self.items.pop()
             if len(self.items) >= self.limit:
                 raise RuntimeError("Whisper cannot keep up; listening stopped instead of executing stale commands.")
@@ -171,6 +176,7 @@ class Listener:
         languages = LanguageTracker(self.options["language_confidence"], self.options["language_confirmations"])
         assembler = TranscriptAssembler()
         finalized = -1  # Capture emits monotonically increasing utterance IDs.
+        early = None  # (utterance, offset, samples, words, info) from the last speculative decode
         try:
             while not self.stop_event.is_set():
                 job = self.jobs.get()
@@ -183,25 +189,34 @@ class Listener:
                     finalized = job.utterance  # Final/late-partial retransmissions cannot replay an effect.
                 self.decode_started = time.monotonic()
                 started = self.decode_started
-                language = self.options.get("language", "en")
-                segments, info = model.transcribe(
-                    job.audio, language=None if language == "auto" else language,
-                    beam_size=5 if job.final else 3, temperature=0,
-                    condition_on_previous_text=False, word_timestamps=True,
-                    vad_filter=False, no_speech_threshold=0.6,
-                    log_prob_threshold=-1.0, compression_ratio_threshold=2.4,
-                    initial_prompt=ASR_PROMPT)
-                words = []
-                for segment in segments:
-                    # Whisper treats high no_speech_prob as silence only when
-                    # the transcript itself also has low log probability.
-                    if segment.avg_logprob < -1.0:
-                        continue
-                    words.extend((word.end, word.word) for word in segment.words or [])
+                reused = bool(job.final and job.reuse and early is not None
+                              and early[:3] == (job.utterance, job.offset, job.reuse))
+                if reused:
+                    words, info = early[3], early[4]
+                else:
+                    language = self.options.get("language", "en")
+                    segments, info = model.transcribe(
+                        job.audio, language=None if language == "auto" else language,
+                        beam_size=5 if job.final or job.speculative else 3, temperature=0,
+                        condition_on_previous_text=False, word_timestamps=True,
+                        vad_filter=False, no_speech_threshold=0.6,
+                        log_prob_threshold=-1.0, compression_ratio_threshold=2.4,
+                        initial_prompt=ASR_PROMPT)
+                    words = []
+                    for segment in segments:
+                        # Whisper treats high no_speech_prob as silence only when
+                        # the transcript itself also has low log probability.
+                        if segment.avg_logprob < -1.0:
+                            continue
+                        words.extend((word.end, word.word) for word in segment.words or [])
                 self.decode_started = None
                 self.decode_metrics.append({'session_id': self.trace_id, 'utterance_id': job.utterance,
                     'final': job.final, 'decode_seconds': time.monotonic() - started,
-                    'queue_seconds': max(0., started - job.queued_at), 'audio_offset': job.offset})
+                    'queue_seconds': max(0., started - job.queued_at), 'audio_offset': job.offset,
+                    'speculative': job.speculative, 'reused': reused, 'queued': job.queued_at})
+                if job.speculative:
+                    early = (job.utterance, job.offset, len(job.audio), words, info)
+                    continue  # Kept for the final job only; never reported or acted on.
                 if self.stop_event.is_set():
                     break
                 if self.muted():
@@ -319,6 +334,11 @@ class Listener:
             silence = float(self.options.get("silence_seconds", 0.8))
             threshold = float(self.options.get("vad_threshold", 0.45))
             vad_elapsed, speech = .1, False
+            # Speculative final decode: start the final transcription after a short silence instead of after the
+            # whole end-of-speech wait. If speech resumes the early result is simply not used.
+            early_after = float(self.options.get("speculative_after_seconds", .25))
+            early_on = bool(self.options.get("speculative_final", True))
+            early_samples = 0
             with sd.InputStream(samplerate=rate, blocksize=int(rate * self.options["frame_ms"] / 1000), device=self.device,
                                 dtype="float32", channels=1, callback=callback):
                 self.capture_started = True
@@ -376,12 +396,15 @@ class Listener:
                         utterance += 1
                         captured = history.copy()
                         offset, silent, next_partial = 0.0, 0.0, interval
+                        early_samples = 0
                     else:
                         captured = np.concatenate((captured, block))
                         writing = writing or held
                         active_playback = active_playback or block_playback
                         active_references = tuple(dict.fromkeys(active_references + tuple(block_references)))[-8:]
                     silent = 0.0 if speech else silent + len(block) / 16000
+                    if speech:
+                        early_samples = 0  # new speech: any early decode is stale
                     duration = len(captured) / 16000
                     latest = self.latest_transcript
                     endpoint = silence
@@ -394,17 +417,23 @@ class Listener:
                         raise RuntimeError('Utterance duration limit exceeded; no command committed.')
                     if silent >= endpoint:
                         self.jobs.put(DecodeJob(utterance, offset, captured.copy(), final=True, playback=active_playback,
-                                                references=active_references, write=writing, session=session))
+                                                references=active_references, write=writing, session=session,
+                                                reuse=early_samples))
                         active = writing = False
                         captured = np.empty(0, dtype=np.float32)
                         history = np.empty(0, dtype=np.float32)
+                    elif early_on and not writing and not early_samples and silent >= early_after and duration < 20.0:
+                        early_samples = len(captured)
+                        self.jobs.put(DecodeJob(utterance, offset, captured.copy(), speculative=True,
+                                                playback=active_playback, references=active_references))
                     elif duration >= 20.0:
                         self.jobs.put(DecodeJob(utterance, offset, captured.copy(), rollover=True, playback=active_playback,
                                                 references=active_references, write=writing, session=session))
+                        early_samples = 0
                         captured = captured[16 * 16000:]
                         offset += 16.0
                         next_partial = len(captured) / 16000 + interval
-                    elif duration >= next_partial and not writing and self.options['streaming_enabled']:
+                    elif duration >= next_partial and not writing and not early_samples and self.options['streaming_enabled']:
                         # No partial decoding while writing: only finished phrases are typed.
                         self.jobs.put(DecodeJob(utterance, offset, captured.copy(), playback=active_playback, references=active_references))
                         next_partial = duration + interval

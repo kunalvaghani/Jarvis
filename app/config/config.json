@@ -91,28 +91,33 @@
     "dom_browser": true,
     "direct_execution": true
   },
-  "model_path": "models/faster-whisper-medium.en",
+  "model_path": "models/faster-whisper-large-v3-turbo",
   "voice": {
     "full_duplex": {
-      "enabled": false,
+      "enabled": true,
       "barge_in": true,
-      "audio_mode": "speakers"
-    }
+      "audio_mode": "speakers",
+      "speaker_barge_in": true
+    },
+    "acknowledge_seconds": 1.2
   },
   "whisper": {
-    "model": "medium.en",
-    "repo": "Systran/faster-whisper-medium.en",
+    "model": "large-v3-turbo",
+    "repo": "dropbox-dash/faster-whisper-large-v3-turbo",
     "device": "cuda",
     "compute_type": "int8_float16",
-    "language": "en",
+    "language": "auto",
     "frame_ms": 100,
     "streaming_enabled": true,
-    "adaptive_endpointing": false,
-    "endpoint_mode": "balanced",
+    "adaptive_endpointing": true,
+    "endpoint_mode": "conversation",
     "max_utterance_seconds": 120,
     "partial_interval_seconds": 1.0,
     "silence_seconds": 0.8,
-    "vad_threshold": 0.45
+    "vad_threshold": 0.45,
+    "speculative_final": true,
+    "speculative_after_seconds": 0.25,
+    "gpu_lease": false
   },
   "files_root": "JarvisFiles",
   "project_roots": [
@@ -122,7 +127,7 @@
     "D:\\"
   ],
   "microphone": null,
-  "wake_timeout_seconds": 600,
+  "wake_timeout_seconds": 0,
   "cursor": {
     "physical_clicks": true
   },
@@ -1321,7 +1326,7 @@
     "enabled": true,
     "model": "qwen3.5:9b",
     "screen_model": "qwen3.5:9b",
-    "answer_language": "en",
+    "answer_language": "auto",
     "internet": true,
     "num_gpu": 12,
     "prompt_format": "ollama_chat",
@@ -1471,7 +1476,7 @@
   },
   "speech": {
     "enabled": true,
-    "language": "en",
+    "language": "auto",
     "length_scale": 1.05,
     "noise_scale": 0.667,
     "noise_w_scale": 0.8,
