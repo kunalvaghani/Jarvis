@@ -2249,6 +2249,36 @@ uses `strategy_execute`; `execution_methods` explains the ranking without acting
   trusted entry to `.jarvis/mcp.json` with an absolute `python.exe`, the server script and its `--root`/settings in `args`,
   and an exact `allow_tools` list ([example](integrations/jarvis-connectors/mcp.example.json)).
 
+### Skill learner: learn a folder or archive
+
+Say **"learn the skills in D:\Downloads\pdf-tools"** (a folder or a `.zip`, `.tar`, `.tar.gz`, `.tgz`). Jarvis copies or
+safely extracts it into `.jarvis-runtime/skill-learning/` (your original is never changed; path escapes, links,
+`.env`/key/credential files and oversize files are left out), finds what is in it, integrates each kind through the
+module that already owns it, checks it, and reports what it can now do (answer, Dynamic Island card, memory note).
+Code: [`jarvis/skill_learner.py`](jarvis/skill_learner.py).
+
+| Found | What Jarvis does | Asks you |
+| --- | --- | --- |
+| Agent Skills (`SKILL.md`, any depth) | Converted to the guide format `SkillMemory` loads (name = folder, one-line description, ≤ 8,000 bytes; a longer guide is condensed and the original kept in `references/ORIGINAL_SKILL.md`), installed in `custom-skills/<name>/`, then checked: it must load and be selected for a request built from its own description. A guide that fails is removed again. | No (guidance is text) |
+| A tool server: Jarvis connector (`BaseConnector`), hand-written stdio MCP, or the official MCP SDK | Copied to `integrations/jarvis-connectors/connectors/apps/<name>/` (connectors) or `integrations/learned/<name>/`; an SDK server gets its own virtual environment with its declared packages (binary wheels). Started once to read its `tools/list`, registered in `.jarvis/mcp.json` (dated backup first; enabled, trusted, exact tool allowlist), where the brain picks its tools up as neurons. A companion guide (`custom-skills/<name>-tools/`) names each tool's exact `mcp_call`. | One card: install (if needed) and first start. Every later call: the usual `mcp_call` card |
+| Code / a library | Learned like a GitHub repository (`RepoLearner.learn_archive`: read as text, never run; saved to memory, `.jarvis-runtime/repo-knowledge/` and an Obsidian note in `Jarvis Repos/`), then the ability forge proposes spoken commands. | Each new command, as before |
+
+Afterwards, ask for a learned tool in your own words ("convert 10 km to miles"): a fixed route picks the server and tool,
+fills its arguments from the tool's schema, calls it with approval and answers from the tool's result. **"forget the
+skills learned from pdf-tools"** removes what that run installed (skills, its tool server and `.jarvis/mcp.json` entry
+after a backup, learned code and its pending ability build), after approval; your original folder is not touched.
+Each run is journalled in `.jarvis-runtime/skill-learning/<run>/report.json` before it acts; the same content learned
+again is recognised (SHA-256) and not integrated twice, while a declined or failed run can be retried without
+duplicating skills. Limits: 20,000 files, 300 MB, 30 minutes per run, 20 configured tool servers.
+
+Verified 2026-11-23 through Jarvis's own entry path: a skill-pack zip (2 skills, one condensed; `.env` left out; both
+loaded and selected) in 1.4 s; a connector folder (2 tools registered, 2 neurons, real call `km_to_miles(10)` =
+6.2137) in 1.3 s, then "convert 10 kilometres to miles" and "convert 37 celsius to fahrenheit" answered from the tool
+(6.2137 miles, 98.6 °F) in about 15 s each; a code library learned in 74 s with its ability build queued; all three
+then forgotten, leaving `.jarvis/mcp.json` identical to before. Tests: `tests/test_skill_learner.py` (11). Limits not
+yet covered: Node or other non-Python tool servers are learned as code, not started; an SDK server needs network for
+its packages.
+
 ### Reasoning lessons, vault index and exploration
 
 | Section | Keys (defaults) | Notes |

@@ -259,8 +259,9 @@ def _parse(text: str) -> Command:
     from .gods_eye import parse_command as gods_eye_command
     from .repo_abilities import parse_command as ability_command
     from .documents import parse_command as document_command
+    from .skill_learner import parse_command as skill_learn_command  # "learn the skills in D:\folder"
     for special in (memory_command, capability_command, weather_command, repo_command, gods_eye_command, ability_command,
-                    document_command):
+                    document_command, skill_learn_command):
         found = special(text)
         if found:
             return found  # "remember that ...", "check your APIs", "is bad weather coming".

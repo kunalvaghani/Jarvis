@@ -252,6 +252,10 @@ def grounded(answer: str, page: str) -> bool:
 # ---- Running -------------------------------------------------------------------------------------------------
 def run(actions: Any, goal: str, cancelled: Cancelled) -> Optional[str]:
     """Brain._run's hook: a finished answer for a request one of the fixed routes covers, else None."""
+    from .skill_learner import route as learn_skills
+    learned = learn_skills(actions, goal, cancelled)  # "learn the skills in <folder or archive>"
+    if learned is not None:
+        return learned
     from . import flags
     from .control.backends import pc_backend
     config = getattr(actions, 'config', None)
