@@ -6,7 +6,8 @@
 //   tabs are never read or driven. Tabs open in the background: the user's view is not switched.
 // - Pages are read through Chrome's accessibility tree (chrome.debugger, CDP) and written in agent-browser's
 //   snapshot format ('- role "name" [ref=eN]'), so Jarvis's browser code and safety rules apply unchanged.
-// - There is no command that runs page script from Jarvis, reads cookies or storage, uploads or downloads.
+// - No arbitrary page scripts, cookies/storage reads or uploads. The closed
+//   model handoff below requires an owned official page and a bounded size.
 'use strict';
 
 const HOST = 'com.jarvis.browser';
@@ -29,6 +30,8 @@ const dialogs = new Map();     // tabId -> the page dialog waiting for an answer
 const leaveBlocked = new Set(); // tabs whose page asked to stay (unsaved changes) on Jarvis's last navigation
 let jarvisTabs = new Set();    // tabs Jarvis created; a tab the user opens in the group is never read or driven
 const tabSession = new Map();  // tabId -> the Jarvis task (session) that opened it, for its end-of-task clean-up
+const modelDownloadReads = new Map(); // temporary selected-model JSON observations, never headers/cookies
+const modelDownloadCaptures = new Map(); // one explicitly requested download in its own tab only
 let renderMode = 'screencast'; // keep hidden tabs drawing ('off' to compare)
 const restored = chrome.storage.session.get('jarvisTabs').then(async (saved) => {
   jarvisTabs = new Set([...(saved.jarvisTabs || []), ...jarvisTabs]);
@@ -66,6 +69,53 @@ chrome.alarms.create('jarvis-keepalive', {periodInMinutes: 0.5});
 chrome.alarms.onAlarm.addListener(() => connect());
 chrome.debugger.onDetach.addListener((source) => attached.delete(source.tabId));
 chrome.debugger.onEvent.addListener((source, method, params) => {
+  const capture = modelDownloadCaptures.get(source.tabId);
+  // target=_blank downloads can announce windowOpen without the deprecated
+  // Page.downloadWillBegin event. Observe only this selected model's literal
+  // archive URL; never follow, cancel or record an unrelated popup.
+  if (capture && method === 'Page.windowOpen' && !capture.url) {
+    try {
+      const u=new URL(params.url);
+      if(u.protocol==='https:' && u.hostname==='media.sketchfab.com' && !u.username && !u.password && !u.hash &&
+          (!u.port || u.port==='443') && u.pathname.startsWith('/models/'+capture.uid+'/') &&
+          /\.(zip|glb)$/i.test(u.pathname) && String(params.url).length<=8000) {
+        capture.url=params.url;capture.event='Page.windowOpen';
+      }
+    } catch (_) { /* not an owned source archive */ }
+  }
+  if (capture && method === 'Page.downloadWillBegin' && !capture.guid) {
+    try {
+      const u = new URL(params.url);
+      if (u.protocol === 'https:' && u.hostname === 'media.sketchfab.com' && !u.username && !u.password &&
+          !u.hash && u.pathname.startsWith('/models/' + capture.uid + '/') && /\.(zip|glb)$/i.test(u.pathname) &&
+          String(params.url).length <= 8000 && typeof params.guid === 'string') {
+        capture.url=params.url;capture.guid=params.guid;capture.event='Page.downloadWillBegin';
+        // Cancel only this owned tab's exact GUID, then relay its legitimate
+        // temporary URL to Jarvis's size-limited HTTPS byte transport. No global
+        // download directory/behavior, permission or unrelated download changes.
+        capture.cancellation=chrome.debugger.sendCommand(source,'Browser.cancelDownload',{guid:params.guid})
+          .then(()=>{capture.cancelled=true;}).catch(()=>{capture.cancelled=false;});
+      }
+    } catch (_) { /* no source/model/format match: never cancel another file */ }
+  }
+  if (capture && method === 'Page.downloadProgress' && params.guid === capture.guid && Number.isFinite(params.receivedBytes)) {
+    capture.observedBytes=Math.max(capture.observedBytes,params.receivedBytes);
+  }
+  const watch = modelDownloadReads.get(source.tabId);
+  if (watch && method === 'Network.responseReceived' && watch.requests.size < 8) {
+    try {
+      const u = new URL(params.response.url);
+      const allowed = (u.origin === 'https://api.sketchfab.com' && u.pathname === '/v3/models/' + watch.uid + '/download') ||
+        (u.origin === 'https://sketchfab.com' && u.pathname === '/i/models/' + watch.uid + '/download');
+      const safeQuery = [...u.searchParams].every(([k,v]) => ['format','type','texture_size','optimized'].includes(k) && /^[A-Za-z0-9_-]{1,32}$/.test(v));
+      if (allowed && !u.username && !u.password && safeQuery && /json/i.test(params.response.mimeType || '')) {
+        watch.requests.set(params.requestId, {status:params.response.status, complete:false, bytes:0});
+      }
+    } catch (_) { /* unrelated requests are never recorded */ }
+  }
+  if (watch && method === 'Network.loadingFinished' && watch.requests.has(params.requestId)) {
+    Object.assign(watch.requests.get(params.requestId), {complete:true, bytes:params.encodedDataLength || 0});
+  }
   // Screencast frames keep a background tab drawing (Gmail renders lists and autosaves only when it draws).
   if (method === 'Page.screencastFrame') {
     chrome.debugger.sendCommand(source, 'Page.screencastFrameAck', {sessionId: params.sessionId}).catch(() => {});
@@ -98,6 +148,8 @@ chrome.tabs.onRemoved.addListener((tabId) => {
   if (jarvisTabs.delete(tabId)) remember();
   for (const [session, tab] of current) if (tab === tabId) current.delete(session);
   tabSession.delete(tabId);
+  modelDownloadReads.delete(tabId);
+  modelDownloadCaptures.delete(tabId);
 });
 connect();
 
@@ -353,7 +405,8 @@ async function snapshot(tabId, interactiveOnly) {
 // ---- Commands (the agent-browser subset Jarvis uses) ---------------------------------------------------------
 async function run(args, session) {
   const [command, ...rest] = args;
-  if (command === 'ping') return {ok: true, version: chrome.runtime.getManifest().version, render: renderMode};
+  if (command === 'ping') return {ok: true, version: chrome.runtime.getManifest().version, render: renderMode,
+    capabilities: ['owned-tabs', 'snapshot', 'read', 'public-links-v1']};
   if (command === 'reload') {  // Jarvis updates the extension files, then reloads it (no click in chrome://extensions)
     setTimeout(() => chrome.runtime.reload(), 200);
     return {reloading: true};
@@ -391,6 +444,40 @@ async function run(args, session) {
   const tabId = await workTab(session, command === 'open');
   if (dialogs.has(tabId)) throw new Error(`the page shows a dialog (${dialogs.get(tabId)}); it needs a decision`);
   switch (command) {
+    case 'model_download': {
+      const [uid,ref,limitText]=rest;const limit=Number(limitText);
+      const before=(await chrome.tabs.get(tabId)).url||'';const page=new URL(before);
+      if (!/^[a-f0-9]{32}$/.test(uid||'') || !Number.isSafeInteger(limit) || limit<4 || limit>100000000 ||
+          page.protocol!=='https:' || !['sketchfab.com','www.sketchfab.com'].includes(page.hostname) || !page.pathname.endsWith(uid)) {
+        throw new Error('download capture requires an admitted size and this owned official model');
+      }
+      const option=await onNode(tabId,ref,`function(){
+        if(!/^(BUTTON|A)$/.test(this.tagName)||this.textContent.trim().toUpperCase()!=='DOWNLOAD'||this.disabled)return null;
+        let el=this;for(let i=0;i<6&&el;i++,el=el.parentElement){const text=(el.innerText||el.textContent||'').trim();if(text.length>1600)break;
+          const kinds=[...new Set((text.match(/(?<!\\w)\\.?(?:glb|gltf|blend|usdz)\\b/gi)||[]).map(s=>s.replace(/^\\./,'').toLowerCase()))];
+          const sizes=[...text.matchAll(/(?<![\\d.])(\\d+(?:\\.\\d+)?)\\s*(GiB|MiB|KiB|GB|MB|KB)\\b/gi)];
+          if(kinds.length===1&&sizes.length===1){const unit=sizes[0][2].toLowerCase();const scale={kb:1000,mb:1000000,gb:1000000000,kib:1024,mib:1048576,gib:1073741824}[unit];
+            return {format:kinds[0],size:Math.round(Number(sizes[0][1])*scale)};}}
+        return null;
+      }`);
+      if (!option || !['glb','gltf'].includes(option.format) || !Number.isSafeInteger(option.size) || option.size<4 || option.size>limit) {
+        throw new Error('official format is unsupported or exceeds the admitted byte cap; no download clicked');
+      }
+      if (modelDownloadCaptures.has(tabId)) throw new Error('a download already owns this tab; no repeated click');
+      const capture={uid,url:null,guid:null,cancelled:false,cancellation:null,observedBytes:0};
+      modelDownloadCaptures.set(tabId,capture);
+      try {
+        await mouse(tabId,ref,'click'); // exactly one fresh, preflighted format control
+        const deadline=Date.now()+10000;
+        while(!capture.url && Date.now()<deadline)await sleep(100);
+        if(!capture.url)throw new Error('owned download outcome uncertain; inspect state, never repeat the format click');
+        if(capture.cancellation)await Promise.race([capture.cancellation,sleep(2000)]);
+        if((await chrome.tabs.get(tabId)).url!==before)throw new Error('selected model changed after download request');
+        return {source_url:before,url:capture.url,format:new URL(capture.url).pathname.toLowerCase().endsWith('.glb')?'glb':'zip',
+          declared_bytes:option.size,browser_cancel_acknowledged:capture.cancelled,browser_observed_bytes:capture.observedBytes,
+          handoff_event:capture.event,browser_bytes_measured:!!capture.guid};
+      } finally {modelDownloadCaptures.delete(tabId);}
+    }
     case 'open': {
       if (!/^https?:\/\//i.test(rest[0] || '')) throw new Error('invalid url: only http(s) pages open');
       leaveBlocked.delete(tabId);
@@ -417,6 +504,125 @@ async function run(args, session) {
       const [what, ref] = rest;
       if (what === 'url') return {url: (await chrome.tabs.get(tabId)).url || ''};
       if (what === 'title') return {title: (await chrome.tabs.get(tabId)).title || ''};
+      if (what === 'model_download_option') {
+        const uid = String(rest[2] || '');
+        const before = (await chrome.tabs.get(tabId)).url || '';
+        const source = new URL(before);
+        if (!/^[a-f0-9]{32}$/.test(uid) || source.protocol !== 'https:' ||
+            !['sketchfab.com','www.sketchfab.com'].includes(source.hostname) || !source.pathname.endsWith(uid)) {
+          throw new Error('download format observation requires the selected official model');
+        }
+        const contexts = await onNode(tabId,ref,`function(){
+          if(!/^(BUTTON|A)$/.test(this.tagName)||this.textContent.trim().toUpperCase()!=='DOWNLOAD')return [];
+          const rows=[];let el=this;
+          for(let i=0;i<6&&el;i++,el=el.parentElement){const text=(el.innerText||el.textContent||'').trim();
+            if(text.length>1600)break;rows.push({text,tag:el.tagName});}
+          return rows;
+        }`);
+        if ((await chrome.tabs.get(tabId)).url !== before) throw new Error('model changed during format observation');
+        return {source_url:before, contexts};
+      }
+      if (what === 'model_download_watch' || what === 'model_download_metadata') {
+        const uid = String(ref || '');
+        const before = (await chrome.tabs.get(tabId)).url || '';
+        const source = new URL(before);
+        if (!/^[a-f0-9]{32}$/.test(uid) || source.protocol !== 'https:' ||
+            !['sketchfab.com', 'www.sketchfab.com'].includes(source.hostname) || !source.pathname.endsWith(uid)) {
+          throw new Error('official download metadata requires this owned selected-model page');
+        }
+        if (what === 'model_download_watch') {
+          modelDownloadReads.set(tabId, {uid, requests:new Map()});
+          await cdp(tabId, 'Network.enable', {maxResourceBufferSize:65536, maxTotalBufferSize:131072});
+          return {watching:true, source_url:before};
+        }
+        const watch = modelDownloadReads.get(tabId);
+        if (!watch || watch.uid !== uid) return {source_url:before, candidates:[], statuses:[]};
+        const candidates = [], statuses = [];
+        try {
+          const collect = (value, format, depth=0) => {
+            if (!value || typeof value !== 'object' || depth > 5) return;
+            if (typeof value.url === 'string' && Number.isSafeInteger(value.size) && value.size > 0 && format) {
+              try {
+                const u = new URL(value.url);
+                if (u.protocol === 'https:' && u.hostname === 'media.sketchfab.com' && !u.username && !u.password &&
+                    !u.hash && u.pathname.startsWith('/models/' + uid + '/') && /\.(zip|glb)$/i.test(u.pathname) && value.url.length <= 8000) {
+                  candidates.push({format:u.pathname.toLowerCase().endsWith('.glb')?'glb':'zip', size:value.size, url:value.url});
+                }
+              } catch (_) { /* no viewer files, other models or arbitrary URLs */ }
+            }
+            for (const [key, child] of Object.entries(value).slice(0,40)) {
+              const next = /^(gltf|glb)(?:_|$)/i.test(key) ? key.toLowerCase().startsWith('glb')?'glb':'zip' :
+                /^(source|usdz|fbx|blend)$/i.test(key) ? null : format;
+              collect(child,next,depth+1);
+            }
+          };
+          for (const [id,item] of watch.requests) {
+            statuses.push(item.status);
+            if (!item.complete || item.status !== 200 || item.bytes > 65536) continue;
+            const body = await cdp(tabId, 'Network.getResponseBody', {requestId:id});
+            if (typeof body.body !== 'string' || body.body.length > 90000) continue;
+            const text = body.base64Encoded ? atob(body.body) : body.body;
+            if (text.length > 65536) continue;
+            collect(JSON.parse(text),null);
+          }
+          if (!candidates.length) {
+            // Documented Download API only, using the already-authorized browser
+            // session. No cookie/storage/header read and no arbitrary endpoint.
+            // This fetch reads at most 64 KiB of JSON, never an asset binary.
+            const result = await cdp(tabId,'Runtime.evaluate',{awaitPromise:true,returnByValue:true,expression:`(async()=>{
+              const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),10000);
+              try {
+                const response=await fetch('https://api.sketchfab.com/v3/models/'+${JSON.stringify(uid)}+'/download',
+                  {credentials:'include',redirect:'error',cache:'no-store',signal:controller.signal,headers:{Accept:'application/json'}});
+                if(!response.ok)return {status:response.status};
+                if(!/json/i.test(response.headers.get('content-type')||''))return {status:415};
+                const reader=response.body.getReader();let size=0;const chunks=[];
+                while(true){const next=await reader.read();if(next.done)break;size+=next.value.byteLength;
+                  if(size>65536){await reader.cancel();return {status:413};}chunks.push(next.value);}
+                const raw=new Uint8Array(size);let offset=0;for(const chunk of chunks){raw.set(chunk,offset);offset+=chunk.length;}
+                return {status:200,data:JSON.parse(new TextDecoder().decode(raw))};
+              }catch(_){return {status:0};}finally{clearTimeout(timer);}
+            })()`});
+            const reply=result.result?.value;
+            if(reply && Number.isInteger(reply.status)){statuses.push(reply.status);if(reply.status===200)collect(reply.data,null);}
+          }
+          if ((await chrome.tabs.get(tabId)).url !== before) throw new Error('model page changed during metadata observation');
+          return {source_url:before, candidates:candidates.slice(0,8), statuses};
+        } finally {
+          modelDownloadReads.delete(tabId);
+          await cdp(tabId, 'Network.disable').catch(()=>{});
+        }
+      }
+      if (what === 'model_screenshot') {
+        const uid = String(ref || '');
+        const before = (await chrome.tabs.get(tabId)).url || '';
+        const source = new URL(before);
+        if (!/^[a-f0-9]{32}$/.test(uid) || source.protocol !== 'https:' ||
+            !['sketchfab.com', 'www.sketchfab.com'].includes(source.hostname) || !source.pathname.endsWith(uid)) {
+          throw new Error('model screenshot requires the selected official model in this owned tab');
+        }
+        const shot = await cdp(tabId, 'Page.captureScreenshot', {format:'jpeg', quality:65, fromSurface:true, captureBeyondViewport:false});
+        if ((await chrome.tabs.get(tabId)).url !== before || typeof shot.data !== 'string' || shot.data.length > 4000000) {
+          throw new Error('model screenshot changed source or exceeded its fixed size cap');
+        }
+        return {source_url:before, format:'jpeg', data:shot.data};
+      }
+      if (what === 'links') {
+        // Fixed read-only probe, only in this session's Jarvis-owned tab. No
+        // caller script, cookies, storage or download permission is exposed.
+        const result = await cdp(tabId, 'Runtime.evaluate', {expression: `JSON.stringify(
+          Array.from(document.querySelectorAll('a[href]')).slice(0, 2000).map(a => {
+            try { const u = new URL(a.href); if (!['http:', 'https:'].includes(u.protocol) || u.username || u.password ||
+                Array.from(u.searchParams.keys()).some(k=>/token|secret|password|credential|signature|authorization|api.?key|access.?key|^sig$|^key$|^auth$|^jwt$/i.test(k))) return null;
+              return {url:u.href.slice(0,2048),text:(a.innerText||a.textContent||'').trim().slice(0,240)};
+            } catch (_) { return null; }
+          }).filter(Boolean).slice(0,200))`, returnByValue: true});
+        return {url:(await chrome.tabs.get(tabId)).url, links:JSON.parse(result.result?.value || '[]')};
+      }
+      if (what === 'href') return {url:await onNode(tabId, ref, `function () {
+        const a=this.closest('a[href]'); if(!a)return ''; try{const u=new URL(a.href);
+        return ['http:','https:'].includes(u.protocol)&&!u.username&&!u.password?u.href.slice(0,2048):'';}catch(_){return '';}
+      }`)};
       if (what === 'text') return {text: await onNode(tabId, ref, 'function () { return (this.innerText || this.textContent || "").slice(0, 20000); }')};
       if (what === 'value') return {value: await onNode(tabId, ref, 'function () { return this.value !== undefined ? String(this.value) : (this.innerText || ""); }')};
       // The item ID a list row carries (Drive's data-id): read-only, used to build the item's own address.

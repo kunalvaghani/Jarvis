@@ -141,13 +141,17 @@ def test_JRV_01_011_interpreters_and_conflicts_are_enumerated():
     assert all(r['dependency_check'] in {'PASS','FAIL','BLOCKED'} for r in rows)
     assert all(r.get('prerequisite') or r.get('error_type') for r in rows if r['dependency_check']=='BLOCKED')
 
-def test_JRV_01_012_registry_inventory_is_not_live_capability_proof():
+def test_JRV_01_012_registry_inventory_is_not_live_capability_proof(tmp_path):
     from jarvis.tools import ToolRegistry,SPECS
     from jarvis.brain import ALLOWED
     rows=ToolRegistry(Mock()).catalog()
     assert {r['action'] for r in rows}==ALLOWED=={r.name for r in SPECS}
     assert all(row['approval'] in {'none','user'} for row in rows)
-    inventory=json.loads((Path(__file__).resolve().parents[1]/'artifacts/jarvis-audit/modules/01-architecture-inventory/source-inventory.json').read_text())
+    # The dated source snapshot is historical evidence, not the current registry.
+    # Collect current metadata into a fixture directory, preserving that history.
+    from scripts.verification.verify_architecture import inventory as collect_inventory
+    inventory=collect_inventory(destination=tmp_path)
+    assert inventory==json.loads((tmp_path/'source-inventory.json').read_text(encoding='utf-8'))
     assert len(inventory['tools'])==len(SPECS)
     assert all(r['state'] in {'credential_or_prerequisite_gated','adapter_present_live_unverified'} and r['dispatch'] for r in inventory['tools'])
 

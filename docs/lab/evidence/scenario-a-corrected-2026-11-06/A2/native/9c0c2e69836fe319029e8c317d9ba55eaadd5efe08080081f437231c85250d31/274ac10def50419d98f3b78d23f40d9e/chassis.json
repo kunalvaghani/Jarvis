@@ -1,0 +1,52 @@
+{
+  "Name": "Sedan chassis",
+  "Type": "Chassis",
+  "Template": "RigidChassis",
+  "Components": [
+    {
+      "Centroidal Frame": {
+        "Location": [
+          0,
+          0,
+          0.3
+        ],
+        "Orientation": [
+          1,
+          0,
+          0,
+          0
+        ]
+      },
+      "Mass": 620.0,
+      "Moments of Inertia": [
+        180.0,
+        650.0,
+        700.0
+      ],
+      "Products of Inertia": [
+        0,
+        0,
+        0
+      ],
+      "Void": false
+    }
+  ],
+  "Driver Position": {
+    "Location": [
+      1.0,
+      0.4,
+      1.2
+    ],
+    "Orientation": [
+      1,
+      0,
+      0,
+      0
+    ]
+  },
+  "Rear Connector Location": [
+    -2.5,
+    0,
+    -0.1
+  ]
+}

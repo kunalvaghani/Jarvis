@@ -1,0 +1,37 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "scope": {
+    "scope": "user-approved-phase-e-two-creates-2026-11-04",
+    "max_creates": 2,
+    "parent_id": "0AMVTcmM1XWY0Uk9PVA",
+    "payloads": {
+      "delivery-3da7c2fc642e689fb66742dd3c2e74839bb78b4ad80d0dae5630085a342c69de": "3da7c2fc642e689fb66742dd3c2e74839bb78b4ad80d0dae5630085a342c69de",
+      "delivery-dc0e3e7984366c9fce0e4e2b00feff3d44601391e33cf09e233be6b30a52b363": "dc0e3e7984366c9fce0e4e2b00feff3d44601391e33cf09e233be6b30a52b363"
+    }
+  },
+  "outcomes": [
+    {
+      "kind": "report",
+      "delivery_id": "delivery-dc0e3e7984366c9fce0e4e2b00feff3d44601391e33cf09e233be6b30a52b363",
+      "remote_id": null,
+      "url": null,
+      "state": "PREPARED",
+      "error_type": "ValueError",
+      "seconds": 0.5779999999795109
+    },
+    {
+      "kind": "table",
+      "delivery_id": "delivery-3da7c2fc642e689fb66742dd3c2e74839bb78b4ad80d0dae5630085a342c69de",
+      "remote_id": null,
+      "url": null,
+      "state": "PREPARED",
+      "error_type": "ValueError",
+      "seconds": 0.0470000000204891
+    }
+  ],
+  "new_model_solver_calls": 0,
+  "folders_sharing_deletion": false,
+  "paid_services": false,
+  "global_activation": false,
+  "full_phase_e_acceptance": false
+}

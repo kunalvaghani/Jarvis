@@ -179,12 +179,9 @@ class MemoryCurator:
             raise ValueError('Corrupt/unreadable fact store requires review before writes.')
         with self.lock:
             self.vault.mkdir(parents=True, exist_ok=True)
-            temp = self.facts_path.with_suffix(".tmp")
-            with temp.open('w',encoding='utf-8') as output:
-                json.dump({'version':1,'facts':self.facts},output,ensure_ascii=False,indent=1)
-                output.flush()
-                os.fsync(output.fileno())
-            temp.replace(self.facts_path)
+            from .checkpoint_io import write_checkpoint
+            write_checkpoint(self.facts_path,json.dumps({'version':1,'facts':self.facts},
+                ensure_ascii=False,indent=1),self.vault)
             self._fact_commit_revision += 1
             lines = ["# Jarvis Memory", "", "[[Jarvis Brain]] · Things Jarvis has learned about Kunal. "
                      "This page is regenerated; to correct a fact, edit `Jarvis Memory.json` or tell Jarvis. "
@@ -195,7 +192,7 @@ class MemoryCurator:
                     lines += ["## " + HEADINGS[category], ""]
                     lines += ["- " + f["text"] + "  *(" + f.get("updated", f.get("created", ""))[:10] + ", " +
                               f.get("source", "learned") + ")*" for f in rows] + [""]
-            (self.vault / "Jarvis Memory.md").write_text("\n".join(lines), encoding="utf-8")
+            write_checkpoint(self.vault/'Jarvis Memory.md',"\n".join(lines),self.vault)
             brain = self.vault / "Jarvis Brain.md"
             try:
                 text = brain.read_text(encoding="utf-8") if brain.exists() else "# Jarvis Brain\n"

@@ -1,0 +1,87 @@
+{
+  "date_local": "2026-11-06 Asia/Calcutta",
+  "status": "PASS_BOUNDARIES_ONLY",
+  "full_scenario_a_passed": false,
+  "source_sha256": "c72ebec0f97a4ecca0b6e084cd7c3637f254316d1ab4a684d5d29ff85cad1d11",
+  "source_unchanged": true,
+  "fingerprint_scheme": "v5: Jarvis/tests/config/requirements, Lab neurons/skills, live benchmarks, browser extension/host, app entrypoints and three verification helpers; v4 receipts retained historically",
+  "focused_regression": {
+    "passed": 194,
+    "failed": 0,
+    "skipped": 2,
+    "errors": 0,
+    "seconds": 96.14099999999598
+  },
+  "unexecuted_skipped_tests": [
+    "tests/test_repo_learning_audit.py::test_JRV_18_003_claims_are_not_validation",
+    "tests/test_repo_learning_audit.py::test_JRV_18_019_restart_readback"
+  ],
+  "strict_typing": {
+    "passed": true,
+    "configured_files": 79
+  },
+  "registered_lab_descriptors": 52,
+  "compiled_existing_templates": 43,
+  "parser_qualification": {
+    "worker_sha256": "b1f26816aa6fde39fcab4a1a2253becce8bf5bc316dd77a755c6478d7a875469",
+    "parser": "trimesh",
+    "version": "5.2.0",
+    "goldens": [
+      {
+        "case": "analytic_cube",
+        "slot": 7,
+        "result_sha256": "7ccc1c765666440f27c90f9820ba0d7d1972eb973e748d9f3d0d606838379913",
+        "passed": true,
+        "cpu_s": 0.765625,
+        "resource_usage": {
+          "peak_process_committed_bytes": 79118336,
+          "committed_memory_limit_bytes": 1073741824,
+          "user_cpu_limit_s": 18,
+          "wall_timeout_s": 30
+        }
+      },
+      {
+        "case": "external_uri_rejected",
+        "slot": 8,
+        "result_sha256": "12fc10b692d6e19eefe9d0c562e315adccdfc67a121a17e25746ec791237cc32",
+        "passed": true,
+        "cpu_s": 0.0,
+        "resource_usage": {
+          "peak_process_committed_bytes": 79257600,
+          "committed_memory_limit_bytes": 1073741824,
+          "user_cpu_limit_s": 18,
+          "wall_timeout_s": 30
+        }
+      }
+    ],
+    "physical_validation": false
+  },
+  "shared_invocations": {
+    "mechanics": {
+      "used": 9,
+      "limit": 50
+    },
+    "chrono": {
+      "used": 27,
+      "limit": 50
+    }
+  },
+  "live_limitations": [
+    "No real model binary acquired in this increment",
+    "Updated extension not reloaded/live-qualified",
+    "Desktop capture helper unavailable; no screenshot observation claimed",
+    "Mechanical binding, eight independent maneuvers and interactive playback incomplete",
+    "No current whole-project regression; prior 5556-pass checkpoint is historical v4"
+  ],
+  "shipped_lab_flags_activated": false,
+  "paid_usage": false,
+  "new_installs": false,
+  "services_started": false,
+  "readiness": {
+    "restricted_context": "DockerEngineUnavailable / Ollama ConnectionError",
+    "outside_context": "ready",
+    "scope": "dependencies_and_configured_services",
+    "live_inference_checked": false,
+    "services_started": false
+  }
+}

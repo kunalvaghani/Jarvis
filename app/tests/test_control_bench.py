@@ -23,11 +23,13 @@ class World:
         self.readers = {'file': lambda p: (files or {}).get(Path(p).name), 'isdir': lambda p: Path(p).name in dirs,
                         'processes': lambda: list(processes), 'windows': lambda: list(windows),
                         'clipboard': lambda: clipboard, 'dnd_on': lambda: dnd,
-                        'google_page': lambda url: (pages or {}).get(url, ''), 'media': lambda: list(media),
+                        'google_page': lambda url: (pages or {}).get(url, ''),
+                        'gmail_draft_body': lambda subject: None, 'media': lambda: list(media),
                         'settle': lambda: 0}
 
     def __enter__(self):
-        self.patch = mock.patch.dict(cc.READERS, self.readers)
+        # No unlisted production reader may leak into this synthetic world.
+        self.patch = mock.patch.dict(cc.READERS, self.readers, clear=True)
         self.patch.start()
         return self
 

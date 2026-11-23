@@ -1,0 +1,17 @@
+{
+  "date_local": "2026-11-05 Asia/Calcutta",
+  "command": "app/.venv/Scripts/python.exe -B -m jarvis.launcher --check",
+  "exit_code": 0,
+  "status": "ready",
+  "missing": [],
+  "incomplete": [],
+  "scope": "dependencies_and_configured_services; read-only, no startup or inference",
+  "services": {
+    "docker": "available Linux engine 29.8.2",
+    "ollama": "available; configured required models present",
+    "localgithub": "available local_git; hosted services not checked",
+    "groq": "optional; live inference not checked"
+  },
+  "autonomous_A_H_pass": false,
+  "live_control_benchmark": false
+}

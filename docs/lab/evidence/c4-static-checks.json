@@ -1,0 +1,76 @@
+{
+  "README.md": {
+    "checked": 219,
+    "missing": []
+  },
+  "app/README.md": {
+    "checked": 428,
+    "missing": []
+  },
+  "docs/lab/C4_OPTIMIZATION.md": {
+    "checked": 14,
+    "missing": []
+  },
+  "shipped_lab_flags": {
+    "enabled": false,
+    "sim": false,
+    "research": false,
+    "learning": false
+  },
+  "neural": {
+    "mode": "act",
+    "learning": "shadow"
+  },
+  "new_code_ast": [
+    "app\\jarvis\\discovery\\c1.py",
+    "app\\jarvis\\discovery\\c2.py",
+    "app\\jarvis\\discovery\\c3.py",
+    "app\\jarvis\\discovery\\c4.py",
+    "app\\jarvis\\discovery\\catalog.py",
+    "app\\jarvis\\discovery\\contracts.py",
+    "app\\jarvis\\discovery\\golden.py",
+    "app\\jarvis\\discovery\\integration.py",
+    "app\\jarvis\\discovery\\jobs.py",
+    "app\\jarvis\\discovery\\learning.py",
+    "app\\jarvis\\discovery\\memory.py",
+    "app\\jarvis\\discovery\\proposal_wire.py",
+    "app\\jarvis\\discovery\\speech_units.py",
+    "app\\jarvis\\discovery\\__init__.py",
+    "app\\jarvis\\discovery\\__main__.py",
+    "app\\jarvis\\discovery\\adapters\\assets.py",
+    "app\\jarvis\\discovery\\adapters\\blender_pendulum.py",
+    "app\\jarvis\\discovery\\adapters\\divider.py",
+    "app\\jarvis\\discovery\\adapters\\drive_sources.py",
+    "app\\jarvis\\discovery\\adapters\\literature.py",
+    "app\\jarvis\\discovery\\adapters\\ngspice.py",
+    "app\\jarvis\\discovery\\adapters\\ngspice_worker.py",
+    "app\\jarvis\\discovery\\adapters\\pendulum_scene.py",
+    "app\\jarvis\\discovery\\adapters\\__init__.py",
+    "app\\jarvis\\discovery\\model\\component_graph.py",
+    "app\\jarvis\\discovery\\model\\literature_review.py",
+    "app\\jarvis\\discovery\\model\\optimization.py",
+    "app\\jarvis\\discovery\\model\\parameter_registry.py",
+    "app\\jarvis\\discovery\\model\\pendulum.py",
+    "app\\jarvis\\discovery\\model\\pendulum_project.py",
+    "app\\jarvis\\discovery\\model\\project_store.py",
+    "app\\jarvis\\discovery\\model\\proposal_payload.py",
+    "app\\jarvis\\discovery\\model\\provenance.py",
+    "app\\jarvis\\discovery\\model\\relativity.py",
+    "app\\jarvis\\discovery\\model\\uncertainty.py",
+    "app\\jarvis\\discovery\\model\\units.py",
+    "app\\jarvis\\discovery\\model\\units_worker.py",
+    "app\\jarvis\\discovery\\model\\__init__.py",
+    "app\\jarvis\\discovery\\sandbox\\budget.py",
+    "app\\jarvis\\discovery\\sandbox\\env_manager.py",
+    "app\\jarvis\\discovery\\sandbox\\local_trials.py",
+    "app\\jarvis\\discovery\\sandbox\\__init__.py",
+    "app\\tests\\test_discovery_optimization.py",
+    "docs\\lab\\run_c4_proof.py"
+  ],
+  "final_trial_usage": {
+    "blender-pendulum": 16,
+    "scipy-pendulum": 22
+  },
+  "final_source_sha256": "c03de07a377b251988cd04c8ab1d4fcee28a4b2b7fe88357fd8f7ef141eb963e",
+  "final_full_baseline_comparison": "same42 prior IDs; no new/discovery failures"
+}

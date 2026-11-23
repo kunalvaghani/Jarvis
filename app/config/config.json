@@ -1780,6 +1780,12 @@
     "mode": "act",
     "learning": "shadow"
   },
+  "lab": {
+    "enabled": false,
+    "sim": false,
+    "research": false,
+    "learning": false
+  },
   "google": {
     "account": "kunalvaghani35@gmail.com",
     "gmail": "browser"

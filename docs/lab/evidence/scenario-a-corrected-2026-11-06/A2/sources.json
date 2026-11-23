@@ -1,0 +1,39 @@
+{
+  "regulation": {
+    "regulation": {
+      "active_aero": true,
+      "cached_pdf": ".jarvis-runtime/discovery/official-sources/698d14b6c3b340c3a2890096c5ae1e276d90f07f92e3558d625b41ff6dbef2ff.pdf",
+      "content_is_untrusted": true,
+      "edition": 21,
+      "index_sha256": "2298d80fc2e2928e29db0391bfc48b4ca477733d2948e1a034f4b1175b1e15e5",
+      "index_url": "https://www.fia.com/regulation/category/110/technical-regulations",
+      "license": "FIA copyright; retained for source verification, not licensed CAD",
+      "limits": {
+        "maximum_non_tyre_half_width_m": 0.95,
+        "maximum_wheelbase_m": 3.4
+      },
+      "page_locators": {
+        "wheelbase": 11,
+        "width": 10
+      },
+      "publication_date": "2026-10-19",
+      "retrieved_at": "2026-11-05T20:14:49.870291+00:00",
+      "scope": "Only stated envelope dimensions and season-specific aero modes; not full FIA compliance or team engineering data.",
+      "sha256": "698d14b6c3b340c3a2890096c5ae1e276d90f07f92e3558d625b41ff6dbef2ff",
+      "title": "FIA 2026 F1 Regulations - Section C [Technical] - Iss 21 - 2026-10-19 Published on 19.10.26",
+      "url": "https://www.fia.com/system/files/documents/fia_2026_f1_regulations_-_section_c_technical_-_iss_21_-_2026-10-19.pdf",
+      "year": 2026
+    },
+    "source_refs": [
+      "fia-2026-698d14b6c3b340c3a2890096c5ae1e276d90f07f92e3558d625b41ff6dbef2ff"
+    ]
+  },
+  "asset_search": {
+    "candidates": [],
+    "payload_sha256": "9bc956b4753bbd9cbfd51837ba1d5db4e3c337c71817b58a4627466220c62af3",
+    "provider_failure": null,
+    "query": "2026 F1 class model",
+    "source_goal_id": "g-3bceac38a1e64ba1",
+    "source_ref": "catalog-search-9bc956b4753bbd9cbfd51837ba1d5db4e3c337c71817b58a4627466220c62af3-310ae489"
+  }
+}

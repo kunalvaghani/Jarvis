@@ -4,9 +4,16 @@ import subprocess
 
 
 class OwnedJob:
-    def __init__(self):
+    def __init__(self, *, memory_bytes=None, cpu_seconds=None):
         self.handle = None
+        import math
+        if memory_bytes is not None and (type(memory_bytes) is not int or not 16*2**20<=memory_bytes<=4*2**30):
+            raise ValueError('Owned process memory limit must be 16 MiB through 4 GiB.')
+        if cpu_seconds is not None and (type(cpu_seconds) not in (int,float) or not math.isfinite(cpu_seconds) or not 1<=cpu_seconds<=120):
+            raise ValueError('Owned process CPU limit must be 1 through 120 seconds.')
         if os.name != 'nt':
+            if memory_bytes is not None or cpu_seconds is not None:
+                raise ValueError('Resource-limited owned jobs require a qualified platform implementation.')
             return
         import ctypes
         from ctypes import wintypes as w
@@ -23,13 +30,21 @@ class OwnedJob:
         self.kernel.CreateJobObjectW.argtypes = [ctypes.c_void_p, w.LPCWSTR]
         self.kernel.CreateJobObjectW.restype = w.HANDLE
         self.kernel.SetInformationJobObject.argtypes = [w.HANDLE, ctypes.c_int, ctypes.c_void_p, w.DWORD]
+        self.kernel.QueryInformationJobObject.argtypes = [w.HANDLE, ctypes.c_int, ctypes.c_void_p, w.DWORD, ctypes.c_void_p]
         self.kernel.AssignProcessToJobObject.argtypes = [w.HANDLE, w.HANDLE]
         self.kernel.OpenProcess.argtypes = [w.DWORD, w.BOOL, w.DWORD]
         self.kernel.OpenProcess.restype = w.HANDLE
         self.kernel.CloseHandle.argtypes = [w.HANDLE]
         self.handle = self.kernel.CreateJobObjectW(None, None)
+        self._extended_type = Extended
         limits = Extended()
         limits.basic.flags = 0x2000  # JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE
+        if memory_bytes is not None:
+            limits.basic.flags |= 0x100  # JOB_OBJECT_LIMIT_PROCESS_MEMORY (committed memory)
+            limits.process_memory = memory_bytes
+        if cpu_seconds is not None:
+            limits.basic.flags |= 0x2  # JOB_OBJECT_LIMIT_PROCESS_TIME, 100 ns units
+            limits.basic.process_time = int(cpu_seconds * 10_000_000)
         if not self.handle or not self.kernel.SetInformationJobObject(self.handle, 9, ctypes.byref(limits), ctypes.sizeof(limits)):
             self.close()
             raise OSError('Could not establish Harness process ownership.')
@@ -51,6 +66,15 @@ class OwnedJob:
         if self.handle:
             self.kernel.CloseHandle(self.handle)
             self.handle = None
+
+    def usage(self):
+        """Observed peak committed bytes, not an estimate or working-set RSS."""
+        if not self.handle:return {'peak_process_committed_bytes':None}
+        import ctypes
+        values=self._extended_type()
+        if not self.kernel.QueryInformationJobObject(self.handle,9,ctypes.byref(values),ctypes.sizeof(values),None):
+            raise OSError('Could not read owned Job Object resource evidence.')
+        return {'peak_process_committed_bytes':int(values.peak_process)}
 
 
 def hidden_spawn(job, spawn):

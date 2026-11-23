@@ -1,0 +1,22 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "scope": "settled solver/process CPU accounting and result bytes, excludes full application/container startup overhead",
+  "budget": [
+    {
+      "state": "done",
+      "entries": 8,
+      "cpu_s": 1.813414747,
+      "result_bytes": 180347.0
+    }
+  ],
+  "remote_deliveries": [
+    {
+      "state": "PREPARED",
+      "n": 1
+    },
+    {
+      "state": "VERIFIED",
+      "n": 2
+    }
+  ]
+}

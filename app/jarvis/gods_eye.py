@@ -694,8 +694,8 @@ class GodsEye:
         try:
             if len(self.seen)>1000: raise ValueError('Alert checkpoint capacity reached')
             self.seen_path.parent.mkdir(parents=True,exist_ok=True)
-            temp=self.seen_path.with_suffix('.tmp')
-            temp.write_text(json.dumps(self.seen),encoding='utf-8');temp.replace(self.seen_path)
+            from .checkpoint_io import write_checkpoint
+            write_checkpoint(self.seen_path,json.dumps(self.seen),(self.seen_path).parent)
             return True
         except (OSError,ValueError):
             self.storage_failed=True

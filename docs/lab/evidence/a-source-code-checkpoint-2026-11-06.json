@@ -1,0 +1,10 @@
+{
+  "date_local": "2026-11-06 Asia/Calcutta",
+  "scope": "Partial code-only acquisition/import checkpoint; not a whole-repository backup, release or Git commit",
+  "source_sha256": "68701341a8c07d31dd0893a44d70cca44ce4934ff9bb5d2904f6343644a1e75a",
+  "files": 108,
+  "private_archive": "app/.jarvis-runtime/lab-validation/checkpoints/a-source-acquisition-68701341a8c0/source.zip",
+  "archive_sha256": "2e1e1671354be6a7085e33f09eae4bb07c71eb84f028387ba232e8d886cfe133",
+  "excluded": "credentials, config.json, runtime databases, recordings, downloaded tools/models and private account screenshots",
+  "restore_policy": "Compare individual files; never restore blindly over mixed work."
+}

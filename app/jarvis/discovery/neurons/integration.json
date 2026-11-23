@@ -1,0 +1,1756 @@
+[
+  {
+    "node_id": "discovery.status@v1",
+    "family": "foundations",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.integration",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_foundations.py",
+    "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+    "memory_kinds": [
+      "Capability",
+      "Tool",
+      "Skill",
+      "LearningEpisode",
+      "Experiment",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.verify.status@v1",
+    "family": "foundations",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.integration",
+    "inputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "verdict",
+        "type": "Verdict",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.status@v1"
+    ],
+    "test_ref": "tests/test_discovery_foundations.py",
+    "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+    "memory_kinds": [
+      "Capability",
+      "Tool",
+      "Skill",
+      "LearningEpisode",
+      "Experiment",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.units.convert@v1",
+    "family": "foundations",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.integration",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_foundations.py",
+    "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+    "memory_kinds": [
+      "Capability",
+      "Tool",
+      "Skill",
+      "LearningEpisode",
+      "Experiment",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.verify.units@v1",
+    "family": "foundations",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.integration",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "verdict",
+        "type": "Verdict",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.units.convert@v1"
+    ],
+    "test_ref": "tests/test_discovery_foundations.py",
+    "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+    "memory_kinds": [
+      "Capability",
+      "Tool",
+      "Skill",
+      "LearningEpisode",
+      "Experiment",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.electronics.divider@v1",
+    "family": "foundations",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.integration",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_foundations.py",
+    "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+    "memory_kinds": [
+      "Capability",
+      "Tool",
+      "Skill",
+      "LearningEpisode",
+      "Experiment",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.verify.divider@v1",
+    "family": "foundations",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.integration",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "verdict",
+        "type": "Verdict",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.electronics.divider@v1"
+    ],
+    "test_ref": "tests/test_discovery_foundations.py",
+    "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+    "memory_kinds": [
+      "Capability",
+      "Tool",
+      "Skill",
+      "LearningEpisode",
+      "Experiment",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.components.inspect@v1",
+    "family": "components",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.c1",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_components.py",
+    "skill_ref": "jarvis/skills/discovery/component-planning/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "Component",
+      "Parameter",
+      "Scenario",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.assets.inspect_local@v1",
+    "family": "components",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.c1",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_components.py",
+    "skill_ref": "jarvis/skills/discovery/component-planning/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "Component",
+      "Parameter",
+      "Scenario",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.parameters.plan@v1",
+    "family": "components",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.c1",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_components.py",
+    "skill_ref": "jarvis/skills/discovery/component-planning/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "Component",
+      "Parameter",
+      "Scenario",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.verify.c1@v1",
+    "family": "components",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.c1",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "verdict",
+        "type": "Verdict",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.components.inspect@v1",
+      "discovery.assets.inspect_local@v1",
+      "discovery.parameters.plan@v1"
+    ],
+    "test_ref": "tests/test_discovery_components.py",
+    "skill_ref": "jarvis/skills/discovery/component-planning/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "Component",
+      "Parameter",
+      "Scenario",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.mechanics.pendulum@v1",
+    "family": "pendulum",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.c2",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_pendulum.py",
+    "skill_ref": "jarvis/skills/discovery/pendulum-lab/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "Component",
+      "Parameter",
+      "Scenario",
+      "Experiment",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.verify.pendulum@v1",
+    "family": "pendulum",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.c2",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "run",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "verdict",
+        "type": "Verdict",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.mechanics.pendulum@v1"
+    ],
+    "test_ref": "tests/test_discovery_pendulum.py",
+    "skill_ref": "jarvis/skills/discovery/pendulum-lab/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "Component",
+      "Parameter",
+      "Scenario",
+      "Experiment",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.geometry.pendulum@v1",
+    "family": "pendulum",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.c2",
+    "inputs": [
+      {
+        "name": "run",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "verdict",
+        "type": "Verdict",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.verify.pendulum@v1"
+    ],
+    "test_ref": "tests/test_discovery_pendulum.py",
+    "skill_ref": "jarvis/skills/discovery/pendulum-lab/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "Component",
+      "Parameter",
+      "Scenario",
+      "Experiment",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.verify.pendulum_native@v1",
+    "family": "pendulum",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.c2",
+    "inputs": [
+      {
+        "name": "run",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "native",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "verdict",
+        "type": "Verdict",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.geometry.pendulum@v1"
+    ],
+    "test_ref": "tests/test_discovery_pendulum.py",
+    "skill_ref": "jarvis/skills/discovery/pendulum-lab/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "Component",
+      "Parameter",
+      "Scenario",
+      "Experiment",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.literature.collect@v1",
+    "family": "research",
+    "registration_feature": "research",
+    "provider": "jarvis.discovery.c3",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_research.py",
+    "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "Claim",
+      "Hypothesis",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.hypotheses.load@v1",
+    "family": "research",
+    "registration_feature": "research",
+    "provider": "jarvis.discovery.c3",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_research.py",
+    "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "Claim",
+      "Hypothesis",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.literature.review@v1",
+    "family": "research",
+    "registration_feature": "research",
+    "provider": "jarvis.discovery.c3",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "collection",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.literature.collect@v1"
+    ],
+    "test_ref": "tests/test_discovery_research.py",
+    "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "Claim",
+      "Hypothesis",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.hypotheses.propose@v2",
+    "family": "research",
+    "registration_feature": "research",
+    "provider": "jarvis.discovery.c3",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "collection",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.hypotheses.load@v1"
+    ],
+    "test_ref": "tests/test_discovery_research.py",
+    "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "Claim",
+      "Hypothesis",
+      "RunArtifact"
+    ],
+    "model_hint": "existing_local_router"
+  },
+  {
+    "node_id": "discovery.hypotheses.skeptic@v1",
+    "family": "research",
+    "registration_feature": "research",
+    "provider": "jarvis.discovery.c3",
+    "inputs": [
+      {
+        "name": "review",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.literature.review@v1",
+      "discovery.hypotheses.propose@v2"
+    ],
+    "test_ref": "tests/test_discovery_research.py",
+    "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "Claim",
+      "Hypothesis",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.verify.literature@v1",
+    "family": "research",
+    "registration_feature": "research",
+    "provider": "jarvis.discovery.c3",
+    "inputs": [
+      {
+        "name": "collection",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "review",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "ranking",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "verdict",
+        "type": "Verdict",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.hypotheses.skeptic@v1"
+    ],
+    "test_ref": "tests/test_discovery_research.py",
+    "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "Claim",
+      "Hypothesis",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.literature.remember@v1",
+    "family": "research",
+    "registration_feature": "research",
+    "provider": "jarvis.discovery.c3",
+    "inputs": [
+      {
+        "name": "review",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "ranking",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "verdict",
+        "type": "Verdict",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.verify.literature@v1"
+    ],
+    "test_ref": "tests/test_discovery_research.py",
+    "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "Claim",
+      "Hypothesis",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.theory.dilation@v1",
+    "family": "research",
+    "registration_feature": "research",
+    "provider": "jarvis.discovery.c3",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_research.py",
+    "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "Claim",
+      "Hypothesis",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.verify.dilation@v1",
+    "family": "research",
+    "registration_feature": "research",
+    "provider": "jarvis.discovery.c3",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "verdict",
+        "type": "Verdict",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.theory.dilation@v1"
+    ],
+    "test_ref": "tests/test_discovery_research.py",
+    "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "Claim",
+      "Hypothesis",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.optimization.advance@v1",
+    "family": "optimization",
+    "registration_feature": "sim",
+    "provider": "jarvis.discovery.c4",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_optimization.py",
+    "skill_ref": "jarvis/skills/discovery/bounded-optimization/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "Experiment",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.verify.optimization@v1",
+    "family": "optimization",
+    "registration_feature": "sim",
+    "provider": "jarvis.discovery.c4",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "verdict",
+        "type": "Verdict",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.optimization.advance@v1"
+    ],
+    "test_ref": "tests/test_discovery_optimization.py",
+    "skill_ref": "jarvis/skills/discovery/bounded-optimization/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "Experiment",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.integration.audit@v1",
+    "family": "integration",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.d",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_wiring.py",
+    "skill_ref": "jarvis/skills/discovery/integration-audit/SKILL.md",
+    "memory_kinds": [
+      "Capability",
+      "Source",
+      "Claim",
+      "Hypothesis",
+      "Component",
+      "Scenario",
+      "Experiment",
+      "RunArtifact",
+      "Parameter",
+      "Tool",
+      "Skill",
+      "LearningEpisode"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.verify.integration@v1",
+    "family": "integration",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.d",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "verdict",
+        "type": "Verdict",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.integration.audit@v1"
+    ],
+    "test_ref": "tests/test_discovery_wiring.py",
+    "skill_ref": "jarvis/skills/discovery/integration-audit/SKILL.md",
+    "memory_kinds": [
+      "Capability",
+      "Source",
+      "Claim",
+      "Hypothesis",
+      "Component",
+      "Scenario",
+      "Experiment",
+      "RunArtifact",
+      "Parameter",
+      "Tool",
+      "Skill",
+      "LearningEpisode"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.source.from_drive@v1",
+    "family": "delivery",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.d2",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_delivery.py",
+    "skill_ref": "jarvis/skills/discovery/service-delivery/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "RunArtifact",
+      "Capability",
+      "Experiment"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.literature.portal_read@v1",
+    "family": "delivery",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.d2",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_delivery.py",
+    "skill_ref": "jarvis/skills/discovery/service-delivery/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "RunArtifact",
+      "Capability",
+      "Experiment"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.literature.read_long@v1",
+    "family": "delivery",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.d2",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_delivery.py",
+    "skill_ref": "jarvis/skills/discovery/service-delivery/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "RunArtifact",
+      "Capability",
+      "Experiment"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.literature.background@v1",
+    "family": "delivery",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.d2",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_delivery.py",
+    "skill_ref": "jarvis/skills/discovery/service-delivery/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "RunArtifact",
+      "Capability",
+      "Experiment"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.choose.option@v1",
+    "family": "delivery",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.d2",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_delivery.py",
+    "skill_ref": "jarvis/skills/discovery/service-delivery/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "RunArtifact",
+      "Capability",
+      "Experiment"
+    ],
+    "model_hint": "existing_local_choice"
+  },
+  {
+    "node_id": "discovery.jobs.queue@v1",
+    "family": "delivery",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.d2",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_delivery.py",
+    "skill_ref": "jarvis/skills/discovery/service-delivery/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "RunArtifact",
+      "Capability",
+      "Experiment"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.jobs.status@v1",
+    "family": "delivery",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.d2",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_delivery.py",
+    "skill_ref": "jarvis/skills/discovery/service-delivery/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "RunArtifact",
+      "Capability",
+      "Experiment"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.jobs.pause@v1",
+    "family": "delivery",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.d2",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_delivery.py",
+    "skill_ref": "jarvis/skills/discovery/service-delivery/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "RunArtifact",
+      "Capability",
+      "Experiment"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.jobs.resume@v1",
+    "family": "delivery",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.d2",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_delivery.py",
+    "skill_ref": "jarvis/skills/discovery/service-delivery/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "RunArtifact",
+      "Capability",
+      "Experiment"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.jobs.cancel@v1",
+    "family": "delivery",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.d2",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_delivery.py",
+    "skill_ref": "jarvis/skills/discovery/service-delivery/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "RunArtifact",
+      "Capability",
+      "Experiment"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.export.prepare@v1",
+    "family": "delivery",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.d2",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "background",
+        "type": "Report",
+        "required": false
+      },
+      {
+        "name": "verdict",
+        "type": "Verdict",
+        "required": false
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_delivery.py",
+    "skill_ref": "jarvis/skills/discovery/service-delivery/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "RunArtifact",
+      "Capability",
+      "Experiment"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.report.to_doc@v1",
+    "family": "delivery",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.d2",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "prepared",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.export.prepare@v1"
+    ],
+    "test_ref": "tests/test_discovery_delivery.py",
+    "skill_ref": "jarvis/skills/discovery/service-delivery/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "RunArtifact",
+      "Capability",
+      "Experiment"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.table.to_sheet@v1",
+    "family": "delivery",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.d2",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "prepared",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.export.prepare@v1"
+    ],
+    "test_ref": "tests/test_discovery_delivery.py",
+    "skill_ref": "jarvis/skills/discovery/service-delivery/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "RunArtifact",
+      "Capability",
+      "Experiment"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.export.inspect@v1",
+    "family": "delivery",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.d2",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_delivery.py",
+    "skill_ref": "jarvis/skills/discovery/service-delivery/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "RunArtifact",
+      "Capability",
+      "Experiment"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.verify.d2@v1",
+    "family": "delivery",
+    "registration_feature": "enabled",
+    "provider": "jarvis.discovery.d2",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "verdict",
+        "type": "Verdict",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_delivery.py",
+    "skill_ref": "jarvis/skills/discovery/service-delivery/SKILL.md",
+    "memory_kinds": [
+      "Source",
+      "RunArtifact",
+      "Capability",
+      "Experiment"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.mechanics.primitive@v1",
+    "family": "mechanics",
+    "registration_feature": "sim",
+    "provider": "jarvis.discovery.mechanical_flow",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_mechanics.py",
+    "skill_ref": "jarvis/skills/discovery/primitive-mechanics/SKILL.md",
+    "memory_kinds": [
+      "Capability",
+      "Source",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.verify.primitive@v1",
+    "family": "mechanics",
+    "registration_feature": "sim",
+    "provider": "jarvis.discovery.mechanical_flow",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "verdict",
+        "type": "Verdict",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.mechanics.primitive@v1"
+    ],
+    "test_ref": "tests/test_discovery_mechanics.py",
+    "skill_ref": "jarvis/skills/discovery/primitive-mechanics/SKILL.md",
+    "memory_kinds": [
+      "Capability",
+      "Source",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.vehicle.compare@v1",
+    "family": "vehicle",
+    "registration_feature": "sim",
+    "provider": "jarvis.discovery.vehicle_flow",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_vehicle.py",
+    "skill_ref": "jarvis/skills/discovery/vehicle-comparison/SKILL.md",
+    "memory_kinds": [
+      "Capability",
+      "Source",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.verify.vehicle_compare@v1",
+    "family": "vehicle",
+    "registration_feature": "sim",
+    "provider": "jarvis.discovery.vehicle_flow",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "verdict",
+        "type": "Verdict",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.vehicle.compare@v1"
+    ],
+    "test_ref": "tests/test_discovery_vehicle.py",
+    "skill_ref": "jarvis/skills/discovery/vehicle-comparison/SKILL.md",
+    "memory_kinds": [
+      "Capability",
+      "Source",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.assets.search_public@v1",
+    "family": "components",
+    "registration_feature": "research",
+    "provider": "jarvis.discovery.asset_search",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_asset_search.py",
+    "skill_ref": "jarvis/skills/discovery/vehicle-comparison/SKILL.md",
+    "memory_kinds": [
+      "Capability",
+      "Source",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.verify.asset_search@v1",
+    "family": "components",
+    "registration_feature": "research",
+    "provider": "jarvis.discovery.asset_search",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "verdict",
+        "type": "Verdict",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.assets.search_public@v1"
+    ],
+    "test_ref": "tests/test_discovery_asset_search.py",
+    "skill_ref": "jarvis/skills/discovery/vehicle-comparison/SKILL.md",
+    "memory_kinds": [
+      "Capability",
+      "Source",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.vehicle.scenario@v1",
+    "family": "vehicle",
+    "registration_feature": "sim",
+    "provider": "jarvis.discovery.scenario_project",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_scenario_a.py",
+    "skill_ref": "jarvis/skills/discovery/vehicle-project/SKILL.md",
+    "memory_kinds": [
+      "Capability",
+      "Source",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.verify.vehicle_scenario@v1",
+    "family": "vehicle",
+    "registration_feature": "sim",
+    "provider": "jarvis.discovery.scenario_project",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "verdict",
+        "type": "Verdict",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.vehicle.scenario@v1"
+    ],
+    "test_ref": "tests/test_discovery_scenario_a.py",
+    "skill_ref": "jarvis/skills/discovery/vehicle-project/SKILL.md",
+    "memory_kinds": [
+      "Capability",
+      "Source",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.assets.acquire_geometry@v1",
+    "family": "integration",
+    "registration_feature": "sim",
+    "provider": "jarvis.discovery.asset_pipeline",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "requires": [],
+    "test_ref": "tests/test_discovery_asset_pipeline.py",
+    "skill_ref": "jarvis/skills/discovery/asset-to-geometry/SKILL.md",
+    "memory_kinds": [
+      "Capability",
+      "Source",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.verify.acquired_geometry@v1",
+    "family": "integration",
+    "registration_feature": "sim",
+    "provider": "jarvis.discovery.asset_pipeline",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "Report",
+        "required": true
+      },
+      {
+        "name": "report",
+        "type": "Report",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "verdict",
+        "type": "Verdict",
+        "required": true
+      }
+    ],
+    "requires": [
+      "discovery.assets.acquire_geometry@v1"
+    ],
+    "test_ref": "tests/test_discovery_asset_pipeline.py",
+    "skill_ref": "jarvis/skills/discovery/asset-to-geometry/SKILL.md",
+    "memory_kinds": [
+      "Capability",
+      "Source",
+      "RunArtifact"
+    ],
+    "model_hint": "none"
+  }
+]

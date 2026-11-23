@@ -1,0 +1,20 @@
+{
+  "Name": "Sedan TMeasy Tire",
+  "Type": "Tire",
+  "Template": "TMeasyTire",
+  "Design": {
+    "Unloaded Radius [m]": 0.35,
+    "Mass [kg]": 11.5,
+    "Inertia [kg.m2]": [
+      0.156,
+      0.679,
+      0.156
+    ],
+    "Width [m]": 0.3,
+    "Rim Radius [m]": 0.2286
+  },
+  "Coefficient of Friction": 1.1,
+  "Rolling Resistance Coefficient": 0.015,
+  "Vehicle Type": "Passenger",
+  "Maximum Bearing Capacity [N]": 6082.200000000001
+}

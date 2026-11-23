@@ -1,0 +1,18 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "audio_source": "new synthetic installed Windows voice; no microphone or speaker",
+  "audio_sha256": "eba0594421255b1d7ccac07dfe6b3a4c0935b3f49c22ca2a1ef1703a7b96201f",
+  "transcript": "Lab simulate divider 10V 1000\u03a9 1000\u03a9",
+  "asr": "existing offline CPU medium.en worker, installed model only",
+  "goal": {
+    "goal_id": "g-39485dff6b244bdc",
+    "text": "lab simulate divider 10 V 1000 ohm 1000 ohm",
+    "state": "verified"
+  },
+  "answer": "{'vectors': {'input_v': 10.0, 'output_v': 5.0, 'supply_current_a': -0.005}, 'solver': 'ngspice-shared', 'solver_version': '44.2', 'netlist_sha256': '164a301f726a044dac9a523995a8852febae42ed675e229a6c75d62c794ddf17', 'cpu_s': 0.008336477000000009, 'input': {'supply_v': 10.0, 'upper_ohm': 1000.0, 'lower_ohm': 1000.0}, 'image_id': 'sha256:fc3e504b26346d8fcfcadbb393fb7020c4f2b92c81f78c188b3711d2f40a9e0e', 'request_ref': 'artifact://sha256/f6b7336cb4f7eaabd822ae9e1f3060115c2e0be77e7cf29f1481e1cec8fd45ce', 'proof_slot': 36, 'checks': ['voltage-source constraint', 'independent Ohm-law solution', 'source-current sign', 'Kirchhoff current balance'], 'evidence_status': 'SIMULATION_PASSED_WITH_ASSUMPTIONS', 'justification': 'Ideal linear DC resistors and ideal voltage source; no physical validation or temperature model.', 'solver_ref': 'artifact://sha256/eabcb1bb8e5e61ac523761149e8db5a91b1eb671f31c6cff8dc3071610f42ca7', 'request_digest': '64b361c233dd49ad0332a64b8b68a443eee5f844c67ef0e0ec80899e905a9474'}\n\n(Checked: actual sandbox receipt; independent Ohm/Kirchhoff checks.)",
+  "ngspice_usage": {
+    "used": 37,
+    "limit": 50
+  },
+  "scope": "synthetic spoken-file ASR -> real Engine -> Actions -> brain -> actual sandbox solver; live microphone/UI NOT_RUN"
+}

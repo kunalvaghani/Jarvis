@@ -1,0 +1,83 @@
+{
+  "parameters": {
+    "chassis_mass_kg": {
+      "value": 620.0,
+      "status": "ASSUMED",
+      "interval": [
+        496.0,
+        744.0
+      ],
+      "sensitivity_tested": false
+    },
+    "spring_n_m": {
+      "value": 180000.0,
+      "status": "ASSUMED",
+      "interval": [
+        144000.0,
+        216000.0
+      ],
+      "sensitivity_tested": false
+    },
+    "damping_n_s_m": {
+      "value": 10000.0,
+      "status": "ASSUMED",
+      "interval": [
+        8000.0,
+        12000.0
+      ],
+      "sensitivity_tested": false
+    },
+    "tire_friction": {
+      "value": 1.1,
+      "status": "ASSUMED",
+      "interval": [
+        0.8800000000000001,
+        1.32
+      ],
+      "sensitivity_tested": false
+    },
+    "maximum_engine_power_w": {
+      "value": 500000.0,
+      "status": "ASSUMED",
+      "interval": [
+        400000.0,
+        600000.0
+      ],
+      "sensitivity_tested": false
+    },
+    "maximum_engine_torque_n_m": {
+      "value": 550.0,
+      "status": "ASSUMED",
+      "interval": [
+        440.0,
+        660.0
+      ],
+      "sensitivity_tested": false
+    },
+    "reference_area_m2": {
+      "value": 1.5,
+      "status": "ASSUMED",
+      "interval": [
+        1.2000000000000002,
+        1.7999999999999998
+      ],
+      "sensitivity_tested": false
+    }
+  },
+  "aero_envelope": {
+    "factors": [
+      0.9,
+      1.1
+    ],
+    "sensitivity_tested": true,
+    "status": "ASSUMED joint envelope, not a probabilistic confidence interval"
+  },
+  "unknowns": [
+    "real team geometry",
+    "measured tire force/slip curves",
+    "verified aero map",
+    "hybrid efficiency",
+    "full regulatory compliance"
+  ],
+  "universal_or_physical_validation": false
+}

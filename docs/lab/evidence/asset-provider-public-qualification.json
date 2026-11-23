@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-06",
+  "status": "PASS_PUBLIC_METADATA_ONLY",
+  "endpoint": "https://api.github.com/repos/octocat/Hello-World",
+  "sha256": "b7ba52dd9f80854177482878e66a08e89c7c4e26b983a1b67e87c0c8168f06d3",
+  "attempt_states": [
+    {
+      "state": "complete",
+      "count": 1
+    },
+    {
+      "state": "failed",
+      "count": 1
+    }
+  ],
+  "cached_reuse_verified": true,
+  "earlier_failure": "NAT64 reserved-address classification; corrected without admitting private embedded IPv4",
+  "downloaded_models": 0,
+  "solver_calls": 0,
+  "model_calls": 0,
+  "scope": "Live public provider transport and Journal/Source qualification using an official example repository; not F1 research or Scenario A acceptance."
+}

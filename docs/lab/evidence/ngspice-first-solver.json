@@ -1,0 +1,30 @@
+{
+  "result": {
+    "vectors": {
+      "input_v": 10.0,
+      "output_v": 5.0,
+      "supply_current_a": -0.005
+    },
+    "solver": "ngspice-shared",
+    "solver_version": "44.2",
+    "netlist_sha256": "164a301f726a044dac9a523995a8852febae42ed675e229a6c75d62c794ddf17",
+    "cpu_s": 0.008739301000000005,
+    "input": {
+      "supply_v": 10.0,
+      "upper_ohm": 1000.0,
+      "lower_ohm": 1000.0
+    },
+    "image_id": "sha256:fc3e504b26346d8fcfcadbb393fb7020c4f2b92c81f78c188b3711d2f40a9e0e",
+    "request_ref": "artifact://sha256/f6b7336cb4f7eaabd822ae9e1f3060115c2e0be77e7cf29f1481e1cec8fd45ce",
+    "proof_slot": 2,
+    "checks": [
+      "voltage-source constraint",
+      "independent Ohm-law solution",
+      "source-current sign",
+      "Kirchhoff current balance"
+    ],
+    "evidence_status": "SIMULATION_PASSED_WITH_ASSUMPTIONS",
+    "justification": "Ideal linear DC resistors and ideal voltage source; no physical validation or temperature model."
+  },
+  "ref": "artifact://sha256/a5908659a769b9e3e9105b50f6adbfee57691e3e8e784597d3e10006f54e5e29"
+}

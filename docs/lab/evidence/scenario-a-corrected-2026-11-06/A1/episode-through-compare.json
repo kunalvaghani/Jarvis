@@ -1,0 +1,511 @@
+[
+  {
+    "stage": "resolve_target",
+    "action": "scenario.resolve_target",
+    "run_id": "scenario-370d71d6335141d9ba268eb19893db4a",
+    "fingerprint": "0ee7866cf40b3bf513981304d5f3f91f77520420900de8462504bc859da0148b",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "ae9c0be7a015e10b9ca458ae81e6daf26d68c89259bad0e2fd8e665f1ccea54b",
+    "post_digest": "ae3d956cd851dc7bc2d8903ba806f9f2cfa9e7a5f2214de70ee042a297bf2029",
+    "result_ref": "artifact://sha256/886558e3a07648c90d190b734e4949fca1724ec6d1a4613b538920a40996a929",
+    "seconds": 0.01599999999598367,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {},
+      "stage": "resolve_target",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free downloadable 2025 McLaren F1 model. Verify its license and identity; say if it is only a concept or visual replica. Build an editable simulation-ready vehicle with separated moving components and explicitly marked physical assumptions. Run real Chrono vehicle dynamics, change the front-wing angle, and compare baseline versus candidate under exactly the same track, environment and power-unit model. Save native editable files, solver inputs, raw numerical outputs, provenance and a reproducible report. Do the work through your available tools; do not claim completion if a required capability or permission is unavailable. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "McLaren",
+        "year": 2025
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {},
+    "budget_usage": {}
+  },
+  {
+    "stage": "requirements_and_sources",
+    "action": "scenario.requirements_and_sources",
+    "run_id": "scenario-370d71d6335141d9ba268eb19893db4a",
+    "fingerprint": "46d51e7d11e5e192dc483565e7c7465dd2d7e8c90a3c3471a3b31a1b9fe7059e",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "ae3d956cd851dc7bc2d8903ba806f9f2cfa9e7a5f2214de70ee042a297bf2029",
+    "post_digest": "9c68ca8a06ea75a4d7f5fe11ad4dc74434a781343612dd3d6875d7823e1bc53e",
+    "result_ref": "artifact://sha256/651d14b3d73b5f79b75016690781abd973905debbef98e27c4ce48caa8704193",
+    "seconds": 17.234000000004016,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "resolve_target": "artifact://sha256/886558e3a07648c90d190b734e4949fca1724ec6d1a4613b538920a40996a929"
+      },
+      "stage": "requirements_and_sources",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free downloadable 2025 McLaren F1 model. Verify its license and identity; say if it is only a concept or visual replica. Build an editable simulation-ready vehicle with separated moving components and explicitly marked physical assumptions. Run real Chrono vehicle dynamics, change the front-wing angle, and compare baseline versus candidate under exactly the same track, environment and power-unit model. Save native editable files, solver inputs, raw numerical outputs, provenance and a reproducible report. Do the work through your available tools; do not claim completion if a required capability or permission is unavailable. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "McLaren",
+        "year": 2025
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {
+      ".jarvis-runtime/discovery/official-sources/454b76e2b388e61db50c0d116ff59477848a0b7e081f38142242808213dc0826.pdf": "454b76e2b388e61db50c0d116ff59477848a0b7e081f38142242808213dc0826"
+    },
+    "budget_usage": {}
+  },
+  {
+    "stage": "discover_assets",
+    "action": "scenario.discover_assets",
+    "run_id": "scenario-370d71d6335141d9ba268eb19893db4a",
+    "fingerprint": "452bdc4c029170b3cb197a7f62030e1247f7227e0a0d5b33231968fa682de002",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "9c68ca8a06ea75a4d7f5fe11ad4dc74434a781343612dd3d6875d7823e1bc53e",
+    "post_digest": "65fa5b34c860eacf9a8c607cd79c9b747c8e64c750215dad842996ebe6118258",
+    "result_ref": "artifact://sha256/76349e2549663af697ede50e28aa26d3404313a1402d4aa6af906508a75a585b",
+    "seconds": 0.9530000000013388,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "requirements_and_sources": "artifact://sha256/651d14b3d73b5f79b75016690781abd973905debbef98e27c4ce48caa8704193",
+        "resolve_target": "artifact://sha256/886558e3a07648c90d190b734e4949fca1724ec6d1a4613b538920a40996a929"
+      },
+      "stage": "discover_assets",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free downloadable 2025 McLaren F1 model. Verify its license and identity; say if it is only a concept or visual replica. Build an editable simulation-ready vehicle with separated moving components and explicitly marked physical assumptions. Run real Chrono vehicle dynamics, change the front-wing angle, and compare baseline versus candidate under exactly the same track, environment and power-unit model. Save native editable files, solver inputs, raw numerical outputs, provenance and a reproducible report. Do the work through your available tools; do not claim completion if a required capability or permission is unavailable. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "McLaren",
+        "year": 2025
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {},
+    "budget_usage": {}
+  },
+  {
+    "stage": "validate_provenance",
+    "action": "scenario.validate_provenance",
+    "run_id": "scenario-370d71d6335141d9ba268eb19893db4a",
+    "fingerprint": "976efe4c8103e07a2d380fedabf1f9256f6ac1fb81425e1b23bd85cd220c241f",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "65fa5b34c860eacf9a8c607cd79c9b747c8e64c750215dad842996ebe6118258",
+    "post_digest": "28870445f8237079f22b43e772dece932edad1e19f327368d20af2797007e492",
+    "result_ref": "artifact://sha256/3c05fbcb6886acc5101a6065673b1b82ce5696bfc08203af57e396adc7106c16",
+    "seconds": 0.0,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "discover_assets": "artifact://sha256/76349e2549663af697ede50e28aa26d3404313a1402d4aa6af906508a75a585b",
+        "requirements_and_sources": "artifact://sha256/651d14b3d73b5f79b75016690781abd973905debbef98e27c4ce48caa8704193",
+        "resolve_target": "artifact://sha256/886558e3a07648c90d190b734e4949fca1724ec6d1a4613b538920a40996a929"
+      },
+      "stage": "validate_provenance",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free downloadable 2025 McLaren F1 model. Verify its license and identity; say if it is only a concept or visual replica. Build an editable simulation-ready vehicle with separated moving components and explicitly marked physical assumptions. Run real Chrono vehicle dynamics, change the front-wing angle, and compare baseline versus candidate under exactly the same track, environment and power-unit model. Save native editable files, solver inputs, raw numerical outputs, provenance and a reproducible report. Do the work through your available tools; do not claim completion if a required capability or permission is unavailable. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "McLaren",
+        "year": 2025
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {},
+    "budget_usage": {}
+  },
+  {
+    "stage": "inspect_asset",
+    "action": "scenario.inspect_asset",
+    "run_id": "scenario-370d71d6335141d9ba268eb19893db4a",
+    "fingerprint": "d2e796a78045a9eafeb8b8e4d445fc3b1ed3e22627657f2f228aba5117a02afc",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "28870445f8237079f22b43e772dece932edad1e19f327368d20af2797007e492",
+    "post_digest": "1f393dc6f9e2f7cd55fbc354d0c68aacf37b866ed5deba5e550b83b511530e06",
+    "result_ref": "artifact://sha256/7312423b958b658f4575aaf1845bcbca04c607bee9b7bd853f287d0565dca9cb",
+    "seconds": 0.01599999999598367,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "discover_assets": "artifact://sha256/76349e2549663af697ede50e28aa26d3404313a1402d4aa6af906508a75a585b",
+        "requirements_and_sources": "artifact://sha256/651d14b3d73b5f79b75016690781abd973905debbef98e27c4ce48caa8704193",
+        "resolve_target": "artifact://sha256/886558e3a07648c90d190b734e4949fca1724ec6d1a4613b538920a40996a929",
+        "validate_provenance": "artifact://sha256/3c05fbcb6886acc5101a6065673b1b82ce5696bfc08203af57e396adc7106c16"
+      },
+      "stage": "inspect_asset",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free downloadable 2025 McLaren F1 model. Verify its license and identity; say if it is only a concept or visual replica. Build an editable simulation-ready vehicle with separated moving components and explicitly marked physical assumptions. Run real Chrono vehicle dynamics, change the front-wing angle, and compare baseline versus candidate under exactly the same track, environment and power-unit model. Save native editable files, solver inputs, raw numerical outputs, provenance and a reproducible report. Do the work through your available tools; do not claim completion if a required capability or permission is unavailable. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "McLaren",
+        "year": 2025
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {
+      ".jarvis-runtime/discovery/scenario-projects/scenario-370d71d6335141d9ba268eb19893db4a/asset_license.json": "2193b16d5db43046e6fa6205f05ab1cd0a4f3d9788263f37337af287a6c390da"
+    },
+    "budget_usage": {}
+  },
+  {
+    "stage": "generate_parametric_surrogate",
+    "action": "scenario.generate_parametric_surrogate",
+    "run_id": "scenario-370d71d6335141d9ba268eb19893db4a",
+    "fingerprint": "dad932c1692e13fc8561fa892aee0bb26f36eb5688dc5361dc777da4d5bf8bcc",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "1f393dc6f9e2f7cd55fbc354d0c68aacf37b866ed5deba5e550b83b511530e06",
+    "post_digest": "43b28bb7b986487b178b507422bc44483888ae9455b12e40ca24e209d5255c23",
+    "result_ref": "artifact://sha256/352cfd246be1430a99ba2d0169a20c80ea5178ee18d96d204b0fbba1bc44cd1f",
+    "seconds": 0.15600000000267755,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "discover_assets": "artifact://sha256/76349e2549663af697ede50e28aa26d3404313a1402d4aa6af906508a75a585b",
+        "inspect_asset": "artifact://sha256/7312423b958b658f4575aaf1845bcbca04c607bee9b7bd853f287d0565dca9cb",
+        "requirements_and_sources": "artifact://sha256/651d14b3d73b5f79b75016690781abd973905debbef98e27c4ce48caa8704193",
+        "resolve_target": "artifact://sha256/886558e3a07648c90d190b734e4949fca1724ec6d1a4613b538920a40996a929",
+        "validate_provenance": "artifact://sha256/3c05fbcb6886acc5101a6065673b1b82ce5696bfc08203af57e396adc7106c16"
+      },
+      "stage": "generate_parametric_surrogate",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free downloadable 2025 McLaren F1 model. Verify its license and identity; say if it is only a concept or visual replica. Build an editable simulation-ready vehicle with separated moving components and explicitly marked physical assumptions. Run real Chrono vehicle dynamics, change the front-wing angle, and compare baseline versus candidate under exactly the same track, environment and power-unit model. Save native editable files, solver inputs, raw numerical outputs, provenance and a reproducible report. Do the work through your available tools; do not claim completion if a required capability or permission is unavailable. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "McLaren",
+        "year": 2025
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {
+      ".jarvis-runtime/discovery/scenario-projects/scenario-370d71d6335141d9ba268eb19893db4a/asset_or_surrogate.glb": "fe099849408618179303d2fcd7ddf5d228b4b62c5ad9a3c931a1d2ca433a2b45",
+      ".jarvis-runtime/discovery/scenario-projects/scenario-370d71d6335141d9ba268eb19893db4a/front.png": "1358c3d34d96f702a7e7575e71f6a0bdbaba79ee794aa0c4fad6a11680b1917c",
+      ".jarvis-runtime/discovery/scenario-projects/scenario-370d71d6335141d9ba268eb19893db4a/geometry_manifest.json": "35bd8ae43115b9083d2aefdd17502e331337ca15e0ff0eaf3c82ecf17b12ae13",
+      ".jarvis-runtime/discovery/scenario-projects/scenario-370d71d6335141d9ba268eb19893db4a/side.png": "bff08e086d41c23446beade08b9329adaaf0ba0279e848f739903978f2db85f8",
+      ".jarvis-runtime/discovery/scenario-projects/scenario-370d71d6335141d9ba268eb19893db4a/solver_configuration.json": "5ca879dd8a2a0dddcac2621b86619359d193d2fb8487029212635b1e8f4b5966",
+      ".jarvis-runtime/discovery/scenario-projects/scenario-370d71d6335141d9ba268eb19893db4a/top.png": "00550f91633cb5574be6c2c08f3475775cd8e76f717165e81e5c0084aa0c32fd",
+      ".jarvis-runtime/discovery/scenario-projects/scenario-370d71d6335141d9ba268eb19893db4a/uncertainties.json": "b733d99a6cc6a1f23c60e864aadc336da6782e571efd5a460f931dbc7abcdc31"
+    },
+    "budget_usage": {}
+  },
+  {
+    "stage": "assemble_physical_vehicle",
+    "action": "scenario.assemble_physical_vehicle",
+    "run_id": "scenario-370d71d6335141d9ba268eb19893db4a",
+    "fingerprint": "ebddb2be15d982579e106aca46c2bc6bebbfacc854ec3f2e901ed318adc81a96",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "43b28bb7b986487b178b507422bc44483888ae9455b12e40ca24e209d5255c23",
+    "post_digest": "d0be1bde4eacab412ff52c9f6a3eeb9bbaddea71e5255667ebea3075c099b446",
+    "result_ref": "artifact://sha256/81827933278d8e8f62871ff081a88ccc71d59feb3f1576cbd39a46efdc094e7c",
+    "seconds": 1.0,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "discover_assets": "artifact://sha256/76349e2549663af697ede50e28aa26d3404313a1402d4aa6af906508a75a585b",
+        "generate_parametric_surrogate": "artifact://sha256/352cfd246be1430a99ba2d0169a20c80ea5178ee18d96d204b0fbba1bc44cd1f",
+        "inspect_asset": "artifact://sha256/7312423b958b658f4575aaf1845bcbca04c607bee9b7bd853f287d0565dca9cb",
+        "requirements_and_sources": "artifact://sha256/651d14b3d73b5f79b75016690781abd973905debbef98e27c4ce48caa8704193",
+        "resolve_target": "artifact://sha256/886558e3a07648c90d190b734e4949fca1724ec6d1a4613b538920a40996a929",
+        "validate_provenance": "artifact://sha256/3c05fbcb6886acc5101a6065673b1b82ce5696bfc08203af57e396adc7106c16"
+      },
+      "stage": "assemble_physical_vehicle",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free downloadable 2025 McLaren F1 model. Verify its license and identity; say if it is only a concept or visual replica. Build an editable simulation-ready vehicle with separated moving components and explicitly marked physical assumptions. Run real Chrono vehicle dynamics, change the front-wing angle, and compare baseline versus candidate under exactly the same track, environment and power-unit model. Save native editable files, solver inputs, raw numerical outputs, provenance and a reproducible report. Do the work through your available tools; do not claim completion if a required capability or permission is unavailable. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "McLaren",
+        "year": 2025
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {
+      ".jarvis-runtime/discovery/scenario-projects/scenario-370d71d6335141d9ba268eb19893db4a/LICENSE-CHRONO.txt": "5f625eb4c9e0ddf86db9d1ed9b6adb5b30296ea81919282b2f38c977136bf079",
+      ".jarvis-runtime/discovery/scenario-projects/scenario-370d71d6335141d9ba268eb19893db4a/physical_model.json": "a958a5f54c6b7c65ad1de4e68b118f57cfd7be2b2b2e75f71d1c47f60260b255",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/0cbcca43221b468088e584999d364c05/assumed-inputs.json": "3fbbf15b3351f254c79c7df284bea7e2e3624483bad894bca11c7a55c1b84db6",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/0cbcca43221b468088e584999d364c05/baseline-components.json": "6bcbf0a41799ae10fc56d4ce6204909296b12175fd62b4f3cbdaebe4870e6343",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/0cbcca43221b468088e584999d364c05/brake.json": "0f7de9f31df4ff6675978160733d92688af9e4988d453759e6fce9754d36f445",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/0cbcca43221b468088e584999d364c05/chassis.json": "a61d578affabeb55264dc74ca1ca870078187adaac1dbcf87bdb950a4167583d",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/0cbcca43221b468088e584999d364c05/driveline.json": "fb717a1fe68233896e0f39cadf33fa408461724ad40dec6054ac279df4d53d69",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/0cbcca43221b468088e584999d364c05/engine.json": "f5e1e217916ef6576cf337a8ba0d55dba17495e10b1afa57df2e9dd9d07d83a0",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/0cbcca43221b468088e584999d364c05/steering.json": "a79c10f8506bd60d23bb9d5700d6add076364387a9e96baccf0866d2d79bc937",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/0cbcca43221b468088e584999d364c05/suspension.json": "956b29215501c341ee8051be9257b768b4be9a32f040ee84d4c77359f1e693b6",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/0cbcca43221b468088e584999d364c05/template-provenance.json": "fbe63de603bbb3f9a5813e55287a066d71caa8e4e7e1a3ae7da84a23c891b2c4",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/0cbcca43221b468088e584999d364c05/terrain.json": "923e376f398886981556a121feeffe2acab02893fbf5116d460a1e92c1150e05",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/0cbcca43221b468088e584999d364c05/tire.json": "0f3488fa670a93f99be721fa37038ad163254f72302eba7626e21786f29d8376",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/0cbcca43221b468088e584999d364c05/transmission.json": "b5e505abf345e9ef7c95c5696affab8c5ab25a403ee2cf908d19b6dae236ffad",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/0cbcca43221b468088e584999d364c05/vehicle.json": "55f3bed355e80b42a02a144b8d36c2f6dbb70a03462f7bc10a6acae32ae4afac",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/0cbcca43221b468088e584999d364c05/wheel.json": "74890af5bb8c7d93d566fddd6a411110e0fca88f6a9804900574d075920004cf"
+    },
+    "budget_usage": {
+      "cpu_s": 0.03125,
+      "slot": 23,
+      "worker_sha256": "db887c905bcd21eb1950bd2982d2d60c00574073f038e133a6c20eb3805bc60d"
+    }
+  },
+  {
+    "stage": "validate_model",
+    "action": "scenario.validate_model",
+    "run_id": "scenario-370d71d6335141d9ba268eb19893db4a",
+    "fingerprint": "20e477ecbab8499046f664fc7c8af0fd356b0c715038290ce94d7a5f6ec875f5",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "d0be1bde4eacab412ff52c9f6a3eeb9bbaddea71e5255667ebea3075c099b446",
+    "post_digest": "dbf3b2f90a64185a278080d0bebcb5bce4f9b216150cb5dce5760f5cf08032eb",
+    "result_ref": "artifact://sha256/a6ec0d2ac1be0898391e305b49872448c425530522a35e3082d3d28f08cc9cfb",
+    "seconds": 0.11000000000058208,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "assemble_physical_vehicle": "artifact://sha256/81827933278d8e8f62871ff081a88ccc71d59feb3f1576cbd39a46efdc094e7c",
+        "discover_assets": "artifact://sha256/76349e2549663af697ede50e28aa26d3404313a1402d4aa6af906508a75a585b",
+        "generate_parametric_surrogate": "artifact://sha256/352cfd246be1430a99ba2d0169a20c80ea5178ee18d96d204b0fbba1bc44cd1f",
+        "inspect_asset": "artifact://sha256/7312423b958b658f4575aaf1845bcbca04c607bee9b7bd853f287d0565dca9cb",
+        "requirements_and_sources": "artifact://sha256/651d14b3d73b5f79b75016690781abd973905debbef98e27c4ce48caa8704193",
+        "resolve_target": "artifact://sha256/886558e3a07648c90d190b734e4949fca1724ec6d1a4613b538920a40996a929",
+        "validate_provenance": "artifact://sha256/3c05fbcb6886acc5101a6065673b1b82ce5696bfc08203af57e396adc7106c16"
+      },
+      "stage": "validate_model",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free downloadable 2025 McLaren F1 model. Verify its license and identity; say if it is only a concept or visual replica. Build an editable simulation-ready vehicle with separated moving components and explicitly marked physical assumptions. Run real Chrono vehicle dynamics, change the front-wing angle, and compare baseline versus candidate under exactly the same track, environment and power-unit model. Save native editable files, solver inputs, raw numerical outputs, provenance and a reproducible report. Do the work through your available tools; do not claim completion if a required capability or permission is unavailable. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "McLaren",
+        "year": 2025
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {},
+    "budget_usage": {
+      "cpu_s": 0.03125,
+      "slot": 23,
+      "worker_sha256": "db887c905bcd21eb1950bd2982d2d60c00574073f038e133a6c20eb3805bc60d"
+    }
+  },
+  {
+    "stage": "simulate",
+    "action": "scenario.simulate",
+    "run_id": "scenario-370d71d6335141d9ba268eb19893db4a",
+    "fingerprint": "ca8fef03f3bd12120a44e1f4d839ac41a1b2f0947f68cdbd1f19ab0adac51b0e",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "dbf3b2f90a64185a278080d0bebcb5bce4f9b216150cb5dce5760f5cf08032eb",
+    "post_digest": "5efe151efdaec15968c8dc7ba47111c2b8fa1d865d6797706c02725b4754afac",
+    "result_ref": "artifact://sha256/336612874d02f0bcbbbca651cd0d873c6c8c2f15104943e6bf5a267a49550354",
+    "seconds": 54.140999999995984,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "assemble_physical_vehicle": "artifact://sha256/81827933278d8e8f62871ff081a88ccc71d59feb3f1576cbd39a46efdc094e7c",
+        "discover_assets": "artifact://sha256/76349e2549663af697ede50e28aa26d3404313a1402d4aa6af906508a75a585b",
+        "generate_parametric_surrogate": "artifact://sha256/352cfd246be1430a99ba2d0169a20c80ea5178ee18d96d204b0fbba1bc44cd1f",
+        "inspect_asset": "artifact://sha256/7312423b958b658f4575aaf1845bcbca04c607bee9b7bd853f287d0565dca9cb",
+        "requirements_and_sources": "artifact://sha256/651d14b3d73b5f79b75016690781abd973905debbef98e27c4ce48caa8704193",
+        "resolve_target": "artifact://sha256/886558e3a07648c90d190b734e4949fca1724ec6d1a4613b538920a40996a929",
+        "validate_model": "artifact://sha256/a6ec0d2ac1be0898391e305b49872448c425530522a35e3082d3d28f08cc9cfb",
+        "validate_provenance": "artifact://sha256/3c05fbcb6886acc5101a6065673b1b82ce5696bfc08203af57e396adc7106c16"
+      },
+      "stage": "simulate",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free downloadable 2025 McLaren F1 model. Verify its license and identity; say if it is only a concept or visual replica. Build an editable simulation-ready vehicle with separated moving components and explicitly marked physical assumptions. Run real Chrono vehicle dynamics, change the front-wing angle, and compare baseline versus candidate under exactly the same track, environment and power-unit model. Save native editable files, solver inputs, raw numerical outputs, provenance and a reproducible report. Do the work through your available tools; do not claim completion if a required capability or permission is unavailable. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "McLaren",
+        "year": 2025
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {
+      ".jarvis-runtime/discovery/vehicle-runs/83cc2f35fe41b204416878152d621502df9460d6785a8a8aaed3efbcff6d3235/b5a49c28c6e0373789d7235ddc2dfca7/assumed-inputs.json": "e2cc5c2e3d5caf137d81d7fe1943b71491dee3d9514935e39579991168bc6e66",
+      ".jarvis-runtime/discovery/vehicle-runs/83cc2f35fe41b204416878152d621502df9460d6785a8a8aaed3efbcff6d3235/b5a49c28c6e0373789d7235ddc2dfca7/baseline-components.json": "0c9340522d849af13e2f93222f8855a309e2d1ed498d2d15d066c6322f6abd48",
+      ".jarvis-runtime/discovery/vehicle-runs/83cc2f35fe41b204416878152d621502df9460d6785a8a8aaed3efbcff6d3235/b5a49c28c6e0373789d7235ddc2dfca7/brake.json": "0f7de9f31df4ff6675978160733d92688af9e4988d453759e6fce9754d36f445",
+      ".jarvis-runtime/discovery/vehicle-runs/83cc2f35fe41b204416878152d621502df9460d6785a8a8aaed3efbcff6d3235/b5a49c28c6e0373789d7235ddc2dfca7/candidate-components.json": "5f440221751d1f5fd12abcaf1c3453b0369a156fdb1a275afe37c05dbe8398f1",
+      ".jarvis-runtime/discovery/vehicle-runs/83cc2f35fe41b204416878152d621502df9460d6785a8a8aaed3efbcff6d3235/b5a49c28c6e0373789d7235ddc2dfca7/chassis.json": "a61d578affabeb55264dc74ca1ca870078187adaac1dbcf87bdb950a4167583d",
+      ".jarvis-runtime/discovery/vehicle-runs/83cc2f35fe41b204416878152d621502df9460d6785a8a8aaed3efbcff6d3235/b5a49c28c6e0373789d7235ddc2dfca7/driveline.json": "fb717a1fe68233896e0f39cadf33fa408461724ad40dec6054ac279df4d53d69",
+      ".jarvis-runtime/discovery/vehicle-runs/83cc2f35fe41b204416878152d621502df9460d6785a8a8aaed3efbcff6d3235/b5a49c28c6e0373789d7235ddc2dfca7/engine.json": "f5e1e217916ef6576cf337a8ba0d55dba17495e10b1afa57df2e9dd9d07d83a0",
+      ".jarvis-runtime/discovery/vehicle-runs/83cc2f35fe41b204416878152d621502df9460d6785a8a8aaed3efbcff6d3235/b5a49c28c6e0373789d7235ddc2dfca7/steering.json": "a79c10f8506bd60d23bb9d5700d6add076364387a9e96baccf0866d2d79bc937",
+      ".jarvis-runtime/discovery/vehicle-runs/83cc2f35fe41b204416878152d621502df9460d6785a8a8aaed3efbcff6d3235/b5a49c28c6e0373789d7235ddc2dfca7/suspension.json": "956b29215501c341ee8051be9257b768b4be9a32f040ee84d4c77359f1e693b6",
+      ".jarvis-runtime/discovery/vehicle-runs/83cc2f35fe41b204416878152d621502df9460d6785a8a8aaed3efbcff6d3235/b5a49c28c6e0373789d7235ddc2dfca7/template-provenance.json": "fbe63de603bbb3f9a5813e55287a066d71caa8e4e7e1a3ae7da84a23c891b2c4",
+      ".jarvis-runtime/discovery/vehicle-runs/83cc2f35fe41b204416878152d621502df9460d6785a8a8aaed3efbcff6d3235/b5a49c28c6e0373789d7235ddc2dfca7/terrain.json": "923e376f398886981556a121feeffe2acab02893fbf5116d460a1e92c1150e05",
+      ".jarvis-runtime/discovery/vehicle-runs/83cc2f35fe41b204416878152d621502df9460d6785a8a8aaed3efbcff6d3235/b5a49c28c6e0373789d7235ddc2dfca7/tire.json": "0f3488fa670a93f99be721fa37038ad163254f72302eba7626e21786f29d8376",
+      ".jarvis-runtime/discovery/vehicle-runs/83cc2f35fe41b204416878152d621502df9460d6785a8a8aaed3efbcff6d3235/b5a49c28c6e0373789d7235ddc2dfca7/transmission.json": "b5e505abf345e9ef7c95c5696affab8c5ab25a403ee2cf908d19b6dae236ffad",
+      ".jarvis-runtime/discovery/vehicle-runs/83cc2f35fe41b204416878152d621502df9460d6785a8a8aaed3efbcff6d3235/b5a49c28c6e0373789d7235ddc2dfca7/vehicle.json": "55f3bed355e80b42a02a144b8d36c2f6dbb70a03462f7bc10a6acae32ae4afac",
+      ".jarvis-runtime/discovery/vehicle-runs/83cc2f35fe41b204416878152d621502df9460d6785a8a8aaed3efbcff6d3235/b5a49c28c6e0373789d7235ddc2dfca7/wheel.json": "74890af5bb8c7d93d566fddd6a411110e0fca88f6a9804900574d075920004cf",
+      ".jarvis-runtime/discovery/vehicle-runs/b9be657493dc56e0b2da97ddbb3ab91ceae5331572d5f7943b96716a086c6d50/c1801c4f2e98fcbca426bdb5f3c9255f/assumed-inputs.json": "0c755d9303e5a955623e209b019de3c5420260c8353fb2dfd0877c8d5a66835d",
+      ".jarvis-runtime/discovery/vehicle-runs/b9be657493dc56e0b2da97ddbb3ab91ceae5331572d5f7943b96716a086c6d50/c1801c4f2e98fcbca426bdb5f3c9255f/baseline-components.json": "24092d3b940d62cb87f868401e6ccee69017ffdb8db617b4c018591c4f7eda89",
+      ".jarvis-runtime/discovery/vehicle-runs/b9be657493dc56e0b2da97ddbb3ab91ceae5331572d5f7943b96716a086c6d50/c1801c4f2e98fcbca426bdb5f3c9255f/brake.json": "0f7de9f31df4ff6675978160733d92688af9e4988d453759e6fce9754d36f445",
+      ".jarvis-runtime/discovery/vehicle-runs/b9be657493dc56e0b2da97ddbb3ab91ceae5331572d5f7943b96716a086c6d50/c1801c4f2e98fcbca426bdb5f3c9255f/candidate-components.json": "b74c0795d989864fb1eeb39fa6afc8c48c48d322bf3e251367d536dcf14fd8ad",
+      ".jarvis-runtime/discovery/vehicle-runs/b9be657493dc56e0b2da97ddbb3ab91ceae5331572d5f7943b96716a086c6d50/c1801c4f2e98fcbca426bdb5f3c9255f/chassis.json": "a61d578affabeb55264dc74ca1ca870078187adaac1dbcf87bdb950a4167583d",
+      ".jarvis-runtime/discovery/vehicle-runs/b9be657493dc56e0b2da97ddbb3ab91ceae5331572d5f7943b96716a086c6d50/c1801c4f2e98fcbca426bdb5f3c9255f/driveline.json": "fb717a1fe68233896e0f39cadf33fa408461724ad40dec6054ac279df4d53d69",
+      ".jarvis-runtime/discovery/vehicle-runs/b9be657493dc56e0b2da97ddbb3ab91ceae5331572d5f7943b96716a086c6d50/c1801c4f2e98fcbca426bdb5f3c9255f/engine.json": "f5e1e217916ef6576cf337a8ba0d55dba17495e10b1afa57df2e9dd9d07d83a0",
+      ".jarvis-runtime/discovery/vehicle-runs/b9be657493dc56e0b2da97ddbb3ab91ceae5331572d5f7943b96716a086c6d50/c1801c4f2e98fcbca426bdb5f3c9255f/steering.json": "a79c10f8506bd60d23bb9d5700d6add076364387a9e96baccf0866d2d79bc937",
+      ".jarvis-runtime/discovery/vehicle-runs/b9be657493dc56e0b2da97ddbb3ab91ceae5331572d5f7943b96716a086c6d50/c1801c4f2e98fcbca426bdb5f3c9255f/suspension.json": "956b29215501c341ee8051be9257b768b4be9a32f040ee84d4c77359f1e693b6",
+      ".jarvis-runtime/discovery/vehicle-runs/b9be657493dc56e0b2da97ddbb3ab91ceae5331572d5f7943b96716a086c6d50/c1801c4f2e98fcbca426bdb5f3c9255f/template-provenance.json": "fbe63de603bbb3f9a5813e55287a066d71caa8e4e7e1a3ae7da84a23c891b2c4",
+      ".jarvis-runtime/discovery/vehicle-runs/b9be657493dc56e0b2da97ddbb3ab91ceae5331572d5f7943b96716a086c6d50/c1801c4f2e98fcbca426bdb5f3c9255f/terrain.json": "923e376f398886981556a121feeffe2acab02893fbf5116d460a1e92c1150e05",
+      ".jarvis-runtime/discovery/vehicle-runs/b9be657493dc56e0b2da97ddbb3ab91ceae5331572d5f7943b96716a086c6d50/c1801c4f2e98fcbca426bdb5f3c9255f/tire.json": "0f3488fa670a93f99be721fa37038ad163254f72302eba7626e21786f29d8376",
+      ".jarvis-runtime/discovery/vehicle-runs/b9be657493dc56e0b2da97ddbb3ab91ceae5331572d5f7943b96716a086c6d50/c1801c4f2e98fcbca426bdb5f3c9255f/transmission.json": "b5e505abf345e9ef7c95c5696affab8c5ab25a403ee2cf908d19b6dae236ffad",
+      ".jarvis-runtime/discovery/vehicle-runs/b9be657493dc56e0b2da97ddbb3ab91ceae5331572d5f7943b96716a086c6d50/c1801c4f2e98fcbca426bdb5f3c9255f/vehicle.json": "55f3bed355e80b42a02a144b8d36c2f6dbb70a03462f7bc10a6acae32ae4afac",
+      ".jarvis-runtime/discovery/vehicle-runs/b9be657493dc56e0b2da97ddbb3ab91ceae5331572d5f7943b96716a086c6d50/c1801c4f2e98fcbca426bdb5f3c9255f/wheel.json": "74890af5bb8c7d93d566fddd6a411110e0fca88f6a9804900574d075920004cf",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/40384123c95255834e6d13d02d2d73d0/assumed-inputs.json": "3fbbf15b3351f254c79c7df284bea7e2e3624483bad894bca11c7a55c1b84db6",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/40384123c95255834e6d13d02d2d73d0/baseline-components.json": "0e51b86009a7d4389e65943c77218caf2f564e938c545e923a31b3fa70d02a1f",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/40384123c95255834e6d13d02d2d73d0/brake.json": "0f7de9f31df4ff6675978160733d92688af9e4988d453759e6fce9754d36f445",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/40384123c95255834e6d13d02d2d73d0/candidate-components.json": "668768ae8a64b5c197ddda2ae331fbacc3f8d2aca0141641ed2b3304379e2677",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/40384123c95255834e6d13d02d2d73d0/chassis.json": "a61d578affabeb55264dc74ca1ca870078187adaac1dbcf87bdb950a4167583d",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/40384123c95255834e6d13d02d2d73d0/driveline.json": "fb717a1fe68233896e0f39cadf33fa408461724ad40dec6054ac279df4d53d69",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/40384123c95255834e6d13d02d2d73d0/engine.json": "f5e1e217916ef6576cf337a8ba0d55dba17495e10b1afa57df2e9dd9d07d83a0",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/40384123c95255834e6d13d02d2d73d0/steering.json": "a79c10f8506bd60d23bb9d5700d6add076364387a9e96baccf0866d2d79bc937",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/40384123c95255834e6d13d02d2d73d0/suspension.json": "956b29215501c341ee8051be9257b768b4be9a32f040ee84d4c77359f1e693b6",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/40384123c95255834e6d13d02d2d73d0/template-provenance.json": "fbe63de603bbb3f9a5813e55287a066d71caa8e4e7e1a3ae7da84a23c891b2c4",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/40384123c95255834e6d13d02d2d73d0/terrain.json": "923e376f398886981556a121feeffe2acab02893fbf5116d460a1e92c1150e05",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/40384123c95255834e6d13d02d2d73d0/tire.json": "0f3488fa670a93f99be721fa37038ad163254f72302eba7626e21786f29d8376",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/40384123c95255834e6d13d02d2d73d0/transmission.json": "b5e505abf345e9ef7c95c5696affab8c5ab25a403ee2cf908d19b6dae236ffad",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/40384123c95255834e6d13d02d2d73d0/vehicle.json": "55f3bed355e80b42a02a144b8d36c2f6dbb70a03462f7bc10a6acae32ae4afac",
+      ".jarvis-runtime/discovery/vehicle-runs/bcd7a62690059525f3f3de75ee155d4931434b4781eb57fbffa2eaf654919548/40384123c95255834e6d13d02d2d73d0/wheel.json": "74890af5bb8c7d93d566fddd6a411110e0fca88f6a9804900574d075920004cf",
+      ".jarvis-runtime/discovery/vehicle-runs/f0621515b7e966630c2922c4a096a8c615e63561968a94d0188ebfc673087414/81a1f70d1325670ab6489c938d4e46dd/assumed-inputs.json": "ee39e7d98327bd8438bb986702eae1ff3a9914ac8dad15f6f131058c55b9405b",
+      ".jarvis-runtime/discovery/vehicle-runs/f0621515b7e966630c2922c4a096a8c615e63561968a94d0188ebfc673087414/81a1f70d1325670ab6489c938d4e46dd/baseline-components.json": "92299bf68f8679de00bea7b2f9e9ded28fc64df49270d5df90d4c42f157d9f79",
+      ".jarvis-runtime/discovery/vehicle-runs/f0621515b7e966630c2922c4a096a8c615e63561968a94d0188ebfc673087414/81a1f70d1325670ab6489c938d4e46dd/brake.json": "0f7de9f31df4ff6675978160733d92688af9e4988d453759e6fce9754d36f445",
+      ".jarvis-runtime/discovery/vehicle-runs/f0621515b7e966630c2922c4a096a8c615e63561968a94d0188ebfc673087414/81a1f70d1325670ab6489c938d4e46dd/candidate-components.json": "8bc2fa6ca08c7372a3c98f3fcd7682058b12a2d162ad3cd4d5708f78607a51e5",
+      ".jarvis-runtime/discovery/vehicle-runs/f0621515b7e966630c2922c4a096a8c615e63561968a94d0188ebfc673087414/81a1f70d1325670ab6489c938d4e46dd/chassis.json": "a61d578affabeb55264dc74ca1ca870078187adaac1dbcf87bdb950a4167583d",
+      ".jarvis-runtime/discovery/vehicle-runs/f0621515b7e966630c2922c4a096a8c615e63561968a94d0188ebfc673087414/81a1f70d1325670ab6489c938d4e46dd/driveline.json": "fb717a1fe68233896e0f39cadf33fa408461724ad40dec6054ac279df4d53d69",
+      ".jarvis-runtime/discovery/vehicle-runs/f0621515b7e966630c2922c4a096a8c615e63561968a94d0188ebfc673087414/81a1f70d1325670ab6489c938d4e46dd/engine.json": "f5e1e217916ef6576cf337a8ba0d55dba17495e10b1afa57df2e9dd9d07d83a0",
+      ".jarvis-runtime/discovery/vehicle-runs/f0621515b7e966630c2922c4a096a8c615e63561968a94d0188ebfc673087414/81a1f70d1325670ab6489c938d4e46dd/steering.json": "a79c10f8506bd60d23bb9d5700d6add076364387a9e96baccf0866d2d79bc937",
+      ".jarvis-runtime/discovery/vehicle-runs/f0621515b7e966630c2922c4a096a8c615e63561968a94d0188ebfc673087414/81a1f70d1325670ab6489c938d4e46dd/suspension.json": "956b29215501c341ee8051be9257b768b4be9a32f040ee84d4c77359f1e693b6",
+      ".jarvis-runtime/discovery/vehicle-runs/f0621515b7e966630c2922c4a096a8c615e63561968a94d0188ebfc673087414/81a1f70d1325670ab6489c938d4e46dd/template-provenance.json": "fbe63de603bbb3f9a5813e55287a066d71caa8e4e7e1a3ae7da84a23c891b2c4",
+      ".jarvis-runtime/discovery/vehicle-runs/f0621515b7e966630c2922c4a096a8c615e63561968a94d0188ebfc673087414/81a1f70d1325670ab6489c938d4e46dd/terrain.json": "923e376f398886981556a121feeffe2acab02893fbf5116d460a1e92c1150e05",
+      ".jarvis-runtime/discovery/vehicle-runs/f0621515b7e966630c2922c4a096a8c615e63561968a94d0188ebfc673087414/81a1f70d1325670ab6489c938d4e46dd/tire.json": "0f3488fa670a93f99be721fa37038ad163254f72302eba7626e21786f29d8376",
+      ".jarvis-runtime/discovery/vehicle-runs/f0621515b7e966630c2922c4a096a8c615e63561968a94d0188ebfc673087414/81a1f70d1325670ab6489c938d4e46dd/transmission.json": "b5e505abf345e9ef7c95c5696affab8c5ab25a403ee2cf908d19b6dae236ffad",
+      ".jarvis-runtime/discovery/vehicle-runs/f0621515b7e966630c2922c4a096a8c615e63561968a94d0188ebfc673087414/81a1f70d1325670ab6489c938d4e46dd/vehicle.json": "55f3bed355e80b42a02a144b8d36c2f6dbb70a03462f7bc10a6acae32ae4afac",
+      ".jarvis-runtime/discovery/vehicle-runs/f0621515b7e966630c2922c4a096a8c615e63561968a94d0188ebfc673087414/81a1f70d1325670ab6489c938d4e46dd/wheel.json": "74890af5bb8c7d93d566fddd6a411110e0fca88f6a9804900574d075920004cf"
+    },
+    "budget_usage": {
+      "cpu_s": 51.015625,
+      "slot": 24,
+      "worker_sha256": "db887c905bcd21eb1950bd2982d2d60c00574073f038e133a6c20eb3805bc60d"
+    }
+  },
+  {
+    "stage": "independently_check",
+    "action": "scenario.independently_check",
+    "run_id": "scenario-370d71d6335141d9ba268eb19893db4a",
+    "fingerprint": "2ca10902b097739038e18f9b47964c7fe5c19ab790031a069699d539afb115c6",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "5efe151efdaec15968c8dc7ba47111c2b8fa1d865d6797706c02725b4754afac",
+    "post_digest": "b5e264dadcdc115c3a91008f397405ff5a9d07047c1085d80ae2a92de9db7e15",
+    "result_ref": "artifact://sha256/df4b20b47f470df791ee7a629d2e18ef0f51a4122829fc11e2b5d364c5a00d1d",
+    "seconds": 0.6869999999980791,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "assemble_physical_vehicle": "artifact://sha256/81827933278d8e8f62871ff081a88ccc71d59feb3f1576cbd39a46efdc094e7c",
+        "discover_assets": "artifact://sha256/76349e2549663af697ede50e28aa26d3404313a1402d4aa6af906508a75a585b",
+        "generate_parametric_surrogate": "artifact://sha256/352cfd246be1430a99ba2d0169a20c80ea5178ee18d96d204b0fbba1bc44cd1f",
+        "inspect_asset": "artifact://sha256/7312423b958b658f4575aaf1845bcbca04c607bee9b7bd853f287d0565dca9cb",
+        "requirements_and_sources": "artifact://sha256/651d14b3d73b5f79b75016690781abd973905debbef98e27c4ce48caa8704193",
+        "resolve_target": "artifact://sha256/886558e3a07648c90d190b734e4949fca1724ec6d1a4613b538920a40996a929",
+        "simulate": "artifact://sha256/336612874d02f0bcbbbca651cd0d873c6c8c2f15104943e6bf5a267a49550354",
+        "validate_model": "artifact://sha256/a6ec0d2ac1be0898391e305b49872448c425530522a35e3082d3d28f08cc9cfb",
+        "validate_provenance": "artifact://sha256/3c05fbcb6886acc5101a6065673b1b82ce5696bfc08203af57e396adc7106c16"
+      },
+      "stage": "independently_check",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free downloadable 2025 McLaren F1 model. Verify its license and identity; say if it is only a concept or visual replica. Build an editable simulation-ready vehicle with separated moving components and explicitly marked physical assumptions. Run real Chrono vehicle dynamics, change the front-wing angle, and compare baseline versus candidate under exactly the same track, environment and power-unit model. Save native editable files, solver inputs, raw numerical outputs, provenance and a reproducible report. Do the work through your available tools; do not claim completion if a required capability or permission is unavailable. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "McLaren",
+        "year": 2025
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {
+      ".jarvis-runtime/discovery/scenario-projects/scenario-370d71d6335141d9ba268eb19893db4a/verification_report.json": "2cbd8ab2c8a892ea9e61a165d1da4ffb314750239d9c60f05a18f9697d7432b3"
+    },
+    "budget_usage": {
+      "cpu_s": 51.015625,
+      "slot": 24,
+      "worker_sha256": "db887c905bcd21eb1950bd2982d2d60c00574073f038e133a6c20eb3805bc60d"
+    }
+  },
+  {
+    "stage": "compare",
+    "action": "scenario.compare",
+    "run_id": "scenario-370d71d6335141d9ba268eb19893db4a",
+    "fingerprint": "36e05b0d847f76785d967bf59635addba523162343fd050a2f252bc506fadc51",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "b5e264dadcdc115c3a91008f397405ff5a9d07047c1085d80ae2a92de9db7e15",
+    "post_digest": "58cc9edb61da2eb46120c67f091e2ee568401fcb7de9541d2bc3b8c91ced153f",
+    "result_ref": "artifact://sha256/3f3003340742294ee67d5daf0e8b2a4eaee9776461560c136e2f579d8690269c",
+    "seconds": 0.046999999998661224,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "assemble_physical_vehicle": "artifact://sha256/81827933278d8e8f62871ff081a88ccc71d59feb3f1576cbd39a46efdc094e7c",
+        "discover_assets": "artifact://sha256/76349e2549663af697ede50e28aa26d3404313a1402d4aa6af906508a75a585b",
+        "generate_parametric_surrogate": "artifact://sha256/352cfd246be1430a99ba2d0169a20c80ea5178ee18d96d204b0fbba1bc44cd1f",
+        "independently_check": "artifact://sha256/df4b20b47f470df791ee7a629d2e18ef0f51a4122829fc11e2b5d364c5a00d1d",
+        "inspect_asset": "artifact://sha256/7312423b958b658f4575aaf1845bcbca04c607bee9b7bd853f287d0565dca9cb",
+        "requirements_and_sources": "artifact://sha256/651d14b3d73b5f79b75016690781abd973905debbef98e27c4ce48caa8704193",
+        "resolve_target": "artifact://sha256/886558e3a07648c90d190b734e4949fca1724ec6d1a4613b538920a40996a929",
+        "simulate": "artifact://sha256/336612874d02f0bcbbbca651cd0d873c6c8c2f15104943e6bf5a267a49550354",
+        "validate_model": "artifact://sha256/a6ec0d2ac1be0898391e305b49872448c425530522a35e3082d3d28f08cc9cfb",
+        "validate_provenance": "artifact://sha256/3c05fbcb6886acc5101a6065673b1b82ce5696bfc08203af57e396adc7106c16"
+      },
+      "stage": "compare",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free downloadable 2025 McLaren F1 model. Verify its license and identity; say if it is only a concept or visual replica. Build an editable simulation-ready vehicle with separated moving components and explicitly marked physical assumptions. Run real Chrono vehicle dynamics, change the front-wing angle, and compare baseline versus candidate under exactly the same track, environment and power-unit model. Save native editable files, solver inputs, raw numerical outputs, provenance and a reproducible report. Do the work through your available tools; do not claim completion if a required capability or permission is unavailable. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "McLaren",
+        "year": 2025
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {},
+    "budget_usage": {}
+  },
+  {
+    "stage": "present_evidence",
+    "action": "scenario.present_evidence",
+    "run_id": "scenario-370d71d6335141d9ba268eb19893db4a",
+    "fingerprint": "aa42b4cf52f87d33e5bbc82cd141208690fe8456c6cbcc559fb48b080c40ef92",
+    "attempt": 1,
+    "category": "claimed",
+    "pre_digest": "58cc9edb61da2eb46120c67f091e2ee568401fcb7de9541d2bc3b8c91ced153f",
+    "post_digest": null,
+    "result_ref": null,
+    "seconds": 0.0,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "assemble_physical_vehicle": "artifact://sha256/81827933278d8e8f62871ff081a88ccc71d59feb3f1576cbd39a46efdc094e7c",
+        "compare": "artifact://sha256/3f3003340742294ee67d5daf0e8b2a4eaee9776461560c136e2f579d8690269c",
+        "discover_assets": "artifact://sha256/76349e2549663af697ede50e28aa26d3404313a1402d4aa6af906508a75a585b",
+        "generate_parametric_surrogate": "artifact://sha256/352cfd246be1430a99ba2d0169a20c80ea5178ee18d96d204b0fbba1bc44cd1f",
+        "independently_check": "artifact://sha256/df4b20b47f470df791ee7a629d2e18ef0f51a4122829fc11e2b5d364c5a00d1d",
+        "inspect_asset": "artifact://sha256/7312423b958b658f4575aaf1845bcbca04c607bee9b7bd853f287d0565dca9cb",
+        "requirements_and_sources": "artifact://sha256/651d14b3d73b5f79b75016690781abd973905debbef98e27c4ce48caa8704193",
+        "resolve_target": "artifact://sha256/886558e3a07648c90d190b734e4949fca1724ec6d1a4613b538920a40996a929",
+        "simulate": "artifact://sha256/336612874d02f0bcbbbca651cd0d873c6c8c2f15104943e6bf5a267a49550354",
+        "validate_model": "artifact://sha256/a6ec0d2ac1be0898391e305b49872448c425530522a35e3082d3d28f08cc9cfb",
+        "validate_provenance": "artifact://sha256/3c05fbcb6886acc5101a6065673b1b82ce5696bfc08203af57e396adc7106c16"
+      },
+      "stage": "present_evidence",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free downloadable 2025 McLaren F1 model. Verify its license and identity; say if it is only a concept or visual replica. Build an editable simulation-ready vehicle with separated moving components and explicitly marked physical assumptions. Run real Chrono vehicle dynamics, change the front-wing angle, and compare baseline versus candidate under exactly the same track, environment and power-unit model. Save native editable files, solver inputs, raw numerical outputs, provenance and a reproducible report. Do the work through your available tools; do not claim completion if a required capability or permission is unavailable. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "McLaren",
+        "year": 2025
+      }
+    },
+    "evidence_changed": false,
+    "artifact_files": {},
+    "budget_usage": {}
+  }
+]

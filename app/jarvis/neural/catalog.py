@@ -13,6 +13,7 @@ from typing import Dict, Tuple
 Contract = Tuple[Tuple[str, ...], Tuple[str, ...], str, str]
 
 TOOLS: Dict[str, Contract] = {
+    'discovery_call': (('command:Text', 'parameters:Report?'), ('report:Report',), 'operation_dependent', 'local_or_network'),
     # Research and the web (read-only by contract; consequential clicks are gated inside the adapter).
     'web_search': (('query:Query',), ('results:SearchResults',), 'read_only', 'network'),
     'google_search': (('query:Query',), ('results:SearchResults',), 'read_only', 'network'),
@@ -80,6 +81,9 @@ TOOLS: Dict[str, Contract] = {
     'calendar_delete': (('event:CalendarEvent',), ('status:Status',), 'destructive', 'network'),
     'mcp_list_tools': (('query:Query?',), ('tools:ToolList',), 'read_only', 'local'),
 }
+
+from ..google_contracts import CONTRACTS as GOOGLE_CONTRACTS
+TOOLS.update(GOOGLE_CONTRACTS)
 
 # Brain-owned neurons wrapping existing modules (sensors, cortex, memory, motor) and upgrade v2 fixed routes.
 # name: (kind, provider, inputs, outputs, side_effect_class, tool or None, description)

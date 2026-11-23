@@ -37,10 +37,10 @@ def test_everyday_requests_pass(text):
 
 
 def test_refusal_happens_before_any_execution():
-    from types import SimpleNamespace
     from jarvis.actions import Actions
     from jarvis.commands import Command
-    fake = SimpleNamespace(_execute=lambda *a: pytest.fail('nothing may run'))
+    fake = Actions.__new__(Actions)  # Real execution methods, without starting UI/services.
+    fake._execute = lambda *a: pytest.fail('nothing may run')
     with pytest.raises(ValueError) as caught:
         Actions.execute(fake, Command('open', 'registry editor and delete the run key'))
     assert "can't do that" in str(caught.value)

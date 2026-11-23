@@ -21,17 +21,8 @@ def atomic(path, text):
     path.parent.mkdir(parents=True, exist_ok=True)
     if path.is_symlink() or (hasattr(path, "is_junction") and path.is_junction()):
         raise ValueError("Skill memory must use regular files.")
-    temporary = None
-    try:
-        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as output:
-            temporary = Path(output.name)
-            output.write(text)
-            output.flush()
-            os.fsync(output.fileno())
-        os.replace(temporary, path)
-    finally:
-        if temporary is not None:
-            temporary.unlink(missing_ok=True)
+    from .checkpoint_io import write_checkpoint
+    write_checkpoint(path,text,path.parent)
 
 
 def linked(path):
@@ -53,10 +44,11 @@ def procedure_reliability(item):
 
 
 class SkillMemory:
-    def __init__(self, memory, source=None):
+    def __init__(self, memory, source=None, *, discovery=False):
         self.memory = memory
         self.vault = memory.vault
         self.source = Path(source) if source else Path(__file__).parent.parent / "skills"
+        self.discovery = discovery is True
         self.lock = threading.RLock()
         self.closed = False
         self.procedures = {}
@@ -104,6 +96,9 @@ class SkillMemory:
                 return
             paths = [(p, 'Builtins') for p in sorted(self.source.glob('*/SKILL.md'))[:50]]
             paths += [(p, 'Custom') for p in sorted((self.memory.base / 'custom-skills').glob('*/SKILL.md'))[:50]]
+            if self.discovery:
+                paths += [(p, 'Discovery') for p in sorted(
+                    (Path(self.memory.base) / 'jarvis/skills/discovery').glob('*/SKILL.md'))[:50]]
             if self.memory.enabled:
                 paths += [(p, 'Personal') for p in sorted((self.vault / 'Jarvis Skills/Personal').glob('*/SKILL.md'))[:50]]
             # Evolved (CAPTURED/FIX/DERIVED) guides are Jarvis-owned and start provisional.

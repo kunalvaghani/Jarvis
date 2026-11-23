@@ -156,6 +156,10 @@ class Models:
             schema = dag_schema([row['action'] for row in data.get('tools', [])])
         else:
             schema = SCHEMAS[operation]
+        discovery = operation=='tool_text' and data.get('discovery_proposals') is True
+        if discovery:
+            from .discovery.proposal_wire import schema as discovery_schema
+            schema=discovery_schema()
         if operation=='tool_text' and data.get('browser_test_plan') is True:
             from .development_browser import test_plan_schema
             schema=test_plan_schema()
@@ -168,6 +172,8 @@ class Models:
                     "temperature": 0.1, "think": False}
         from .inference_limits import planning_read_timeout
         settings['timeout_seconds'] = planning_read_timeout(getattr(self, 'coding_options', {}))
+        if discovery:
+            settings.update(num_ctx=2048,num_predict=320,temperature=0)
         if operation == 'tool_text' and data.get('long_output') is True:
             settings['timeout_seconds'] = max(settings['timeout_seconds'], 900)  # A whole file, written once.
         if operation == 'next_step':
@@ -232,8 +238,10 @@ class Models:
         user_message = {"role": "user", "content": "Perform the requested " + operation + " operation using this input; do not echo the input object:\n" + json.dumps(data, ensure_ascii=False)}
         if images:
             user_message['images'] = images
+        if discovery:
+            from .discovery.proposal_wire import SYSTEM
         result = json.loads(chat(self.client, settings,
-            [{"role": "system", "content": (CODE_RULES if operation in {'code_plan', 'code_edit'} else GMAIL_RULES if operation=='gmail_request' else RULES) + prompt},
+            [{"role": "system", "content": (SYSTEM if discovery else CODE_RULES if operation in {'code_plan', 'code_edit'} else GMAIL_RULES if operation=='gmail_request' else RULES) + prompt},
              user_message], structured=True))
         if operation in {'plan', 'replan', 'next_step'}:
             from .mcp_contract import validate_schema_value
@@ -371,6 +379,10 @@ class Models:
                 {'goal':request.get('goal','')},operation)
         if operation == "tool_text":
             model = options["coder"] if request.get("tool") in {"write_code", "improve_code", "write_tests"} else options["planner"]
+            if request.get('discovery_proposals') is True:
+                if request.get('tool')!='think':raise ValueError('Discovery proposals are text-only reasoning')
+                return self.generate(model,' Return two different mechanisms and concise falsifiable predictions; no digits. ',
+                    {'context':request.get('context',''),'discovery_proposals':True},operation)
             web_coder = options.get("web_coder")
             if (request.get("long_output") is True and request.get("tool") in {"write_code", "improve_code"}
                     and isinstance(web_coder, str) and web_coder in names):

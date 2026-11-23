@@ -1,0 +1,54 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "approval": "explicit user reply: Approve scoped CPU extension",
+  "scope": "existing C3 scratch Journal only; 300 admission units, prior reservations retained; max two existing-local 9B goals",
+  "attempts": [
+    {
+      "attempt": 1,
+      "goal_id": "g-f347deee335b4758",
+      "state": "failed",
+      "seconds": 90.09399999998277,
+      "error": {
+        "type": "ValueError",
+        "message": "The brain stopped (failed): review failed: ValueError: The local brain timed out. Try a shorter task."
+      },
+      "answer_sha256": null,
+      "answer": ""
+    },
+    {
+      "attempt": 2,
+      "goal_id": "g-58b4fafcead94104",
+      "state": "failed",
+      "seconds": 90.15600000001723,
+      "error": {
+        "type": "ValueError",
+        "message": "The brain stopped (failed): review failed: ValueError: The local brain timed out. Try a shorter task."
+      },
+      "answer_sha256": null,
+      "answer": ""
+    }
+  ],
+  "success": false,
+  "new_packages": 0,
+  "paid_provider_calls": 0,
+  "global_policy_changed": false,
+  "production_flags_activated": false,
+  "model_reservations": [
+    {
+      "cpu_s": 90.0,
+      "state": "uncertain"
+    },
+    {
+      "cpu_s": 20.0,
+      "state": "uncertain"
+    },
+    {
+      "cpu_s": 90.0,
+      "state": "uncertain"
+    },
+    {
+      "cpu_s": 90.0,
+      "state": "uncertain"
+    }
+  ]
+}

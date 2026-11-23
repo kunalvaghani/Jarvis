@@ -1,0 +1,7 @@
+# Isolated Pint worker only; do not include in core runtime requirements.
+# Approved 2026-11-04 IST. Binary wheels; hashes from PyPI resolution.
+Pint==0.25.2 --hash=sha256:ca35ab1d8eeeb6f7d9942b3cb5f34ca42b61cdd5fb3eae79531553dcca04dda7
+flexcache==0.3 --hash=sha256:d43c9fea82336af6e0115e308d9d33a185390b8346a017564611f1466dcd2e32
+flexparser==0.4 --hash=sha256:3738b456192dcb3e15620f324c447721023c0293f6af9955b481e91d00179846
+platformdirs==4.14.3 --hash=sha256:cba2d05fe5e18b26b1fa6f376b8e6234c012abe1f8696c486fface7d0054e931
+typing_extensions==4.16.0 --hash=sha256:481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8

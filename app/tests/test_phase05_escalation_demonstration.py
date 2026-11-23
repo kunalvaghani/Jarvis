@@ -8,6 +8,7 @@ the low-level mouse hook (injected-move classification), UI Automation on the
 disposable Win32 fixture window, structured replay, skill validation/registration.
 """
 import json
+import queue
 from pathlib import Path
 import subprocess
 import sys
@@ -366,14 +367,22 @@ def test_P05_real_hook_classifies_injected_input_and_cancellation_stops(tmp_path
                     'while an elevated/system window is in the foreground.')
     session.start_hook()
     try:
+        tag=(int(uuid.uuid4().hex[:8],16)&0x7fffffff) or 1
         # Injected 1-px move and back (as Jarvis's pointer does): no click, cursor ends where it started.
-        ctypes.windll.user32.mouse_event(0x0001, 1, 0, 0, 0)
-        ctypes.windll.user32.mouse_event(0x0001, -1, 0, 0, 0)
-        time.sleep(.3)
+        ctypes.windll.user32.mouse_event(0x0001, 1, 0, 0, tag)
+        ctypes.windll.user32.mouse_event(0x0001, -1, 0, 0, tag)
         captured = []
-        while not session.events.empty():
-            captured.append(session.events.get())
-        assert captured and all(classify_input(event[3]) == 'injected' for event in captured)
+        deadline=time.monotonic()+3
+        while time.monotonic()<deadline:
+            try:captured.append(session.events.get(timeout=.05))
+            except queue.Empty:pass
+            if len([event for event in captured if getattr(event,'extra_info',0)==tag])>=2:break
+        owned=[event for event in captured if getattr(event,'extra_info',0)==tag]
+        if not owned and win32gui.GetForegroundWindow()!=fixture_window:
+            pytest.skip('BLOCKED: desktop focus changed before the tagged injected input was observed.')
+        # Physical user input can legitimately arrive concurrently. Only our
+        # tagged events establish this fixture's injected-input assertion.
+        assert owned and all(classify_input(event[3]) == 'injected' for event in owned)
     finally:
         steps = session.pump(timeout=1, cancelled=lambda: True)
     assert steps == [] and session.state['status'] == 'cancelled' and session.hook is None

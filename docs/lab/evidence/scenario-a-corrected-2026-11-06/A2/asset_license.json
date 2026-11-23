@@ -1,0 +1,20 @@
+{
+  "decision": {
+    "decision": "SURROGATE_REQUIRED",
+    "geometry_acquired": false,
+    "target_year": 2026,
+    "original_goal_hash": "cdb7ebfd1fcd137d8b70a49a3bba0c03c1026f87b151d88fc270ac75212fada0",
+    "regulation_source_refs": [
+      "fia-2026-698d14b6c3b340c3a2890096c5ae1e276d90f07f92e3558d625b41ff6dbef2ff"
+    ],
+    "reason": "No inspected engineering asset is available from the configured bounded source path. This does not claim no such asset exists anywhere.",
+    "fallback_scope": "explicit surrogate fallback in the original request; no third-party mesh copied",
+    "exact_team_cad": false,
+    "decision_hash": "f6d00dbb7ab9a5b0cf4670b91f0dee7a2b92716b23afce3372e323897e749bdb"
+  },
+  "reviews": {
+    "decisions": [],
+    "exact_engineering_identity_verified": false,
+    "reviewed_ids": []
+  }
+}

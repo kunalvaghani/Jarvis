@@ -27,7 +27,7 @@ SENSITIVE = re.compile(r"\b(delete|remove|erase|uninstall|send|submit|publish|po
 # Opening/viewing only: no data written, nothing sent, nothing closed.
 NAVIGATION_ACTIONS = {'browse', 'browser_search', 'open', 'media_search', 'open_folder', 'open_file'}
 # Effects that cannot be safely re-planned around after an uncertain outcome.
-WRITE_ACTIONS = {'create_file', 'modify_file', 'delete_file', 'save_file', 'append_file',
+WRITE_ACTIONS = {'discovery_call', 'create_file', 'modify_file', 'delete_file', 'save_file', 'append_file',
                  'run_command', 'close_app', 'type_text', 'deerflow_sandbox_task', 'deerflow_free_media'}
 _CLIENT_LOCK = threading.Lock()
 _MAX_WORKER_MESSAGE = 8_000_000
@@ -40,6 +40,9 @@ class RepeatedAction(ValueError):
 def navigation_step(step, specs):
     """True for steps that only open or read; their outcome is checked from fresh state."""
     action = step.get('action')
+    if action=='discovery_call':
+        from .discovery.native_wire import read_only
+        return read_only(step)
     if action in NAVIGATION_ACTIONS:
         return True
     spec = specs.get(action)
@@ -488,6 +491,11 @@ class BrainClient:
             data['capability_context'] = runtime_context(data['goal'], rows if isinstance(rows, list) else [],
                 skills if isinstance(skills, SkillMemory) else None, data.get('memory_context'),
                 coding=operation in {'code_plan', 'code_edit'})
+            source_provider = getattr(self,'scientific_context_provider',None)
+            if callable(source_provider):
+                source_context = source_provider()
+                if source_context:
+                    data['capability_context']['current_scientific_sources'] = source_context
             from .prompt_router import guidance
             routed = guidance(data['goal'])  # Empty slot prompts (the default) add nothing.
             if routed and isinstance(data['capability_context'], dict):
@@ -628,6 +636,8 @@ class BrainClient:
         if operation == 'tool_text' and data.get('long_output') is True:
             seconds = max(900, seconds)  # A whole checked file (web_app.py); the worker allows the same.
         deadline = time.monotonic() + seconds
+        progress_started = deadline - seconds
+        next_progress = progress_started + 15
         total_deadline = time.monotonic() + total if coding or planning else deadline
         try:
             while True:
@@ -641,6 +651,16 @@ class BrainClient:
                 except queue.Empty:
                     if self.process is None or self.process.poll() is not None:
                         raise ValueError('Brain worker stopped before completing its response.')
+                    callback = getattr(self, 'progress_callback', None)
+                    if callable(callback) and operation in {'plan','replan','next_step','dag_plan','verify'}:
+                        now = time.monotonic()
+                        if now >= next_progress:
+                            next_progress = now + 15
+                            try:
+                                callback('Waiting for local '+operation+' inference ('+str(int(now-progress_started))+
+                                         's elapsed; the existing deadline remains in force).')
+                            except Exception:
+                                pass  # Progress display cannot change inference or replay an action.
                     continue
                 if line is None:
                     raise ValueError("Brain worker stopped. See " + self.worker_log + ".")
@@ -688,6 +708,9 @@ class Brain:
     def __init__(self, actions, base, options):
         self.actions, self.options = actions, options
         self.client = BrainClient(base, options)
+        self.client.progress_callback = lambda text: actions.report('brain', text)
+        self.current_scientific_context = {}
+        self.client.scientific_context_provider = lambda: self.current_scientific_context
         self.client.memory = getattr(actions, "memory", None)
         from .experience_memory import observe_conditions
         self.client.condition_provider = lambda **kwargs: observe_conditions(actions, **kwargs)
@@ -703,6 +726,7 @@ class Brain:
             self.workflows = WorkflowMemory(base)
 
     def planning_request(self, operation, cancelled, **data):
+        self.scientific_progress(data.get('goal',''))
         acquisition = getattr(self.actions, 'acquisition', None)
         if acquisition is not None and data.get('goal'):
             data['learning_context'] = acquisition.prepare(data['goal'], cancelled, data.get('screen'))
@@ -756,6 +780,32 @@ class Brain:
             raise ValueError('The next-step planner must return one action or a completed goal.')
         return result
 
+    def scientific_progress(self, goal):
+        """Project current Journal evidence before planning, without doing work.
+
+        The planner sees remaining acceptance obligations throughout a task;
+        only independent producers/verifiers can change those obligations.
+        Reports/checkpoints are emitted on change, not on a polling timer.
+        """
+        from .flags import enabled
+        config=getattr(self.actions,'config',{})
+        if not (enabled(config,'lab','enabled') and enabled(config,'lab','sim')):
+            return
+        from .discovery.vehicle_assurance import audit
+        verdict=audit(self.actions,goal)
+        if not verdict.get('applies'):return
+        progress={key:verdict[key] for key in ('passed','checks','missing','issues','source','physical_validation')}
+        self.current_scientific_context={**getattr(self,'current_scientific_context',{}),
+            'whole_goal_evidence':progress}
+        key=json.dumps(progress,sort_keys=True)
+        if key==getattr(self,'_scientific_progress_key',None):return
+        self._scientific_progress_key=key
+        self.checkpoint('scientific_progress',source='current_task_journal_audit',evidence=key)
+        checks=[value for era,row in verdict['checks'].items() for name,value in row.items()
+            if name!='spatial_active_aero' or era=='2026']
+        self.actions.report('brain',f'Scientific progress: {sum(value is True for value in checks)}/{len(checks)} required evidence checks verified. '
+            +'Remaining: '+'; '.join(verdict['missing'])+'. Progress is retained; source reads alone do not complete the engineering goal.')
+
     def propose_plan(self, operation, cancelled, **data):
         """One read-only correction for invalid targets/scope, before dispatch."""
         state=getattr(self.actions,'task_state',None)
@@ -794,7 +844,43 @@ class Brain:
             result = ground_file_scope(result, data.get('goal', ''))
             if isinstance(result, dict) and result.get('conversation'):
                 data['conversation'] = result['conversation']  # A correction continues the same conversation.
+            from .flags import enabled as feature_enabled
+            lab_config = getattr(self.actions, 'config', {})
+            if (isinstance(result, dict) and result.get('done') is True
+                    and feature_enabled(lab_config,'lab','enabled') and feature_enabled(lab_config,'lab','sim')):
+                from .discovery.vehicle_assurance import completion_error
+                rejection = completion_error(self.actions, data.get('goal', ''))
+                if rejection:
+                    self.checkpoint('scientific_acceptance_unmet', source='current_task_journal_audit', evidence=rejection)
+                    self.actions.report('brain', rejection)
+                    if attempt:
+                        if controller is not None:
+                            controller.transition('BLOCKED', rejection)
+                        raise ValueError('Task checkpoint retained: '+rejection)
+                    data['plan_validation_error'] = rejection
+                    continue  # Existing bounded read-only correction; no action replay.
             steps = result.get('steps', []) if isinstance(result, dict) else []
+            from .toolkits import virtual_scope_error
+            bad_scope = next((error for step in steps if isinstance(step,dict)
+                for error in [virtual_scope_error(step)] if error),None) if isinstance(steps,list) else None
+            if bad_scope:
+                self.checkpoint('invalid_tool_scope_rejected',source='tool_contract',evidence=bad_scope)
+                self.actions.report('brain','Correcting a skill namespace used as a file-search scope; no filesystem access was granted.')
+                if attempt:raise ValueError(bad_scope)
+                data['plan_validation_error']=bad_scope
+                continue
+            identity_error = None
+            if (feature_enabled(lab_config,'lab','enabled') and feature_enabled(lab_config,'lab','sim')
+                    and isinstance(steps,list)):
+                from .discovery.vehicle_assurance import search_step_error
+                identity_error = next((error for step in steps if isinstance(step,dict)
+                    for error in [search_step_error(lab_config,data.get('goal',''),step)] if error),None)
+            if identity_error:
+                self.checkpoint('scientific_identity_rejected',source='user_goal_constraint',evidence=identity_error)
+                self.actions.report('brain','Correcting a model search that dropped the requested vehicle identity.')
+                if attempt:raise ValueError(identity_error)
+                data['plan_validation_error']=identity_error
+                continue
             missing = isinstance(steps, list) and any(isinstance(step, dict)
                 and step.get('action') in FILE_SCOPE_ACTIONS
                 and (not isinstance(step.get('folder'), str) or not step['folder'].strip()) for step in steps)
@@ -1100,6 +1186,10 @@ class Brain:
                           "github_delete_file": r"\b(?:delete|remove)\b", "calendar_create": r"\b(?:create|add|schedule)\b",
                           "calendar_delete": r"\b(?:delete|remove|cancel)\b", "jira_create": r"\b(?:create|add)\b",
                           "jira_edit": r"\b(?:edit|update|modify)\b",
+                          'google_docs_create': r'\b(?:create|make|write|draft)\b',
+                          'google_sheets_create': r'\b(?:create|make|write)\b',
+                          'google_drive_save_file': r'\b(?:save|create|write|upload)\b',
+                          'google_drive_upload': r'\bupload\b',
                           "gmail_api_draft": r"\b(?:draft|compose|write|create|make|gmail_api_draft)\b",
                           "gmail_api_update_draft": r"\b(?:edit|update|modify|replace|change|gmail_api_update_draft)\b",
                           "gmail_api_send": r"\b(?:send|gmail_api_send)\b",
@@ -1269,6 +1359,7 @@ class Brain:
         if not self._run_lock.acquire(blocking=False):
             raise ValueError('Task paused: this execution worker already owns another task.')
         try:
+            self.current_scientific_context = {}
             return self._run_owned(goal, cancelled, approach)
         except Exception as exc:
             controller = self.adaptive_controller
@@ -1333,6 +1424,8 @@ class Brain:
                             evidence=json.dumps(self.last_step_timings, separators=(',', ':'))[:500])
 
     def _run(self, goal, cancelled):
+        self.current_scientific_context = {}
+        self._scientific_progress_key = None
         self.visual_fallback.last_saved = None
         self.planner_done = None
         self.tool_observations = []  # Fresh reads are required after restart or task change.
@@ -1353,6 +1446,23 @@ class Brain:
         state = getattr(self.actions, "task_state", None)
         resumed = getattr(self.actions, "resume_source", None)
         prior = resumed if isinstance(resumed, dict) else (state.previous(spoken_goal, "task") if isinstance(state, TaskState) else None)
+        from .flags import enabled as feature_enabled
+        config = getattr(self.actions,'config',{})
+        if feature_enabled(config,'lab','enabled') and feature_enabled(config,'lab','research'):
+            from .discovery.asset_preflight import run as source_preflight
+            source_observation = source_preflight(self.actions,goal,cancelled)
+            if source_observation is not None:
+                if source_observation.get('verified') is True:
+                    from .discovery.asset_preflight import context as source_context
+                    self.current_scientific_context = source_context(source_observation)
+                    # Present the bounded source index rather than clipping the
+                    # beginning of long provider descriptions. Full bytes and
+                    # original ordering remain in the source child Journal.
+                    source_observation = {**source_observation,
+                        'result':json.dumps(self.current_scientific_context,ensure_ascii=False)}
+                self.tool_observations.append(source_observation)
+                self.checkpoint('scientific_source_preflight',source='registered_source_dispatcher',
+                                evidence=source_observation['result'][:2000])
         from .gmail_workflows import run_gmail
         gmail_result = run_gmail(self, goal, cancelled)
         if gmail_result is not None:
@@ -1421,7 +1531,7 @@ class Brain:
         visual = None
         from .route_guide import guide as route_guide
         # Work routed to API/browser tools reads pages and files through the tools, not pixels.
-        routed = any(row.get('target') in {'web', 'spreadsheet', 'document', 'blender', 'code', 'notes', 'media', 'email'}
+        routed = any(row.get('target') in {'web', 'spreadsheet', 'document', 'blender', 'code', 'notes', 'media', 'email', 'science'}
                      for row in route_guide(goal, set(ToolRegistry(self.actions).specs)))
         if screen_aware and (fixed_media_plan or initial_launch_plan or exact_file or learned_plan or routed):
             captured = {"title": snapshot.get("title", "Desktop"), "ocr": "", "summary": "",
@@ -1446,7 +1556,7 @@ class Brain:
             name in {"chrome", "notepad", "file explorer", "edge", "calculator"}), reverse=True)[:80]
         exact_single_request = None if has_progress else (exact_file or explicit_command_plan(goal) or explicit_desktop_plan(goal))
         plan = exact_single_request or fixed_media_plan or initial_launch_plan or learned_plan or self.planning_request("plan", cancelled, goal=goal,
-            screen=self.visual_context(captured) if screen_aware else self.screen(snapshot), apps=apps,
+            screen=self.planning_context(self.visual_context(captured) if screen_aware else self.screen(snapshot)), apps=apps,
             completed=resume_completed, prior_task=prior, tools=ToolRegistry(self.actions).catalog(goal),
             fresh_image_ready=bool(self.step_session is not None and screen_aware),
             experience=state.recall(spoken_goal) if isinstance(state, TaskState) else [])
@@ -1969,6 +2079,17 @@ class Brain:
         if proposed:  # For a question the answer is the result: check it against the observations above.
             evidence.append("Jarvis's proposed answer or result (verify it against the observed results): " + proposed[:600])
         self.adaptive_controller.transition('VERIFY', 'Independent whole-goal verification')
+        from .flags import enabled as feature_enabled
+        lab_config = getattr(self.actions, 'config', {})
+        rejection = None
+        if feature_enabled(lab_config,'lab','enabled') and feature_enabled(lab_config,'lab','sim'):
+            from .discovery.vehicle_assurance import completion_error
+            rejection = completion_error(self.actions, goal)
+        if rejection:
+            self.adaptive_controller.transition('BLOCKED', rejection)
+            self.checkpoint('scientific_acceptance_unmet', source='current_task_journal_audit', evidence=rejection)
+            self.actions.report('brain', rejection)
+            raise ValueError('The full scientific goal is not verified; progress is retained: '+rejection)
         final = self.client.request("verify", cancelled, goal=goal,
             step={"action": "goal", "value": goal, "expected": "The ENTIRE user goal is satisfied: " + goal},
             screen=self.planning_context({**(self.visual_context(captured) if screen_aware else self.screen(after)), "trusted_evidence": evidence}))

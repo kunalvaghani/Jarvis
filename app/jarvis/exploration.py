@@ -237,9 +237,8 @@ class Explorer:
         return state
 
     def _save(self):
-        temporary = self.state_path.with_name('.state.' + uuid.uuid4().hex[:8])
-        temporary.write_text(json.dumps(self.state, indent=1, default=str), encoding='utf-8')
-        temporary.replace(self.state_path)
+        from .checkpoint_io import write_checkpoint
+        write_checkpoint(self.state_path,json.dumps(self.state, indent=1, default=str),(self.state_path).parent)
 
     def episode(self, application, environment, cancelled=lambda: False, hint_values=None, conditions=None):
         """One curriculum goal: observe, plan, act, verify, record, learn. Returns the trajectory."""

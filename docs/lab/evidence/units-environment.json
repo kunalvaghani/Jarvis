@@ -1,0 +1,44 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "environment": "app/.venv-discovery-units",
+  "approval": "user explicitly approved isolated Pint install in this chat",
+  "wheel_archive_bytes": 428497,
+  "packages": [
+    {
+      "name": "flexcache",
+      "version": "0.3",
+      "requires_python": ">=3.9",
+      "license_expression": null,
+      "license": "BSD"
+    },
+    {
+      "name": "flexparser",
+      "version": "0.4",
+      "requires_python": ">=3.9",
+      "license_expression": null,
+      "license": "BSD-3-Clause"
+    },
+    {
+      "name": "Pint",
+      "version": "0.25.2",
+      "requires_python": ">=3.11",
+      "license_expression": null,
+      "license": "BSD"
+    },
+    {
+      "name": "platformdirs",
+      "version": "4.14.3",
+      "requires_python": ">=3.11",
+      "license_expression": "MIT",
+      "license": null
+    },
+    {
+      "name": "typing_extensions",
+      "version": "4.16.0",
+      "requires_python": ">=3.9",
+      "license_expression": "PSF-2.0",
+      "license": null
+    }
+  ],
+  "core_environment_changed": false
+}

@@ -1,0 +1,40 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "strict_neural_mypy": {
+    "passed": true,
+    "files": 18,
+    "command": ".venv/Scripts/python.exe -B -m mypy --strict jarvis/neural --no-incremental"
+  },
+  "launcher_readiness": {
+    "status": "ready",
+    "scope": "dependencies_and_configured_services",
+    "live_inference_checked": false,
+    "services_started_or_restarted": false
+  },
+  "local_attempts": {
+    "ngspice": {
+      "used": 37,
+      "cap": 50
+    },
+    "scipy-pendulum": {
+      "used": 12,
+      "cap": 50
+    },
+    "blender-pendulum": {
+      "used": 16,
+      "cap": 50
+    }
+  },
+  "new_packages": 0,
+  "paid_provider_calls": 0,
+  "new_services": 0,
+  "shipped_lab_flags": "all false",
+  "control_defaults": "legacy preserved",
+  "repair_campaign": "PAUSED_BY_USER",
+  "limitations": [
+    "operator-assisted known-tool proof, not autonomous acquisition",
+    "synthetic spoken-file path; live microphone/UI NOT_RUN",
+    "SciPy conditional dynamics; no Bullet/physical validation",
+    "full C2/STEP/FEM/CFD/general mechanism acceptance remains open"
+  ]
+}

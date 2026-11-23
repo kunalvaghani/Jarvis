@@ -47,6 +47,8 @@ def tool_neurons() -> List[Neuron]:
         contract = catalog.TOOLS.get(spec.name)
         effect = catalog.side_effect(spec.name, spec.approval)
         secrets = tuple(f'secret:{name}' for name in (KIT[spec.name][2] if spec.name in KIT else ()))
+        if spec.name == 'discovery_call':
+            secrets += ('flag:lab.enabled',)
         if contract:
             inputs, outputs, _, runtime = contract
             explicit = 'explicit'

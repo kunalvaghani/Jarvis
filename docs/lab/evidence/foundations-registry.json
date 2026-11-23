@@ -1,0 +1,62 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "shipped_lab": "off",
+  "default_registry": {
+    "neurons": 306,
+    "active": 306,
+    "kinds": {
+      "tool": 179,
+      "mcp": 91,
+      "sensor": 3,
+      "skill": 13,
+      "model": 1,
+      "memory": 2,
+      "verifier": 10,
+      "route": 7
+    },
+    "side_effects": {
+      "local_write": 66,
+      "read_only": 136,
+      "ui_or_media_state": 58,
+      "destructive": 8,
+      "unknown": 8,
+      "external_write": 18,
+      "operation_dependent": 12
+    },
+    "explicit_contracts": 112,
+    "errors": []
+  },
+  "default_synapses": 434,
+  "lab_test_registry": {
+    "neurons": 310,
+    "active": 310,
+    "kinds": {
+      "tool": 179,
+      "mcp": 91,
+      "sensor": 3,
+      "skill": 15,
+      "model": 1,
+      "memory": 2,
+      "verifier": 12,
+      "route": 7
+    },
+    "side_effects": {
+      "local_write": 66,
+      "read_only": 140,
+      "ui_or_media_state": 58,
+      "destructive": 8,
+      "unknown": 8,
+      "external_write": 18,
+      "operation_dependent": 12
+    },
+    "explicit_contracts": 116,
+    "errors": []
+  },
+  "lab_nodes": [
+    "discovery.status@v1",
+    "discovery.verify.status@v1",
+    "discovery.units.convert@v1",
+    "discovery.verify.units@v1"
+  ],
+  "production_journal_opened": false
+}

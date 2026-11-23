@@ -1,0 +1,16 @@
+# C3 compact-response qualification proposal
+
+**Final approved outcome:** the user approved the corrected-worker530 scratch allowance retaining 400 charged units. Both calls verified (quick17.797s, configured9B52.531s), then a fresh process replayed their stored skeptic checks with zero new inference. Eight retained model reservations total 510 uncertain admission units. Both two-slot grants are exhausted; no further calls, reset, package installation or global policy change. [Receipt](evidence/c3-compact-wire-proof.json). Proposal text below is historical.
+
+
+**Historical intermediate proposal (superseded by the approved final outcome above):** the first approved v2 calls both failed before inference because the isolated worker lacked Pydantic. Their charges remain retained (400 total model-admission units); no package was installed. The wire contract is now standard-library-only, and the actual brain interpreter passed a mocked-chat schema/validation preflight. A replacement proposal is to raise only the scratch allowance from420 to530, preserving 400, for one quick20s/25s and one configured90s/95s call. The previous two-slot grant remains consumed; at that intermediate checkpoint the replacement was not yet approved.
+
+2026-11-04 IST. Prepared for the user's C4 + Firecrawl-assisted C3 repair request. **Not authorized by the exhausted earlier grant.**
+
+The new proposer v2 uses the existing local BrainClient/model/GPU scheduler with an explicit C3-only direct JSON schema, short system prompt, 320 output-token cap and 2048 requested context (small-model policy can clamp lower). Code binds actual citations and the explicit null baseline. Generic worker behavior and global settings remain unchanged. The earlier four v1 timeouts and290 uncertain admission units remain retained. New v2 starts UNVERIFIED, not silently VERIFIED.
+
+Proposed live scope: only the existing C3 scratch Journal, raise its operator-proof allowance from300 to420, retain every charge; at most **two v2 calls total**, one explicit installed-local0.8B quick request (20s request/25s outer cancellation), one configured-local9B request (90s/95s). No automatic third attempt; unknown outcomes stay charged. No reset/renewal of the previous two-slot grant. Use a separate durable two-slot grant for this changed implementation and refuse reused/expired slots before inference.
+
+Use actual cached/public DOI metadata and the unchanged skeptic, provider receipt, schema/model identity and evidence gates. No generated code executes, no scientific truth promotion, no package/model download, purchase, paid provider, global quota/model/privacy/GPU policy change, microphone/UI start or shared-service restart/kill. Require the existing local server to be available; no startup. A failure remains a failed gate. Default product allowance remains120; only the exact existing proof Journal gets the temporary process-scoped420 allowance.
+
+This separate quota approval is required by [CLAUDE.md](../../CLAUDE.md): “Don't change model, quota, or privacy policy without asking.” The prior free-local50 ceilings and the exhausted v1 grant remain distinct. The compact schema/expansion and C4 domain regression currently pass29 tests; they do not substitute for actual live model qualification.

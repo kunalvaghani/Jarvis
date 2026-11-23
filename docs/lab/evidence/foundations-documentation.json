@@ -1,0 +1,15 @@
+{
+  "local_links_checked": 949,
+  "missing_links": [],
+  "lab_flags": {
+    "enabled": false,
+    "sim": false,
+    "research": false,
+    "learning": false
+  },
+  "neural_mode": "act",
+  "neural_learning": "shadow",
+  "archive_hash_matches": true,
+  "ngspice_execution": "NOT_RUN; preparation approval only; Windows binaries do not run in existing Linux sandbox",
+  "fixture_matches_HEAD": true
+}

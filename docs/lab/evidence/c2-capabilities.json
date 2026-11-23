@@ -1,0 +1,165 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "lab_neurons": 14,
+  "all_explicit": true,
+  "flags_off_count": 0,
+  "nodes": [
+    {
+      "id": "discovery.status@v1",
+      "contract": "explicit",
+      "side_effect_class": "read_only",
+      "privilege": "read",
+      "requirements": [
+        "flag:lab.enabled"
+      ],
+      "capability_status": "reviewed built-in; per-run evidence required; not physically validated"
+    },
+    {
+      "id": "discovery.verify.status@v1",
+      "contract": "explicit",
+      "side_effect_class": "read_only",
+      "privilege": "read",
+      "requirements": [
+        "flag:lab.enabled"
+      ],
+      "capability_status": "reviewed built-in; per-run evidence required; not physically validated"
+    },
+    {
+      "id": "discovery.units.convert@v1",
+      "contract": "explicit",
+      "side_effect_class": "read_only",
+      "privilege": "read",
+      "requirements": [
+        "flag:lab.enabled",
+        "flag:lab.sim"
+      ],
+      "capability_status": "reviewed built-in; per-run evidence required; not physically validated"
+    },
+    {
+      "id": "discovery.verify.units@v1",
+      "contract": "explicit",
+      "side_effect_class": "read_only",
+      "privilege": "read",
+      "requirements": [
+        "flag:lab.enabled",
+        "flag:lab.sim"
+      ],
+      "capability_status": "reviewed built-in; per-run evidence required; not physically validated"
+    },
+    {
+      "id": "discovery.electronics.divider@v1",
+      "contract": "explicit",
+      "side_effect_class": "read_only",
+      "privilege": "read",
+      "requirements": [
+        "flag:lab.enabled",
+        "flag:lab.sim"
+      ],
+      "capability_status": "reviewed built-in; per-run evidence required; not physically validated"
+    },
+    {
+      "id": "discovery.verify.divider@v1",
+      "contract": "explicit",
+      "side_effect_class": "read_only",
+      "privilege": "read",
+      "requirements": [
+        "flag:lab.enabled",
+        "flag:lab.sim"
+      ],
+      "capability_status": "reviewed built-in; per-run evidence required; not physically validated"
+    },
+    {
+      "id": "discovery.components.inspect@v1",
+      "contract": "explicit",
+      "side_effect_class": "read_only",
+      "privilege": "read",
+      "requirements": [
+        "flag:lab.enabled"
+      ],
+      "capability_status": "reviewed built-in; per-run evidence required; not physically validated"
+    },
+    {
+      "id": "discovery.assets.inspect_local@v1",
+      "contract": "explicit",
+      "side_effect_class": "read_only",
+      "privilege": "read",
+      "requirements": [
+        "flag:lab.enabled"
+      ],
+      "capability_status": "reviewed built-in; per-run evidence required; not physically validated"
+    },
+    {
+      "id": "discovery.parameters.plan@v1",
+      "contract": "explicit",
+      "side_effect_class": "read_only",
+      "privilege": "read",
+      "requirements": [
+        "flag:lab.enabled",
+        "flag:lab.sim"
+      ],
+      "capability_status": "reviewed built-in; per-run evidence required; not physically validated"
+    },
+    {
+      "id": "discovery.verify.c1@v1",
+      "contract": "explicit",
+      "side_effect_class": "read_only",
+      "privilege": "read",
+      "requirements": [
+        "flag:lab.enabled"
+      ],
+      "capability_status": "reviewed built-in; per-run evidence required; not physically validated"
+    },
+    {
+      "id": "discovery.mechanics.pendulum@v1",
+      "contract": "explicit",
+      "side_effect_class": "read_only",
+      "privilege": "read",
+      "requirements": [
+        "flag:lab.enabled",
+        "flag:lab.sim"
+      ],
+      "capability_status": "reviewed built-in; per-run evidence required; not physically validated"
+    },
+    {
+      "id": "discovery.verify.pendulum@v1",
+      "contract": "explicit",
+      "side_effect_class": "read_only",
+      "privilege": "read",
+      "requirements": [
+        "flag:lab.enabled",
+        "flag:lab.sim"
+      ],
+      "capability_status": "reviewed built-in; per-run evidence required; not physically validated"
+    },
+    {
+      "id": "discovery.geometry.pendulum@v1",
+      "contract": "explicit",
+      "side_effect_class": "local_write",
+      "privilege": "write",
+      "requirements": [
+        "flag:lab.enabled",
+        "flag:lab.sim"
+      ],
+      "capability_status": "reviewed built-in; per-run evidence required; not physically validated"
+    },
+    {
+      "id": "discovery.verify.pendulum_native@v1",
+      "contract": "explicit",
+      "side_effect_class": "read_only",
+      "privilege": "read",
+      "requirements": [
+        "flag:lab.enabled",
+        "flag:lab.sim"
+      ],
+      "capability_status": "reviewed built-in; per-run evidence required; not physically validated"
+    }
+  ],
+  "skills": [
+    "component-planning",
+    "lab-evidence",
+    "lab-units",
+    "ngspice-divider",
+    "pendulum-lab"
+  ],
+  "learning": "Pint/ngspice scoped learned qualification only; C1/C2 reviewed static neurons are not autonomous acquisition proof"
+}

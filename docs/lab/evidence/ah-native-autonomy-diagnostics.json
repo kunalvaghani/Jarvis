@@ -1,0 +1,64 @@
+{
+  "date_local": "2026-11-05 Asia/Calcutta",
+  "scope": "Live primitive-mechanics smoke diagnostics; not A-H acceptance",
+  "attempts": [
+    {
+      "attempt": "v1",
+      "probe_passed": false,
+      "model_calls": 4,
+      "seconds": 256.98499999998603,
+      "failure": "Procedure name proposed as tool command; decision concluded solver unavailable",
+      "solver_calls": 0,
+      "physical_validation": false
+    },
+    {
+      "attempt": "v2",
+      "probe_passed": false,
+      "model_calls": 1,
+      "seconds": 20.29599999997299,
+      "failure": "Restricted tool-session localhost access denied before inference",
+      "solver_calls": 0,
+      "physical_validation": false
+    },
+    {
+      "attempt": "v3",
+      "probe_passed": false,
+      "model_calls": 2,
+      "seconds": 223.59399999998277,
+      "failure": "Help schema read and verified; subsequent native arguments rejected",
+      "solver_calls": 0,
+      "physical_validation": false
+    },
+    {
+      "attempt": "v4",
+      "probe_passed": false,
+      "model_calls": 1,
+      "seconds": 45.65700000000652,
+      "failure": "Required native operation or expected-result contract rejected before execution",
+      "solver_calls": 0,
+      "physical_validation": false
+    },
+    {
+      "attempt": "v5",
+      "probe_passed": true,
+      "model_calls": 5,
+      "seconds": 252.81299999996554,
+      "solver_calls": 1,
+      "checks": [
+        {
+          "goal_id": "g-d2b88aa5f9a044e3",
+          "actual_final_z_m": 1.8037999999999998,
+          "analytic_reference_z_m": 1.8037999999999998,
+          "run_ref": "artifact://sha256/229b09b0d741a02bf686938b014427e05d45f058a4887fe6773522243cd253f3"
+        }
+      ],
+      "physical_validation": false
+    }
+  ],
+  "preserved_private_traces": true,
+  "prepared_case_json": false,
+  "live_model_solver_patches": false,
+  "all_eight_autonomous_scenarios_passed": false,
+  "primitive_smoke_passed": true,
+  "mechanics_slots_used": 5
+}

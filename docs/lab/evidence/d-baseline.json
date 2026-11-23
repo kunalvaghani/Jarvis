@@ -1,0 +1,1264 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "passed": 208,
+  "failed": 0,
+  "skipped": 0,
+  "errors": 0,
+  "collection_errors": [],
+  "exit_code": 0,
+  "seconds": 61.95299999997951,
+  "reports": [
+    {
+      "test": "tests/test_discovery_foundations.py::test_unknowns_bounds_nonfinite_and_llm_provenance",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00048750004498288035
+    },
+    {
+      "test": "tests/test_discovery_foundations.py::test_all_scientific_kinds_roundtrip",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.013489499979186803
+    },
+    {
+      "test": "tests/test_discovery_foundations.py::test_migration_rollback_preserves_history_and_existing_tables",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0031630999874323606
+    },
+    {
+      "test": "tests/test_discovery_foundations.py::test_secrets_and_dangling_relations_are_rejected",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.003436799976043403
+    },
+    {
+      "test": "tests/test_discovery_foundations.py::test_reference_index_uses_existing_reasoning_bank_without_personal_facts",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.028517700033262372
+    },
+    {
+      "test": "tests/test_discovery_foundations.py::test_pint_known_answers_unknowns_and_dimension_rejection",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 6.978165699983947
+    },
+    {
+      "test": "tests/test_discovery_foundations.py::test_default_off_does_not_import_or_construct_lab_state",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.06793960003415123
+    },
+    {
+      "test": "tests/test_discovery_foundations.py::test_brain_routes_real_unit_conversion_and_query_from_same_memory",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 2.9573238999582827
+    },
+    {
+      "test": "tests/test_discovery_foundations.py::test_wrong_target_unit_cannot_pass_roundtrip_only_verifier",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 1.9301334000192583
+    },
+    {
+      "test": "tests/test_discovery_foundations.py::test_research_scouts_are_scoped_and_sim_requires_master_flag",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00024999998277053237
+    },
+    {
+      "test": "tests/test_discovery_foundations.py::test_budget_restart_uncertain_reservations_and_no_paid_gpu_bypass",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0008916000369936228
+    },
+    {
+      "test": "tests/test_discovery_foundations.py::test_golden_gate_rejects_false_goals_and_duplicate_use_counts",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 13.895232899987604
+    },
+    {
+      "test": "tests/test_discovery_foundations.py::test_scientific_source_hash_uses_existing_path_scope",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.007531500014010817
+    },
+    {
+      "test": "tests/test_discovery_foundations.py::test_google_read_contracts_never_downgrade_writes",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.02384219999657944
+    },
+    {
+      "test": "tests/test_discovery_foundations.py::test_jobs_use_the_existing_queue_and_checkpoint_owner",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0047342999605461955
+    },
+    {
+      "test": "tests/test_discovery_foundations.py::test_text_ingress_and_actions_execute_route_the_lab_without_a_model",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 3.228717499994673
+    },
+    {
+      "test": "tests/test_discovery_foundations.py::test_nested_discovery_guides_use_existing_skill_loader_only_when_enabled",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.04951350000919774
+    },
+    {
+      "test": "tests/test_discovery_foundations.py::test_caller_fabricated_pass_artifact_cannot_promote",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.02908710000338033
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_only_downstream_work_is_invalidated_and_unknowns_remain_unknown",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0007220999686978757
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_invalid_assembly_and_dependency_graphs_are_rejected[param-sha256:b09edb8edbc07b69]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0006153999711386859
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_invalid_assembly_and_dependency_graphs_are_rejected[param-sha256:cdb970f8bb86b5f4]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0005024000420235097
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_invalid_assembly_and_dependency_graphs_are_rejected[param-sha256:19bb91d964babe69]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.000534099992364645
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_invalid_assembly_and_dependency_graphs_are_rejected[param-sha256:168a1de3933bda4a]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0004857999738305807
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_invalid_assembly_and_dependency_graphs_are_rejected[param-sha256:1da89fd7aefdb787]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00048479996621608734
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_invalid_assembly_and_dependency_graphs_are_rejected[param-sha256:c8d8343bcdc348e7]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0005145999602973461
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_invalid_assembly_and_dependency_graphs_are_rejected[param-sha256:3fa029701a47c91b]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0005189999938011169
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_change_plan_converts_units_preserves_scenario_and_never_runs_solver",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 1.8349700999679044
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_unsupported_change_cannot_cheat_units_bounds_or_scenario[param-sha256:a610d12847b56ccf]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.9013059000135399
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_unsupported_change_cannot_cheat_units_bounds_or_scenario[param-sha256:1f44b263dd0c1897]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.9306312000262551
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_unsupported_change_cannot_cheat_units_bounds_or_scenario[param-sha256:79d7d936eaef6f62]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0006623999797739089
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_project_snapshots_reuse_journal_and_reject_rewriting_a_revision",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.022935900022275746
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_concept_and_regulation_mismatch_are_never_exact",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00036539998836815357
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_license_and_provenance_are_hard_rejects_even_with_other_good_fields[param-sha256:fe71ce0f16383887]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00032430002465844154
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_license_and_provenance_are_hard_rejects_even_with_other_good_fields[param-sha256:a41e255623e11e4b]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00032439996721222997
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_license_and_provenance_are_hard_rejects_even_with_other_good_fields[param-sha256:58d5a7bce1495b54]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0003420999855734408
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_license_and_provenance_are_hard_rejects_even_with_other_good_fields[param-sha256:e1f214545816a303]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0004415000439621508
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_license_and_provenance_are_hard_rejects_even_with_other_good_fields[param-sha256:eefaf643e7bdd141]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0004684000159613788
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_license_and_provenance_are_hard_rejects_even_with_other_good_fields[param-sha256:cf794b8a58022cb9]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0003063000040128827
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_asset_cache_keeps_bytes_license_attribution_and_hash_in_same_journal",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.06815000000642613
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_rejected_asset_is_not_read_and_out_of_scope_path_is_refused",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0008710999973118305
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_c1_text_requests_fire_through_actual_actions_brain_and_independent_verifier",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 4.784671899979003
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_c1_registration_is_default_off_and_explicit_when_enabled",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00042290001874789596
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_drive_source_adapter_only_reuses_existing_reads_and_labels_excerpt_hash",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0033790000015869737
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_unknown_baseline_and_immutable_parameter_stop_before_unit_worker",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0006336000515148044
+    },
+    {
+      "test": "tests/test_discovery_components.py::test_affine_unit_delta_does_not_add_absolute_temperature_offset",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 1.4242995999520645
+    },
+    {
+      "test": "tests/test_discovery_pendulum.py::test_numerical_pendulum_matches_independent_period_energy_and_refinement",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 1.4108751000021584
+    },
+    {
+      "test": "tests/test_discovery_pendulum.py::test_unsupported_or_underresolved_model_is_rejected[param-sha256:b90038c058c42db7]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00024349999148398638
+    },
+    {
+      "test": "tests/test_discovery_pendulum.py::test_unsupported_or_underresolved_model_is_rejected[param-sha256:4e6bef5798ac035f]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00023880001390352845
+    },
+    {
+      "test": "tests/test_discovery_pendulum.py::test_unsupported_or_underresolved_model_is_rejected[param-sha256:8aa307e77cd2aec1]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00021000002743676305
+    },
+    {
+      "test": "tests/test_discovery_pendulum.py::test_unsupported_or_underresolved_model_is_rejected[param-sha256:826f4449eb8c74ca]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00020409998251125216
+    },
+    {
+      "test": "tests/test_discovery_pendulum.py::test_unsupported_or_underresolved_model_is_rejected[param-sha256:e35daa8255d6ce84]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0002120999852195382
+    },
+    {
+      "test": "tests/test_discovery_pendulum.py::test_unsupported_or_underresolved_model_is_rejected[param-sha256:aca60ba47f5b384e]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00020670000230893493
+    },
+    {
+      "test": "tests/test_discovery_pendulum.py::test_unsupported_or_underresolved_model_is_rejected[param-sha256:5d819421f38ef4d0]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00019799999427050352
+    },
+    {
+      "test": "tests/test_discovery_pendulum.py::test_unsupported_or_underresolved_model_is_rejected[param-sha256:0e2eeb3c12d27561]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00020950002362951636
+    },
+    {
+      "test": "tests/test_discovery_pendulum.py::test_frozen_motion_is_not_accepted_as_a_simulation_and_damping_is_passive",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0651069000014104
+    },
+    {
+      "test": "tests/test_discovery_pendulum.py::test_scenario_cannot_be_changed_to_make_a_comparison_pass",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0003771999618038535
+    },
+    {
+      "test": "tests/test_discovery_pendulum.py::test_only_explicit_local_tools_get_fifty_durable_attempts",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 1.148030899988953
+    },
+    {
+      "test": "tests/test_discovery_pendulum.py::test_native_build_requires_real_existing_approval_and_changed_source_is_preserved",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.2558934999979101
+    },
+    {
+      "test": "tests/test_discovery_pendulum.py::test_registered_c2_is_off_by_default_and_native_writes_stay_gated",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00032839999767020345
+    },
+    {
+      "test": "tests/test_discovery_pendulum.py::test_actual_spoken_unit_forms_normalize_without_changing_numbers[param-sha256:67a0eef3b5d894ee]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00019459996838122606
+    },
+    {
+      "test": "tests/test_discovery_pendulum.py::test_actual_spoken_unit_forms_normalize_without_changing_numbers[param-sha256:2a098fe38b9ce396]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0001792000257410109
+    },
+    {
+      "test": "tests/test_discovery_pendulum.py::test_speech_normalization_never_partially_accepts_shell_text_or_other_goals",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0003093000268563628
+    },
+    {
+      "test": "tests/test_discovery_pendulum.py::test_mismatched_native_result_never_promotes_components_or_experiment",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.17568709998158738
+    },
+    {
+      "test": "tests/test_discovery_pendulum.py::test_c2_native_project_reuses_c1_ids_world_and_dependency_plans",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.016027199977543205
+    },
+    {
+      "test": "tests/test_discovery_pendulum.py::test_real_pendulum_parameter_command_reuses_c1_units_and_keeps_source_scenario",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 2.3598162999842316
+    },
+    {
+      "test": "tests/test_discovery_research.py::test_metadata_doi_identity_dates_markup_and_no_false_peer_review",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0010067999828606844
+    },
+    {
+      "test": "tests/test_discovery_research.py::test_public_queries_never_send_secrets_urls_paths_or_addresses[param-sha256:eadec7a8a1f59fdb]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0002223999472334981
+    },
+    {
+      "test": "tests/test_discovery_research.py::test_public_queries_never_send_secrets_urls_paths_or_addresses[param-sha256:be2bcd0c797eb656]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00036290002753958106
+    },
+    {
+      "test": "tests/test_discovery_research.py::test_public_queries_never_send_secrets_urls_paths_or_addresses[param-sha256:b57994c56e326bc0]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00019109999993816018
+    },
+    {
+      "test": "tests/test_discovery_research.py::test_public_queries_never_send_secrets_urls_paths_or_addresses[param-sha256:696fd237c3043464]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00019809999503195286
+    },
+    {
+      "test": "tests/test_discovery_research.py::test_public_queries_never_send_secrets_urls_paths_or_addresses[param-sha256:be4e0f9585caf670]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0001776000135578215
+    },
+    {
+      "test": "tests/test_discovery_research.py::test_cache_restart_cancellation_failure_retention_and_paid_refusal",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.002723399957176298
+    },
+    {
+      "test": "tests/test_discovery_research.py::test_http_rejects_ssrf_and_redirect_targets_before_any_socket",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00028989999555051327
+    },
+    {
+      "test": "tests/test_discovery_research.py::test_excerpts_dedup_locators_tournament_and_tamper_refusal",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.008263300056569278
+    },
+    {
+      "test": "tests/test_discovery_research.py::test_retracted_sources_are_not_usable_hypothesis_evidence",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0018340999959036708
+    },
+    {
+      "test": "tests/test_discovery_research.py::test_new_metadata_revision_keeps_distinct_immutable_source_identity",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0005116999964229763
+    },
+    {
+      "test": "tests/test_discovery_research.py::test_conditional_theory_analytic_limits_and_impossible_speed_refusal",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00038539996603503823
+    },
+    {
+      "test": "tests/test_discovery_research.py::test_actual_ingress_research_cache_skeptic_and_theory",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.2780571000184864
+    },
+    {
+      "test": "tests/test_discovery_research.py::test_fabricated_pass_verdict_cannot_persist_sources",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.1190368999959901
+    },
+    {
+      "test": "tests/test_discovery_research.py::test_flags_contracts_invalid_syntax_and_no_paid_model_fallback",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0005836999625898898
+    },
+    {
+      "test": "tests/test_discovery_research.py::test_doi_lookup_cannot_substitute_another_work",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0015545000205747783
+    },
+    {
+      "test": "tests/test_discovery_research.py::test_fifty_attempt_cap_and_real_cache_reopen",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.003963600029237568
+    },
+    {
+      "test": "tests/test_discovery_research.py::test_possible_contradiction_is_not_asserted_as_scientific_refutation",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0008556999964639544
+    },
+    {
+      "test": "tests/test_discovery_research.py::test_explicit_local_route_hint_is_private_and_bad_model_numbers_are_retained",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0006612999713979661
+    },
+    {
+      "test": "tests/test_discovery_research.py::test_provided_hypotheses_use_real_cached_sources_and_scoped_file",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.2513800000306219
+    },
+    {
+      "test": "tests/test_discovery_optimization.py::test_numerical_objective_improves_without_relaxing_scenario_and_failures_retained",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.8206286000204273
+    },
+    {
+      "test": "tests/test_discovery_optimization.py::test_fresh_journal_reopen_resumes_next_trial_without_replaying_completed",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.5973865000414662
+    },
+    {
+      "test": "tests/test_discovery_optimization.py::test_crash_unknown_trial_stays_charged_and_is_not_repeated",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.503354299988132
+    },
+    {
+      "test": "tests/test_discovery_optimization.py::test_pause_cancel_and_active_lease_never_silently_resume",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.13144319999264553
+    },
+    {
+      "test": "tests/test_discovery_optimization.py::test_budget_stop_needs_explicit_new_scope_not_resume",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.10069649998331442
+    },
+    {
+      "test": "tests/test_discovery_optimization.py::test_changed_source_and_fabricated_physics_are_refused",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.29141110001364723
+    },
+    {
+      "test": "tests/test_discovery_optimization.py::test_existing_scheduler_dependencies_and_restore",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.5295604999992065
+    },
+    {
+      "test": "tests/test_discovery_optimization.py::test_real_brain_ingress_and_disabled_flags_cannot_fall_back",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 1.1131982000079006
+    },
+    {
+      "test": "tests/test_discovery_optimization.py::test_compact_c3_direct_schema_and_program_bound_provenance",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.002091499976813793
+    },
+    {
+      "test": "tests/test_discovery_optimization.py::test_queue_remaining_is_idempotent_dependency_chain",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.8680976000032388
+    },
+    {
+      "test": "tests/test_discovery_optimization.py::test_explicit_queue_after_pause_drain_preserves_old_tasks_and_runs_remaining",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.9713595000212081
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_independent_dc_oracle_and_explicit_source_sign[param-sha256:af645964fe69490b]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00034819997381418943
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_independent_dc_oracle_and_explicit_source_sign[param-sha256:0d8558c01935f993]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0002992999507114291
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_independent_dc_oracle_and_explicit_source_sign[param-sha256:4f6077e8aed33fd6]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00021399999968707561
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_independent_dc_oracle_and_explicit_source_sign[param-sha256:713bebbc7a0d9734]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00019510003039613366
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_wrong_sign_wrong_voltage_and_nonconservation_are_rejected",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00018640002235770226
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_invalid_physics_bounds_and_arbitrary_spice_are_rejected[param-sha256:3e7d65b55baad81c]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00018700002692639828
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_invalid_physics_bounds_and_arbitrary_spice_are_rejected[param-sha256:b69e26471a0037c2]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00018319999799132347
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_invalid_physics_bounds_and_arbitrary_spice_are_rejected[param-sha256:d9cd4d9351f6aeeb]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00018019997514784336
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_invalid_physics_bounds_and_arbitrary_spice_are_rejected[param-sha256:aca537b0899aada4]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00018939998699352145
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_invalid_physics_bounds_and_arbitrary_spice_are_rejected[param-sha256:ea0f60f44ae8cf89]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00017969997134059668
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_invalid_physics_bounds_and_arbitrary_spice_are_rejected[param-sha256:f68bac56d6b4a14f]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00018440000712871552
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_invalid_physics_bounds_and_arbitrary_spice_are_rejected[param-sha256:d4575d7e9ab4b183]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00018209998961538076
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_invalid_physics_bounds_and_arbitrary_spice_are_rejected[param-sha256:0ecf2d59c02a4c46]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.000179799972102046
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_netlist_is_fixed_topology_and_missing_vectors_have_no_analytic_fallback",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00020730000687763095
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_proof_slots_survive_restarts_and_never_refund_uncertain_execution",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.14398910000454634
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_missing_environment_and_cancel_never_execute_a_host_solver",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.01737640000646934
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_fabricated_numerical_receipt_cannot_pass_brain_verifier",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.08564159995876253
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_divider_intent_is_bounded_and_flags_off_never_compiles",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.011974799970630556
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_wrong_library_size_is_rejected_before_reading_or_loading",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.014628200035076588
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_invalid_supported_request_stops_in_brain_before_solver_or_legacy",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.08481229998869821
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_unapproved_or_mismatched_proof_extension_is_rejected",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0037991999997757375
+    },
+    {
+      "test": "tests/test_discovery_divider.py::test_explicit_free_local_fifty_limit_retains_old_usage_and_enforces_cap",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.6859097999986261
+    },
+    {
+      "test": "tests/test_brain.py::PlanTests::test_bounds_plan_and_handles_clarification",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00031949998810887337
+    },
+    {
+      "test": "tests/test_brain.py::PlanTests::test_configured_coder_handles_project_edits_and_code_drafts",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.004628999973647296
+    },
+    {
+      "test": "tests/test_brain.py::PlanTests::test_exact_file_requests_keep_filename_and_replacement",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.002392199996393174
+    },
+    {
+      "test": "tests/test_brain.py::PlanTests::test_explicit_task_keeps_all_clauses_for_planner",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.008866499993018806
+    },
+    {
+      "test": "tests/test_brain.py::PlanTests::test_file_edit_and_approved_actions_have_bounded_plan_shapes",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00046640000073239207
+    },
+    {
+      "test": "tests/test_brain.py::PlanTests::test_free_form_only_dispatches_after_final",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.008820599992759526
+    },
+    {
+      "test": "tests/test_brain.py::PlanTests::test_missing_configured_coder_does_not_switch_to_planner",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0006395999807864428
+    },
+    {
+      "test": "tests/test_brain.py::PlanTests::test_new_instruction_queues_behind_running_task",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.25963190000038594
+    },
+    {
+      "test": "tests/test_brain.py::PlanTests::test_normalizes_redundant_browser_open_and_incomplete_music_search",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0008224999764934182
+    },
+    {
+      "test": "tests/test_brain.py::PlanTests::test_normalizes_selected_folder_without_launching_it",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00023300002794712782
+    },
+    {
+      "test": "tests/test_brain.py::PlanTests::test_planning_schema_allows_only_supplied_configured_tools",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.002109499997459352
+    },
+    {
+      "test": "tests/test_brain.py::PlanTests::test_rejects_model_invented_actions",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00025189999723806977
+    },
+    {
+      "test": "tests/test_brain.py::PlanTests::test_scoped_single_read_preserves_operand_without_model",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00030130002414807677
+    },
+    {
+      "test": "tests/test_brain.py::PlanTests::test_trims_only_unrequested_trailing_newline_from_file_content",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00020870001753792167
+    },
+    {
+      "test": "tests/test_brain.py::PlanTests::test_visual_model_accepts_structured_result_in_thinking_field",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0009991000406444073
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_adaptive_cancel_after_inference_prevents_plan_acceptance",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.014631700003519654
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_adaptive_does_not_accept_empty_unfinished_plan_or_over_budget",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.033237700001336634
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_adaptive_inference_failure_does_not_execute_stale_remaining_plan",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.06417159998090938
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_adaptive_rejects_completed_action_anywhere_in_plan",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.021448699990287423
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_adaptive_replaces_remaining_tasks_using_verified_result",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.05541669996455312
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_cancellation_between_decision_and_action",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.025376000034157187
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_completed_action_cannot_be_repeated_by_changing_unused_browser",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.021849899960216135
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_failed_verification_never_replays_click",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.02555919997394085
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_full_goal_failure_does_not_claim_completion",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.024267999979201704
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_invalid_dependencies_stop_before_any_external_action",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.013798600004520267
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_invented_choice_id_is_rejected",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.022480899991933256
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_plan_cannot_change_a_different_named_file",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.014264600002206862
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_post_action_observation_uses_fresh_file_state",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0008359000203199685
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_post_action_observation_waits_for_new_window_without_reacting",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0008976999670267105
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_rejected_decision_does_not_act",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.02347279997775331
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_replace_plan_cannot_silently_overwrite_entire_file",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.01488869998138398
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_replanner_asking_for_the_goal_is_answered_once_then_real_questions_reach_the_user",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.05960929999127984
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_resume_observes_and_executes_only_remaining_action",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.02950599999167025
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_resume_rejects_repeated_completed_action",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.01417149999178946
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_screen_aware_adaptive_replans_from_landed_screen",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.053065699990838766
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_screen_aware_reobserves_loading_page_without_repeating_action",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.027668199967592955
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_screen_aware_replans_from_landed_screen",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.053268899966496974
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_screen_aware_stops_when_landed_screen_does_not_confirm_step",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.026516100042499602
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_stale_screen_does_not_act",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.026181300054304302
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_unique_exact_choice_skips_laya_and_is_verified",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.026678399997763336
+    },
+    {
+      "test": "tests/test_brain.py::LoopTests::test_wrong_choice_never_clicks",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.025378699996508658
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_ten_random_order_nodes_release_by_graph_not_arrival",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.09418009995715693
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_same_project_context_does_not_impose_sequencing",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.009946199948899448
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_unrelated_command_between_continuations_uses_compatible_entity",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.013525200018193573
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_after_that_is_explicit_ordering_with_unique_lineage",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.009173400001600385
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_ambiguous_pronoun_never_selects_most_recent_project",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00949709996348247
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_two_actual_result_handoffs_resolved_at_dispatch",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.022163899964652956
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_independent_safe_lanes_overlap_but_file_edits_do_not",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.017579699982888997
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_conditional_test_branches_require_structured_verification[param-sha256:804ebf5e907c4f43]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.019597499980591238
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_conditional_test_branches_require_structured_verification[param-sha256:ce905dc776fd5da5]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.01904749998357147
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_prose_claim_that_tests_passed_is_not_verification",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.010608599986881018
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_optional_failed_prerequisite_does_not_block_other_path",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.018639400019310415
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_failed_required_branch_leaves_unrelated_group_eligible",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.01445879996754229
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_cycle_rejection_is_atomic_and_revision_preserved",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.007505200046580285
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_restart_preserves_graph_results_and_never_replays_uncertain_write",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.04107389994896948
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_upstream_artifact_change_invalidates_transitive_results_without_replay",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.028526399983093143
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_similar_wording_independent_projects_and_explicit_separation",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.016416799975559115
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_dynamic_expansion_is_bounded_deduplicated_reviewed_and_atomic",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.03959719999693334
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_join_running_workflow_move_split_and_group_pause",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.016154800017829984
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_low_risk_visible_twenty_second_graph_decision_and_sensitive_gate",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.02807780000148341
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_group_report_records_actual_failures_artifacts_and_blockers",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.017742800002451986
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_graph_strategy_validation_rejects_cycle_without_partial_edits",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.023954799980856478
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_conditional_commit_and_exact_multiple_reference_resolution",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.025115399970673025
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_internal_repair_until_pass_does_not_require_previous_task[param-sha256:ce905dc776fd5da5]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0038399999612011015
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_internal_repair_until_pass_does_not_require_previous_task[param-sha256:804ebf5e907c4f43]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.007841299986466765
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_until_completion_is_distinct_from_release_and_explicit_context_gates",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.008496499969623983
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_intake_does_not_coerce_internal_completion_loop_into_context_command",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.0012928000069223344
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_pending_named_project_reference_resolves_when_producer_arrives",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.030103500001132488
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_exact_artifact_reference_uses_verified_producer",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.015504300012253225
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_expansion_tool_uses_existing_registry_and_deny_policy",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.054719200008548796
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_graph_decision_committed_before_crash_applies_once_after_restart",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.026025600032880902
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_strategy_cannot_remove_existing_verification_condition",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.021909700008109212
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_unverified_generic_completion_cannot_feed_result_dependent_write",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.009930700005497783
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_large_result_bundle_defers_without_killing_worker",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.031176599964965135
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_group_priority_unlocks_descendant_but_blocked_node_stays_ineligible",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.01573320000898093
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_real_queue_database_migration_keeps_prior_outcomes_and_dependencies",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.02532649994827807
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_conversation_and_observed_project_must_agree_to_disambiguate",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.010641700006090105
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_result_invalidation_is_idempotent_and_report_scopes_shared_group_to_batch",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.014557699963916093
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_workflow_expansion_total_quota_and_depth_are_not_bypassed",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.21406830003252253
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_late_graph_decision_defers_when_task_has_started",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.028365000034682453
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_new_verification_gate_added_during_decision_cannot_be_removed",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.02535920002264902
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_result_commit_fault_keeps_effect_owner_until_reconciliation",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.004891599994152784
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_same_work_for_new_application_keeps_new_project_owner",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.00878729997202754
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_native_group_controls_hide_empty_moved_groups_and_preserve_task_inspection",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.473272499977611
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_cached_application_context_must_be_recent_open_and_visible[param-sha256:b92c275c2cc06606]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.02151739998953417
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_cached_application_context_must_be_recent_open_and_visible[param-sha256:a97b90e671b7774b]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.02143160003470257
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_cached_application_context_must_be_recent_open_and_visible[param-sha256:5525a3af17f5346e]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.021790700033307076
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_cached_application_context_must_be_recent_open_and_visible[param-sha256:7724e519c8dcc7c5]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.020662099996116012
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_cached_application_context_must_be_recent_open_and_visible[param-sha256:eaeed94bc28c39c0]",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.02197080000769347
+    },
+    {
+      "test": "tests/test_workflow_graph.py::test_compact_island_body_scrolls_and_timer_requires_fully_visible_question",
+      "phase": "call",
+      "outcome": "passed",
+      "seconds": 0.5828091000439599
+    }
+  ],
+  "source_sha256_before": "c03de07a377b251988cd04c8ab1d4fcee28a4b2b7fe88357fd8f7ef141eb963e",
+  "source_sha256_after": "c03de07a377b251988cd04c8ab1d4fcee28a4b2b7fe88357fd8f7ef141eb963e",
+  "isolation": "production credential files/external network/local model and Blender traffic denied; fixture loopback allowed",
+  "output_policy": "counts and test identifiers only; no assertion payloads"
+}

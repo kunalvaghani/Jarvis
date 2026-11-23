@@ -1,0 +1,66 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "scope": {
+    "scope": "user-approved-c3-compact-wire-530-2026-11-04",
+    "day": "2026-11-04",
+    "max_calls": 2,
+    "cpu_allowance": 530,
+    "journal": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\lab-validation\\c3-proof.sqlite3"
+  },
+  "attempts": [
+    {
+      "mode": "quick ",
+      "goal_id": "g-8a5c3c7d6aa74e8f",
+      "state": "verified",
+      "seconds": 17.79700000002049,
+      "error": null,
+      "answer_sha256": "cb3c2c4a66b7f7135c3019bc04fb6518664cff6fa931a8701cbde14aa3590c84"
+    },
+    {
+      "mode": "configured",
+      "goal_id": "g-89a03aac61394613",
+      "state": "verified",
+      "seconds": 52.53099999995902,
+      "error": null,
+      "answer_sha256": "e4b9d04bed5f3185213bc066bd730196304effd268f3143d3f4c12e8bce8add4"
+    }
+  ],
+  "old_grant_reused": false,
+  "global_policy_changed": false,
+  "new_packages": 0,
+  "new_paid_inference": 0,
+  "model_reservations": [
+    {
+      "cpu_s": 90.0,
+      "state": "uncertain"
+    },
+    {
+      "cpu_s": 20.0,
+      "state": "uncertain"
+    },
+    {
+      "cpu_s": 90.0,
+      "state": "uncertain"
+    },
+    {
+      "cpu_s": 90.0,
+      "state": "uncertain"
+    },
+    {
+      "cpu_s": 20.0,
+      "state": "uncertain"
+    },
+    {
+      "cpu_s": 90.0,
+      "state": "uncertain"
+    },
+    {
+      "cpu_s": 20.0,
+      "state": "uncertain"
+    },
+    {
+      "cpu_s": 90.0,
+      "state": "uncertain"
+    }
+  ]
+}

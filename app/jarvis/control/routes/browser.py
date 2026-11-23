@@ -241,7 +241,9 @@ class BrowserExecutor(RouteExecutor):
 
     def browser_state(self) -> Dict[str, Any]:
         tabs = []
-        for tab in self.tabs.values():
+        # Reading a page pumps browser events; a close/open callback can mutate
+        # self.tabs while a title is read. Observe a stable membership snapshot.
+        for tab in list(self.tabs.values()):
             try:
                 tabs.append({'tab_id': tab.id, 'title': tab.page.title()[:300], 'url': tab.page.url[:2000],
                              'active': tab.id == self.active})
@@ -404,6 +406,16 @@ class BrowserExecutor(RouteExecutor):
             return tab.page.url
         if what == 'title':
             return tab.page.title()
+        if what == 'links':
+            before = tab.page.url
+            rows = tab.page.evaluate("""() => Array.from(document.querySelectorAll('a[href]')).slice(0,2000).map(a => {
+                try {const u=new URL(a.href);if(!['http:','https:'].includes(u.protocol)||u.username||u.password||
+                    Array.from(u.searchParams.keys()).some(k=>/token|secret|password|credential|signature|authorization|api.?key|access.?key|^sig$|^key$|^auth$|^jwt$/i.test(k)))return null;
+                    return {url:u.href.slice(0,2048),text:(a.innerText||a.textContent||'').trim().slice(0,240)};
+                }catch(_){return null;}}).filter(Boolean).slice(0,200)""")
+            if tab.page.url != before:
+                raise ControlError('Research page changed while links were observed.', ErrorCategory.STALE_REF)
+            return {'url': before, 'links': rows}
         if what == 'value':
             session, node = self._object(tab, self._key(tab, params['ref']))
             return session.send('Runtime.callFunctionOn', {'objectId': node, 'functionDeclaration': READ_VALUE,

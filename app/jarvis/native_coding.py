@@ -882,7 +882,8 @@ def infer(messages, options, cancelled, deadline, report, run, vision=False):
 def run(coder, project, goal, cancelled=lambda:False, initial_plan=None, initial_feedback=None,
         allowed_paths=None, deferred_paths=None, total_deadline=None, return_receipt=False):
     from .campaign_pause import assert_allowed
-    assert_allowed(project=project,run=coder.actions.base)
+    from .runtime_scope import optional_actor_base
+    assert_allowed(project=project,run=optional_actor_base(coder.actions))
     options=coder.client.options;project=Path(project).resolve(strict=True)
     validation_goal=getattr(coder,'validation_goal',goal)
     requested_coder=options.get('coder','qwen3.5:9b')
@@ -1381,7 +1382,7 @@ def run(coder, project, goal, cancelled=lambda:False, initial_plan=None, initial
                         'than copying its prefix until the field cap. No application body is supplied by the controller. '
                         )+
                         'Preserve each callable name, signature, original objects and every frozen assertion. Source execution is '
-                        'not causal proof: reason from the actual failed assertion and current implementation. No unrelated '
+                        'not causal proof: execution alone does not locate the defect. Reason from the actual failed assertion and current implementation. No unrelated '
                         'definitions or statements outside these exact source spans are permitted in this attempt. The controller '
                         'supplies no function body. Original candidate/progress/size/time/turn/repair limits remain binding.'}]
                     if function_key in function_feedback:

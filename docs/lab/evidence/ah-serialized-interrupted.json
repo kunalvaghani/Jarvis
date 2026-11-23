@@ -1,0 +1,20 @@
+{
+  "scope": "Interrupted diagnostic; not a complete regression receipt",
+  "terminal_receipt_written": false,
+  "reported_lower_bound": 4300,
+  "failures": [
+    {
+      "run_id": "e7ba299e84d4",
+      "source_sha256": "ff1c466ffe77bd9788e2440b0227f038802644970787d79fceee56848dbe9146",
+      "event": "failure",
+      "test": "tests/test_phase05_escalation_demonstration.py::test_P05_restart_recovery_keeps_steps_but_needs_fresh_consent",
+      "phase": "call",
+      "outcome": "failed",
+      "seconds": 6.0999596000001475,
+      "failure_kind": "PermissionError"
+    }
+  ],
+  "source_stability_certified": false,
+  "stop_reason": "Private demonstration-state rename failed; consolidating remaining reviewed app-owned metadata writers; user/source/authentication/asset effects excluded",
+  "all_eight_autonomous_scenarios_passed": false
+}

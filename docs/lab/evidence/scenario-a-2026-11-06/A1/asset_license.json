@@ -1,0 +1,134 @@
+{
+  "decision": {
+    "decision": "SURROGATE_REQUIRED",
+    "geometry_acquired": false,
+    "target_year": 2025,
+    "original_goal_hash": "637d898ba1ace82591281c514e430d85a843bd1c1da5229153e4bd5a7a3b41df",
+    "regulation_source_refs": [
+      "fia-2025-68145096a7b72b5b87c2ef7383b1efd206bf3297342536b464300d57516f7e89"
+    ],
+    "reason": "No inspected engineering asset is available from the configured bounded source path. This does not claim no such asset exists anywhere.",
+    "fallback_scope": "explicit surrogate fallback in the original request; no third-party mesh copied",
+    "exact_team_cad": false,
+    "decision_hash": "69b782a2b59eef883851421e718b57e186d18cdcd1771cf38fc697f48489e32c"
+  },
+  "reviews": {
+    "decisions": [
+      {
+        "decision": "NOT_ENGINEERING_QUALIFIED",
+        "license_declared": {
+          "fullName": "",
+          "label": "CC Attribution",
+          "requirements": "",
+          "uid": "322a749bcfa841b29dff1e8a1bb74b0b",
+          "url": ""
+        },
+        "name": "Gulf Mclaren F1 2022 Car",
+        "reason": "season name mismatch",
+        "uid": "dabbf81921e94065bfadbb5fd1b2ee5b"
+      },
+      {
+        "decision": "NOT_ENGINEERING_QUALIFIED",
+        "license_declared": {
+          "fullName": "",
+          "label": "CC Attribution",
+          "requirements": "",
+          "uid": "322a749bcfa841b29dff1e8a1bb74b0b",
+          "url": ""
+        },
+        "name": "F1 2021 McLaren MCL35M",
+        "reason": "season name mismatch",
+        "uid": "967ecec37468412083c40c62b3d7234d"
+      },
+      {
+        "decision": "NOT_ENGINEERING_QUALIFIED",
+        "license_declared": {
+          "fullName": "",
+          "label": "CC Attribution-NonCommercial-ShareAlike",
+          "requirements": "",
+          "uid": "2628dbe5140a4e9592126c8df566c0b7",
+          "url": ""
+        },
+        "name": "1997 McLaren F1 GT",
+        "reason": "season name mismatch",
+        "uid": "c1cc76945ca84c10a7ff8330fb1dd1ab"
+      },
+      {
+        "decision": "NOT_ENGINEERING_QUALIFIED",
+        "license_declared": {
+          "fullName": "",
+          "label": "CC Attribution",
+          "requirements": "",
+          "uid": "322a749bcfa841b29dff1e8a1bb74b0b",
+          "url": ""
+        },
+        "name": "F1 2025 McLaren MCL39",
+        "reason": "metadata cannot establish inspected native geometry or exact team engineering identity; binary acquisition not authorized/authenticated by this adapter",
+        "uid": "c6194270002b401bb25be7e35ab56e34"
+      },
+      {
+        "decision": "NOT_ENGINEERING_QUALIFIED",
+        "license_declared": {
+          "fullName": "",
+          "label": "CC Attribution-NonCommercial-ShareAlike",
+          "requirements": "",
+          "uid": "2628dbe5140a4e9592126c8df566c0b7",
+          "url": ""
+        },
+        "name": "2025 McLaren W1",
+        "reason": "metadata cannot establish inspected native geometry or exact team engineering identity; binary acquisition not authorized/authenticated by this adapter",
+        "uid": "519ee6f9089b4d548cd4384ef159f62e"
+      },
+      {
+        "decision": "NOT_ENGINEERING_QUALIFIED",
+        "license_declared": {
+          "fullName": "",
+          "label": "CC Attribution-NonCommercial",
+          "requirements": "",
+          "uid": "bbfe3f7dbcdd4122b966b85b9786a989",
+          "url": ""
+        },
+        "name": "McLaren F1 1993 NFS2 Edition. Scene Version",
+        "reason": "season name mismatch",
+        "uid": "49502d9e4874458aa6223222a56ff0b7"
+      },
+      {
+        "decision": "NOT_ENGINEERING_QUALIFIED",
+        "license_declared": {
+          "fullName": "",
+          "label": "CC Attribution",
+          "requirements": "",
+          "uid": "322a749bcfa841b29dff1e8a1bb74b0b",
+          "url": ""
+        },
+        "name": "Mclaren Mcl36",
+        "reason": "season name mismatch",
+        "uid": "273d819de35d41a09a16213863ed0936"
+      },
+      {
+        "decision": "NOT_ENGINEERING_QUALIFIED",
+        "license_declared": {
+          "fullName": "",
+          "label": "CC Attribution",
+          "requirements": "",
+          "uid": "322a749bcfa841b29dff1e8a1bb74b0b",
+          "url": ""
+        },
+        "name": "Mclaren 35M 2021 | www.vecarz.com",
+        "reason": "season name mismatch",
+        "uid": "5094ae7c57c544e7832fcd9ca39bba2f"
+      }
+    ],
+    "exact_engineering_identity_verified": false,
+    "reviewed_ids": [
+      "dabbf81921e94065bfadbb5fd1b2ee5b",
+      "967ecec37468412083c40c62b3d7234d",
+      "c1cc76945ca84c10a7ff8330fb1dd1ab",
+      "c6194270002b401bb25be7e35ab56e34",
+      "519ee6f9089b4d548cd4384ef159f62e",
+      "49502d9e4874458aa6223222a56ff0b7",
+      "273d819de35d41a09a16213863ed0936",
+      "5094ae7c57c544e7832fcd9ca39bba2f"
+    ]
+  }
+}

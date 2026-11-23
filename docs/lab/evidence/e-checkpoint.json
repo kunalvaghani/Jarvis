@@ -1,0 +1,152 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "kind": "local Phase E source/evidence checkpoint, not a full repository backup or Git release",
+  "private_archive": "app/.jarvis-runtime/lab-validation/e-source-evidence-checkpoint-2026-11-04.zip",
+  "archive_sha256": "5a9fbdd97f3422ac089394258dc2ecc9a5b7918bed67d0e718c3f2afd9feb6af",
+  "expanded_source_sha256": "02ee9f4d047fe4eab146426f2b55f789d43060990fd2bdb04f96b86b39997303",
+  "entries": [
+    {
+      "path": "app/jarvis/discovery/acceptance.py",
+      "bytes": 12112,
+      "sha256": "433cb33780ce8f0bd6a6cac1d46498033339dd4ffc28eb6644ae1a58ea0b4916"
+    },
+    {
+      "path": "app/benchmarks/live/discovery_lab.py",
+      "bytes": 12798,
+      "sha256": "8c46d27185067ad1afde7a18a37e517f7cd896b3bfc25f9300e2dfe7c0bc6e08"
+    },
+    {
+      "path": "app/tests/test_discovery_acceptance.py",
+      "bytes": 7236,
+      "sha256": "315f28423a9f2f8ef20a352dd834110900ae77c41d2e443ce5aacdfe813606e9"
+    },
+    {
+      "path": "app/config/runtime_manifest.json",
+      "bytes": 100785,
+      "sha256": "8d879245c874632478ece8328181ee360035cb3dcac3a0d2f12d2f401a896b28"
+    },
+    {
+      "path": "docs/lab/E_ACCEPTANCE.md",
+      "bytes": 14362,
+      "sha256": "7f14f074b6b59bf221f251a783f709d809aa00a393fbe4ab3264c098d1298447"
+    },
+    {
+      "path": "docs/lab/reproduce_e.py",
+      "bytes": 5066,
+      "sha256": "695f8fb1ef1e175ae9c68a39aa1685ae9f0fe7d48be1fd1dfbecd9de374066ae"
+    },
+    {
+      "path": "docs/lab/run_e_exports.py",
+      "bytes": 5993,
+      "sha256": "3ee3df8243a8f3d5413f1bd38d8252e9a36f9ee56a014e15a5f14cacacc6382b"
+    },
+    {
+      "path": "docs/lab/prepare_e_exports.py",
+      "bytes": 2912,
+      "sha256": "ee150d7951436989bb8e226cd051580aac60ea5afc39245ce68cf51a9afd2497"
+    },
+    {
+      "path": "docs/lab/finalize_e.py",
+      "bytes": 10809,
+      "sha256": "10c24b380a950f858193428bc6b15e330e8ec8225758551746c9e466dd20c030"
+    },
+    {
+      "path": "docs/lab/archive_e_code.py",
+      "bytes": 1492,
+      "sha256": "49f2a74d07423871e2c922ad285828db4f7ff22e4e823d7ca26915903bada0a8"
+    },
+    {
+      "path": "docs/lab/checkpoint_e.py",
+      "bytes": 2997,
+      "sha256": "8de27121c4c745757f0e9e9ea1f4522dcde409331a1381cce12e6f9ad68c5abf"
+    },
+    {
+      "path": "docs/lab/evidence/e-baseline.json",
+      "bytes": 696,
+      "sha256": "0abf8826a3866d79c9abd5cd658b1eebaef11bc24fabfadcfc272ee938a6637a"
+    },
+    {
+      "path": "docs/lab/evidence/e-current-audit.json",
+      "bytes": 955,
+      "sha256": "8c2b189de0e8497384006db4e6a870013b8977ece128b8d094b8a33d6472a3db"
+    },
+    {
+      "path": "docs/lab/evidence/e-divider-0.cir",
+      "bytes": 85,
+      "sha256": "63d7cd0d1f0a271da7e3a4526d0a97336a48f246f86183c0bf26303584bfe387"
+    },
+    {
+      "path": "docs/lab/evidence/e-divider-1.cir",
+      "bytes": 85,
+      "sha256": "25b07b9c213287b1e7e1f6870157d98c46e89ee843b177f89f708d4060164cc2"
+    },
+    {
+      "path": "docs/lab/evidence/e-export-prepared.json",
+      "bytes": 4843,
+      "sha256": "9489985bad5e5cb9e298a16310d93d76587a0b20ae11138042154114d253801b"
+    },
+    {
+      "path": "docs/lab/evidence/e-final-export-prepared.json",
+      "bytes": 27111,
+      "sha256": "8186124cc71ba04df2fd54b786dcc5c62baf7f9e26397f117bad884b1cb142db"
+    },
+    {
+      "path": "docs/lab/evidence/e-focused-final.json",
+      "bytes": 697,
+      "sha256": "1ce2776eb266e3dd39c9914b6715b5680557df60d2f92bd8853cda16af47c602"
+    },
+    {
+      "path": "docs/lab/evidence/e-full-final.json",
+      "bytes": 5201,
+      "sha256": "5cd64b8b5a7ed0e31d11955dc0e93aedc19166ecc9f7bbca761654b08b9a682e"
+    },
+    {
+      "path": "docs/lab/evidence/e-google-live.json",
+      "bytes": 1279,
+      "sha256": "b69226a6e49231a32759f9f20fba00905bda402f0163950d55e881565afb2c77"
+    },
+    {
+      "path": "docs/lab/evidence/e-google-reconciled.json",
+      "bytes": 1500,
+      "sha256": "a9a59f027a9bf5e168882c671eff014ad44b57aaa783304236b882c900a572be"
+    },
+    {
+      "path": "docs/lab/evidence/e-harness-executed.py.txt",
+      "bytes": 12798,
+      "sha256": "8c46d27185067ad1afde7a18a37e517f7cd896b3bfc25f9300e2dfe7c0bc6e08"
+    },
+    {
+      "path": "docs/lab/evidence/e-local-acceptance.json",
+      "bytes": 34187,
+      "sha256": "b0b589b4aef9f60468ef70b2ce68a2b597fdd6850802cde0eb6b6e80afd1c168"
+    },
+    {
+      "path": "docs/lab/evidence/e-oracle-executed.py.txt",
+      "bytes": 11879,
+      "sha256": "f2b4983b93b92cc54a7074d706af13dd6adf4f27a717a4b95401e31382e7fb25"
+    },
+    {
+      "path": "docs/lab/evidence/e-oracles-final.json",
+      "bytes": 695,
+      "sha256": "60349ccb2c0ce34e55e8ffa4e990e6d140ef0dd3a031d6477083da1048264bee"
+    },
+    {
+      "path": "docs/lab/evidence/e-portable-outputs.json",
+      "bytes": 195900,
+      "sha256": "663ec9661bc5f7c829b2322a165775dd8d1044bee92de82fd53c9556c53c7ee5"
+    },
+    {
+      "path": "docs/lab/evidence/e-resource-accounting.json",
+      "bytes": 458,
+      "sha256": "3d78916634e9dcac0c7bc7daf9fa7d392de607bb26ec470985e5f65ccf964b7e"
+    },
+    {
+      "path": "docs/lab/evidence/e-static.json",
+      "bytes": 587,
+      "sha256": "e3bef6651418fd193b14cf4391b4b83cef0a3817178169c2dcba096a31005d8b"
+    }
+  ],
+  "excludes": "credentials, personal memory, recordings, runtime databases, native binaries, unrelated working-tree files",
+  "full_phase_e_acceptance": false,
+  "commit_push_tag": false
+}

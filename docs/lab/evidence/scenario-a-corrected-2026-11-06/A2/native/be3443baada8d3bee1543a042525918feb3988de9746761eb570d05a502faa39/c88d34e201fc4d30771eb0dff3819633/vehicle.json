@@ -1,0 +1,60 @@
+{
+  "Name": "Sedan Vehicle",
+  "Type": "Vehicle",
+  "Template": "WheeledVehicle",
+  "Chassis": {
+    "Input File": "chassis.json"
+  },
+  "Axles": [
+    {
+      "Suspension Input File": "suspension.json",
+      "Suspension Location": [
+        1.666,
+        0,
+        0.25
+      ],
+      "Steering Index": 0,
+      "Left Wheel Input File": "wheel.json",
+      "Right Wheel Input File": "wheel.json",
+      "Left Brake Input File": "brake.json",
+      "Right Brake Input File": "brake.json"
+    },
+    {
+      "Suspension Input File": "suspension.json",
+      "Suspension Location": [
+        -1.666,
+        0,
+        0.125
+      ],
+      "Left Wheel Input File": "wheel.json",
+      "Right Wheel Input File": "wheel.json",
+      "Left Brake Input File": "brake.json",
+      "Right Brake Input File": "brake.json"
+    }
+  ],
+  "Steering Subsystems": [
+    {
+      "Input File": "steering.json",
+      "Location": [
+        1.478,
+        0,
+        0.14
+      ],
+      "Orientation": [
+        1,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "Wheelbase": 3.332,
+  "Minimum Turning Radius": 7.6,
+  "Maximum Steering Angle (deg)": 25.0,
+  "Driveline": {
+    "Input File": "driveline.json",
+    "Suspension Indexes": [
+      1
+    ]
+  }
+}

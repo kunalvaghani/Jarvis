@@ -44,6 +44,18 @@ def classify_input(flags):
     return 'injected' if flags & (LLMHF_INJECTED | LLMHF_LOWER_IL_INJECTED) else 'user'
 
 
+class HookEvent(tuple):
+    """Existing five-field event, with ephemeral correlation metadata only.
+
+    extra_info never grants trust and is not persisted in demonstration steps.
+    Injection classification still uses Windows flags exclusively.
+    """
+    def __new__(cls, x, y, message, flags, received_at, extra_info=0):
+        event=super().__new__(cls,(x,y,message,flags,received_at))
+        event.extra_info=extra_info
+        return event
+
+
 class HookProcess:
     """In-process WH_MOUSE_LL with a message pump (used inside the dedicated hook process only)."""
 
@@ -59,7 +71,7 @@ class HookProcess:
         def callback(code, wparam, lparam):
             if code == 0:
                 data = ctypes.cast(lparam, ctypes.POINTER(MSLLHOOKSTRUCT)).contents
-                self.emit(data.pt.x, data.pt.y, int(wparam), int(data.flags))
+                self.emit(data.pt.x, data.pt.y, int(wparam), int(data.flags), int(data.dwExtraInfo))
             return user32.CallNextHookEx(None, code, wparam, lparam)
 
         self._callback = callback_type(callback)
@@ -68,7 +80,7 @@ class HookProcess:
         handle = user32.SetWindowsHookExW(WH_MOUSE_LL, self._callback, None, 0)
         if not handle:
             raise OSError('SetWindowsHookExW failed (' + str(ctypes.get_last_error()) + ')')
-        self.emit(0, 0, 0, -1)  # ready marker
+        self.emit(0, 0, 0, -1, 0)  # ready marker
         message = wintypes.MSG()
         while user32.GetMessageW(ctypes.byref(message), None, 0, 0) > 0:
             user32.TranslateMessage(ctypes.byref(message))
@@ -93,7 +105,7 @@ class MouseHook:
     def start(self):
         import subprocess
         import sys
-        self.process = subprocess.Popen([sys.executable, '-m', 'jarvis.demonstration', '--hook'],
+        self.process = subprocess.Popen([sys.executable, '-m', 'jarvis.demonstration', '--hook-v2'],
                                         cwd=str(Path(__file__).resolve().parents[1]), stdin=subprocess.DEVNULL,
                                         stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True,
                                         creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
@@ -106,14 +118,17 @@ class MouseHook:
     def _read(self):
         for line in self.process.stdout:
             try:
-                x, y, message, flags = (int(part) for part in line.split())
+                parts=[int(part) for part in line.split()]
+                if len(parts) not in (4,5):continue
+                x,y,message,flags=parts[:4]
+                extra_info=parts[4] if len(parts)==5 else 0
             except ValueError:
                 continue
             if flags == -1:
                 self.ready.set()
                 continue
             try:
-                self.events.put_nowait((x, y, message, flags, time.monotonic()))
+                self.events.put_nowait(HookEvent(x,y,message,flags,time.monotonic(),extra_info))
             except queue.Full:
                 pass
 
@@ -195,9 +210,8 @@ class DemonstrationSession:
 
     def _save(self):
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        temporary = self.path.with_name('.' + self.path.name + '.' + uuid.uuid4().hex[:6])
-        temporary.write_text(json.dumps(self.state, indent=1), encoding='utf-8')
-        temporary.replace(self.path)
+        from .checkpoint_io import write_checkpoint
+        write_checkpoint(self.path,json.dumps(self.state, indent=1),(self.path).parent)
 
     def request(self, action_name, window_handle, cancelled=lambda: False):
         """Ask by voice, then require explicit consent scoped to one window. No consent: nothing is installed."""
@@ -375,12 +389,14 @@ def promote(skills, session, replay, name):
                                                             None, provenance)
 
 
-def _hook_main():
+def _hook_main(*, extra_info=False):
     import sys
 
-    def emit(x, y, message, flags):
-        print(x, y, message, flags, flush=True)
+    def emit(x, y, message, flags, extra_info=0):
+        values=(x,y,message,flags,extra_info) if include_extra else (x,y,message,flags)
+        print(*values, flush=True)
         sys.stdout.flush()
+    include_extra=extra_info
     HookProcess(emit).run()
 
 
@@ -388,3 +404,5 @@ if __name__ == '__main__':
     import sys
     if sys.argv[1:] == ['--hook']:
         _hook_main()
+    elif sys.argv[1:] == ['--hook-v2']:
+        _hook_main(extra_info=True)

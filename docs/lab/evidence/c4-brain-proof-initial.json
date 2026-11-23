@@ -1,0 +1,172 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "operator_assisted": true,
+  "physical_validation": false,
+  "fresh_process_resume": true,
+  "owned_child_crash_exit": 23,
+  "real_lease_wait_s": 21,
+  "new_installs": 0,
+  "paid_calls": 0,
+  "first": {
+    "study_id": "study-1dd859da6c833071a93ff4208463d07c",
+    "state": "READY",
+    "scenario_sha256": "970819b30f6557f5c26e8fd3e6c647c353eb2d18b88a468ae1b3ecc59f1c979d",
+    "objective": {
+      "target_period_s": 2.0,
+      "tolerance_s": 0.02
+    },
+    "candidates_m": [
+      0.5,
+      1.5,
+      1.0
+    ],
+    "trials": [
+      {
+        "number": 0,
+        "state": "COMPLETED",
+        "detail": "numerically verified; constraints evaluated separately",
+        "run_ref": "artifact://sha256/b616deb83c2e6279a4d812fa5327e634c285b0b985fe1aaba1bd64d0c0fe1692",
+        "length_m": 0.5,
+        "period_s": 1.4248997019994853,
+        "gravity_moment_nm": 0.9744730675497754,
+        "feasible": true,
+        "decision": "CANDIDATE",
+        "error_s": 0.5751002980005147
+      }
+    ],
+    "best": {
+      "number": 0,
+      "state": "COMPLETED",
+      "detail": "numerically verified; constraints evaluated separately",
+      "run_ref": "artifact://sha256/b616deb83c2e6279a4d812fa5327e634c285b0b985fe1aaba1bd64d0c0fe1692",
+      "length_m": 0.5,
+      "period_s": 1.4248997019994853,
+      "gravity_moment_nm": 0.9744730675497754,
+      "feasible": true,
+      "decision": "CANDIDATE",
+      "error_s": 0.5751002980005147
+    },
+    "baseline_error_s": 0.5751002980005147,
+    "objective_met": false,
+    "evidence_status": "SIMULATION_PASSED_WITH_ASSUMPTIONS",
+    "physical_validation": false,
+    "scope": "ideal pendulum bounded grid search; objective/constraint decision is separate from numerical verification"
+  },
+  "resume": {
+    "study_id": "study-1dd859da6c833071a93ff4208463d07c",
+    "state": "COMPLETED",
+    "scenario_sha256": "970819b30f6557f5c26e8fd3e6c647c353eb2d18b88a468ae1b3ecc59f1c979d",
+    "objective": {
+      "target_period_s": 2.0,
+      "tolerance_s": 0.02
+    },
+    "candidates_m": [
+      0.5,
+      1.5,
+      1.0
+    ],
+    "trials": [
+      {
+        "number": 0,
+        "state": "COMPLETED",
+        "detail": "numerically verified; constraints evaluated separately",
+        "run_ref": "artifact://sha256/b616deb83c2e6279a4d812fa5327e634c285b0b985fe1aaba1bd64d0c0fe1692",
+        "length_m": 0.5,
+        "period_s": 1.4248997019994853,
+        "gravity_moment_nm": 0.9744730675497754,
+        "feasible": true,
+        "decision": "CANDIDATE",
+        "error_s": 0.5751002980005147
+      },
+      {
+        "number": 1,
+        "state": "COMPLETED",
+        "detail": "numerically verified; constraints evaluated separately",
+        "run_ref": "artifact://sha256/0ed05414ca5190032112c660f6df4962dcfa7745e10f73037fa2abd9f2176d7e",
+        "length_m": 1.5,
+        "period_s": 2.463624396563948,
+        "gravity_moment_nm": 2.9234192026493258,
+        "feasible": false,
+        "decision": "REJECTED_CONSTRAINT",
+        "error_s": 0.46362439656394816
+      },
+      {
+        "number": 2,
+        "state": "COMPLETED",
+        "detail": "numerically verified; constraints evaluated separately",
+        "run_ref": "artifact://sha256/aacd2a31bce09f14ff103b797a1b6482d3dccadff3501c55049717f54301c5eb",
+        "length_m": 1.0,
+        "period_s": 2.012098142789198,
+        "gravity_moment_nm": 1.9489461350995507,
+        "feasible": true,
+        "decision": "CANDIDATE",
+        "error_s": 0.012098142789198185
+      }
+    ],
+    "best": {
+      "number": 2,
+      "state": "COMPLETED",
+      "detail": "numerically verified; constraints evaluated separately",
+      "run_ref": "artifact://sha256/aacd2a31bce09f14ff103b797a1b6482d3dccadff3501c55049717f54301c5eb",
+      "length_m": 1.0,
+      "period_s": 2.012098142789198,
+      "gravity_moment_nm": 1.9489461350995507,
+      "feasible": true,
+      "decision": "CANDIDATE",
+      "error_s": 0.012098142789198185
+    },
+    "baseline_error_s": 0.5751002980005147,
+    "objective_met": true,
+    "evidence_status": "SIMULATION_PASSED_WITH_ASSUMPTIONS",
+    "physical_validation": false,
+    "scope": "ideal pendulum bounded grid search; objective/constraint decision is separate from numerical verification",
+    "queue_states": [
+      "COMPLETED",
+      "COMPLETED",
+      "COMPLETED"
+    ],
+    "checkpoint_present": true
+  },
+  "recover": {
+    "study_id": "study-89f1ed5da5dc5f212ed48552d085bb95",
+    "state": "READY",
+    "scenario_sha256": "970819b30f6557f5c26e8fd3e6c647c353eb2d18b88a468ae1b3ecc59f1c979d",
+    "objective": {
+      "target_period_s": 2.1,
+      "tolerance_s": 0.02
+    },
+    "candidates_m": [
+      0.5,
+      1.5,
+      1.0
+    ],
+    "trials": [
+      {
+        "number": 0,
+        "state": "UNCERTAIN",
+        "detail": "interrupted trial; no replay",
+        "run_ref": null
+      },
+      {
+        "number": 1,
+        "state": "COMPLETED",
+        "detail": "numerically verified; constraints evaluated separately",
+        "run_ref": "artifact://sha256/5ba255cf7a35ef010841be16e3d8a564cf9b0d13f9135b34e88f664a68c00bef",
+        "length_m": 1.5,
+        "period_s": 2.463624396563948,
+        "gravity_moment_nm": 2.9234192026493258,
+        "feasible": false,
+        "decision": "REJECTED_CONSTRAINT",
+        "error_s": 0.36362439656394807
+      }
+    ],
+    "best": null,
+    "baseline_error_s": null,
+    "objective_met": false,
+    "evidence_status": "INSUFFICIENT_EVIDENCE",
+    "physical_validation": false,
+    "scope": "ideal pendulum bounded grid search; objective/constraint decision is separate from numerical verification",
+    "budget_stop": "BUDGET_STOP",
+    "control_final": "CANCELLED"
+  }
+}

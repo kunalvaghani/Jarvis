@@ -1,0 +1,11 @@
+{
+  "date": "2026-11-06",
+  "scope": "Code-only mixed-worktree checkpoint; not a release, full backup or clean Git commit",
+  "source_sha256": "6d82f0d7ec8434dea64db5e3ecf5c58ad92552f9d927aeff6a5c2f3dbc35d609",
+  "file_count": 882,
+  "uncompressed_bytes": 11651321,
+  "private_archive": "app/.jarvis-runtime/lab-validation/checkpoints/scenario-a-6d82f0d7ec84/source.zip",
+  "archive_sha256": "969b5c1bcc7109140d3344cd2bb3c89c5513e048beb4021e5336b9e0962f92e3",
+  "excluded": "credentials/config.json contents, personal memory, recordings, runtime databases, downloaded tools/models/binaries",
+  "restore_policy": "Do not restore blindly over mixed user work. Compare individual files; no automatic rollback or deletion."
+}

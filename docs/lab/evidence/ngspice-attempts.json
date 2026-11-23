@@ -1,0 +1,24 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "approved_limit": 24,
+  "consumed": 24,
+  "successful_calls": 22,
+  "failed_attempts": [
+    {
+      "slot": 0,
+      "outcome": "native process failed without result",
+      "budget": "uncertain retained"
+    },
+    {
+      "slot": 1,
+      "outcome": "segmentation fault localized to ngSpice_nospinit before initialization",
+      "budget": "uncertain retained"
+    }
+  ],
+  "resolution": "use empty private sandbox initialization directories; mandatory callbacks bound; no syscall/resource relaxation",
+  "final_requalification": "PASS",
+  "voice_acceptance": "NOT_RUN",
+  "autonomous_acquisition": "NOT_IMPLEMENTED",
+  "remaining_authorized": 0,
+  "invalid_request_refusal": "recognized invalid request stays in brain; typed adapter refuses before solver; no LLM fallback"
+}

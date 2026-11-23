@@ -1,0 +1,511 @@
+[
+  {
+    "stage": "resolve_target",
+    "action": "scenario.resolve_target",
+    "run_id": "scenario-fbee0aad1bc44fe3800140ec89d1173d",
+    "fingerprint": "8ee04fd41d5e8c2021b47d0667e113cfc287335410fd90930dd3d8e8b70c0301",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "d64f9ddaae0e8baccf110108bec72254f83665270c2765da2d59f5a599a31594",
+    "post_digest": "031b83fc739e3439ab6256d979c0b727eb39fe38f9fb58810155312dbe35d5dc",
+    "result_ref": "artifact://sha256/7563f370b24ebb68f5bac14c679a60f3d3b55b7f17999f5b73094798920b1803",
+    "seconds": 0.0,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {},
+      "stage": "resolve_target",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free model for a 2026-regulation F1 car and verify its license and era identity. Build an editable simulation-ready vehicle and run real Chrono vehicle dynamics with front and rear active aero: Corner Mode and Straight Mode coefficient sets, switched by designated track zones. Increase only the Corner Mode front-flap angle by 2 degrees and compare cornering, top speed and energy use, keeping Straight Mode, track, environment and power-unit model fixed. Mark guessed coefficients and unavailable proprietary data. Save native source, separated moving components, mode trace, raw results, source provenance and a reproducible report. Do the work through your available tools; never claim completion without execution evidence. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "F1 class",
+        "year": 2026
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {},
+    "budget_usage": {}
+  },
+  {
+    "stage": "requirements_and_sources",
+    "action": "scenario.requirements_and_sources",
+    "run_id": "scenario-fbee0aad1bc44fe3800140ec89d1173d",
+    "fingerprint": "25caa0cdecd2f218523f5261db60690365b6b89207fd089bc03555c80207ba64",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "031b83fc739e3439ab6256d979c0b727eb39fe38f9fb58810155312dbe35d5dc",
+    "post_digest": "9d76b180abfe7dd51fde2fed6d10e92309943281088407bc9783f27b2aca3fcf",
+    "result_ref": "artifact://sha256/39de3c8d896e6fa90bc5fb6f9ee56dc4b329ade5d5d761f6b50e4c276e21887c",
+    "seconds": 39.79700000000594,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "resolve_target": "artifact://sha256/7563f370b24ebb68f5bac14c679a60f3d3b55b7f17999f5b73094798920b1803"
+      },
+      "stage": "requirements_and_sources",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free model for a 2026-regulation F1 car and verify its license and era identity. Build an editable simulation-ready vehicle and run real Chrono vehicle dynamics with front and rear active aero: Corner Mode and Straight Mode coefficient sets, switched by designated track zones. Increase only the Corner Mode front-flap angle by 2 degrees and compare cornering, top speed and energy use, keeping Straight Mode, track, environment and power-unit model fixed. Mark guessed coefficients and unavailable proprietary data. Save native source, separated moving components, mode trace, raw results, source provenance and a reproducible report. Do the work through your available tools; never claim completion without execution evidence. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "F1 class",
+        "year": 2026
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {
+      ".jarvis-runtime/discovery/official-sources/698d14b6c3b340c3a2890096c5ae1e276d90f07f92e3558d625b41ff6dbef2ff.pdf": "698d14b6c3b340c3a2890096c5ae1e276d90f07f92e3558d625b41ff6dbef2ff"
+    },
+    "budget_usage": {}
+  },
+  {
+    "stage": "discover_assets",
+    "action": "scenario.discover_assets",
+    "run_id": "scenario-fbee0aad1bc44fe3800140ec89d1173d",
+    "fingerprint": "a4c6bff49b0fc6a7e3775286e82c7eb98131fbf2abe858347b35be7909df375b",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "9d76b180abfe7dd51fde2fed6d10e92309943281088407bc9783f27b2aca3fcf",
+    "post_digest": "41f0abf4ba4563e73db443e4758a4397b7f4a6e2e3c4bb58fb54f0f283e4d2d1",
+    "result_ref": "artifact://sha256/a625e4faa8754ad83fd18ea61dc906f89a4227b0977c45ecdc309f722738e453",
+    "seconds": 0.75,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "requirements_and_sources": "artifact://sha256/39de3c8d896e6fa90bc5fb6f9ee56dc4b329ade5d5d761f6b50e4c276e21887c",
+        "resolve_target": "artifact://sha256/7563f370b24ebb68f5bac14c679a60f3d3b55b7f17999f5b73094798920b1803"
+      },
+      "stage": "discover_assets",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free model for a 2026-regulation F1 car and verify its license and era identity. Build an editable simulation-ready vehicle and run real Chrono vehicle dynamics with front and rear active aero: Corner Mode and Straight Mode coefficient sets, switched by designated track zones. Increase only the Corner Mode front-flap angle by 2 degrees and compare cornering, top speed and energy use, keeping Straight Mode, track, environment and power-unit model fixed. Mark guessed coefficients and unavailable proprietary data. Save native source, separated moving components, mode trace, raw results, source provenance and a reproducible report. Do the work through your available tools; never claim completion without execution evidence. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "F1 class",
+        "year": 2026
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {},
+    "budget_usage": {}
+  },
+  {
+    "stage": "validate_provenance",
+    "action": "scenario.validate_provenance",
+    "run_id": "scenario-fbee0aad1bc44fe3800140ec89d1173d",
+    "fingerprint": "a37e914c57cebed20a22c25180c7134cc311983018756f5847c8904670becaa6",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "41f0abf4ba4563e73db443e4758a4397b7f4a6e2e3c4bb58fb54f0f283e4d2d1",
+    "post_digest": "af86aa0dfb8191d7e798f98f04c6635bdd208e4e1b29528a711ec3beb24a0e34",
+    "result_ref": "artifact://sha256/6fede62d29879e329a5e026a826787fd01d9510c38e4e4b9be10c7a9b6147458",
+    "seconds": 0.0,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "discover_assets": "artifact://sha256/a625e4faa8754ad83fd18ea61dc906f89a4227b0977c45ecdc309f722738e453",
+        "requirements_and_sources": "artifact://sha256/39de3c8d896e6fa90bc5fb6f9ee56dc4b329ade5d5d761f6b50e4c276e21887c",
+        "resolve_target": "artifact://sha256/7563f370b24ebb68f5bac14c679a60f3d3b55b7f17999f5b73094798920b1803"
+      },
+      "stage": "validate_provenance",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free model for a 2026-regulation F1 car and verify its license and era identity. Build an editable simulation-ready vehicle and run real Chrono vehicle dynamics with front and rear active aero: Corner Mode and Straight Mode coefficient sets, switched by designated track zones. Increase only the Corner Mode front-flap angle by 2 degrees and compare cornering, top speed and energy use, keeping Straight Mode, track, environment and power-unit model fixed. Mark guessed coefficients and unavailable proprietary data. Save native source, separated moving components, mode trace, raw results, source provenance and a reproducible report. Do the work through your available tools; never claim completion without execution evidence. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "F1 class",
+        "year": 2026
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {},
+    "budget_usage": {}
+  },
+  {
+    "stage": "inspect_asset",
+    "action": "scenario.inspect_asset",
+    "run_id": "scenario-fbee0aad1bc44fe3800140ec89d1173d",
+    "fingerprint": "c86df46969d0429fcee4059c8cc8e42d9321b7fbb9913c038296b8fe2f2976ef",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "af86aa0dfb8191d7e798f98f04c6635bdd208e4e1b29528a711ec3beb24a0e34",
+    "post_digest": "f2d5f15634cd06a52e6356ff72ea06754b5ef402d5d8f5c4fae8e290b3c39abb",
+    "result_ref": "artifact://sha256/0105f2a7e12e2a319f2a6e133181f2a348d31060cf1cefaaca3886d400c39632",
+    "seconds": 0.01600000000325963,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "discover_assets": "artifact://sha256/a625e4faa8754ad83fd18ea61dc906f89a4227b0977c45ecdc309f722738e453",
+        "requirements_and_sources": "artifact://sha256/39de3c8d896e6fa90bc5fb6f9ee56dc4b329ade5d5d761f6b50e4c276e21887c",
+        "resolve_target": "artifact://sha256/7563f370b24ebb68f5bac14c679a60f3d3b55b7f17999f5b73094798920b1803",
+        "validate_provenance": "artifact://sha256/6fede62d29879e329a5e026a826787fd01d9510c38e4e4b9be10c7a9b6147458"
+      },
+      "stage": "inspect_asset",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free model for a 2026-regulation F1 car and verify its license and era identity. Build an editable simulation-ready vehicle and run real Chrono vehicle dynamics with front and rear active aero: Corner Mode and Straight Mode coefficient sets, switched by designated track zones. Increase only the Corner Mode front-flap angle by 2 degrees and compare cornering, top speed and energy use, keeping Straight Mode, track, environment and power-unit model fixed. Mark guessed coefficients and unavailable proprietary data. Save native source, separated moving components, mode trace, raw results, source provenance and a reproducible report. Do the work through your available tools; never claim completion without execution evidence. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "F1 class",
+        "year": 2026
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {
+      ".jarvis-runtime/discovery/scenario-projects/scenario-fbee0aad1bc44fe3800140ec89d1173d/asset_license.json": "b803ca16e65593b391e4f802f75e90938144b22b9a633c94324c31c83ebe7bde"
+    },
+    "budget_usage": {}
+  },
+  {
+    "stage": "generate_parametric_surrogate",
+    "action": "scenario.generate_parametric_surrogate",
+    "run_id": "scenario-fbee0aad1bc44fe3800140ec89d1173d",
+    "fingerprint": "f5bd10350a58f5b091dbb19d88805411c6d0da4765f1fc5f48dbf5494d886b64",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "f2d5f15634cd06a52e6356ff72ea06754b5ef402d5d8f5c4fae8e290b3c39abb",
+    "post_digest": "107fe998410b7fb3c4fa2e8e92436b36d57544ef2392dd1e8bfc773002f88dc3",
+    "result_ref": "artifact://sha256/83a6127823b311029458bcaa85e22129fe3af4800ec34adefb13feb84c5ebd4d",
+    "seconds": 0.2649999999994179,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "discover_assets": "artifact://sha256/a625e4faa8754ad83fd18ea61dc906f89a4227b0977c45ecdc309f722738e453",
+        "inspect_asset": "artifact://sha256/0105f2a7e12e2a319f2a6e133181f2a348d31060cf1cefaaca3886d400c39632",
+        "requirements_and_sources": "artifact://sha256/39de3c8d896e6fa90bc5fb6f9ee56dc4b329ade5d5d761f6b50e4c276e21887c",
+        "resolve_target": "artifact://sha256/7563f370b24ebb68f5bac14c679a60f3d3b55b7f17999f5b73094798920b1803",
+        "validate_provenance": "artifact://sha256/6fede62d29879e329a5e026a826787fd01d9510c38e4e4b9be10c7a9b6147458"
+      },
+      "stage": "generate_parametric_surrogate",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free model for a 2026-regulation F1 car and verify its license and era identity. Build an editable simulation-ready vehicle and run real Chrono vehicle dynamics with front and rear active aero: Corner Mode and Straight Mode coefficient sets, switched by designated track zones. Increase only the Corner Mode front-flap angle by 2 degrees and compare cornering, top speed and energy use, keeping Straight Mode, track, environment and power-unit model fixed. Mark guessed coefficients and unavailable proprietary data. Save native source, separated moving components, mode trace, raw results, source provenance and a reproducible report. Do the work through your available tools; never claim completion without execution evidence. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "F1 class",
+        "year": 2026
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {
+      ".jarvis-runtime/discovery/scenario-projects/scenario-fbee0aad1bc44fe3800140ec89d1173d/asset_or_surrogate.glb": "abf0b70390b6442966e46bf3b8612c0c4b35c840a64e0e5ff98606fe3f114b79",
+      ".jarvis-runtime/discovery/scenario-projects/scenario-fbee0aad1bc44fe3800140ec89d1173d/front.png": "374e5682414c5d5004884dae9b14cf766c29380e42aa35ab58614676dbf74a25",
+      ".jarvis-runtime/discovery/scenario-projects/scenario-fbee0aad1bc44fe3800140ec89d1173d/geometry_manifest.json": "9f9fc3b26d03c90e4754a1f8d1a8b3e21c844d4341edef4525d2a1b397cc8659",
+      ".jarvis-runtime/discovery/scenario-projects/scenario-fbee0aad1bc44fe3800140ec89d1173d/side.png": "c4de8d3d673a8637067f5a234db42cc29fcddcda8c52abb836463713f4ce3f2f",
+      ".jarvis-runtime/discovery/scenario-projects/scenario-fbee0aad1bc44fe3800140ec89d1173d/solver_configuration.json": "6018f28551889dc5ee86354fa5f7101046319c2d5523332ac63ead3f999a8c56",
+      ".jarvis-runtime/discovery/scenario-projects/scenario-fbee0aad1bc44fe3800140ec89d1173d/top.png": "e4c50ddac0b7984e243f9212b31ae848749cbabb0668410542736243cf5b41c8",
+      ".jarvis-runtime/discovery/scenario-projects/scenario-fbee0aad1bc44fe3800140ec89d1173d/uncertainties.json": "b733d99a6cc6a1f23c60e864aadc336da6782e571efd5a460f931dbc7abcdc31"
+    },
+    "budget_usage": {}
+  },
+  {
+    "stage": "assemble_physical_vehicle",
+    "action": "scenario.assemble_physical_vehicle",
+    "run_id": "scenario-fbee0aad1bc44fe3800140ec89d1173d",
+    "fingerprint": "27589dbe5fba2a1c1f2584400acef5937fc3be8db3182b32f5401f6e405b33e3",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "107fe998410b7fb3c4fa2e8e92436b36d57544ef2392dd1e8bfc773002f88dc3",
+    "post_digest": "d23b5700ac089237c58c873ff2286aecf3385f428ef4ce56e98563f03902e180",
+    "result_ref": "artifact://sha256/ab8f50a1813a565081393035c0eeb2faca659af2163521881bc4348e5f197345",
+    "seconds": 1.187000000005355,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "discover_assets": "artifact://sha256/a625e4faa8754ad83fd18ea61dc906f89a4227b0977c45ecdc309f722738e453",
+        "generate_parametric_surrogate": "artifact://sha256/83a6127823b311029458bcaa85e22129fe3af4800ec34adefb13feb84c5ebd4d",
+        "inspect_asset": "artifact://sha256/0105f2a7e12e2a319f2a6e133181f2a348d31060cf1cefaaca3886d400c39632",
+        "requirements_and_sources": "artifact://sha256/39de3c8d896e6fa90bc5fb6f9ee56dc4b329ade5d5d761f6b50e4c276e21887c",
+        "resolve_target": "artifact://sha256/7563f370b24ebb68f5bac14c679a60f3d3b55b7f17999f5b73094798920b1803",
+        "validate_provenance": "artifact://sha256/6fede62d29879e329a5e026a826787fd01d9510c38e4e4b9be10c7a9b6147458"
+      },
+      "stage": "assemble_physical_vehicle",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free model for a 2026-regulation F1 car and verify its license and era identity. Build an editable simulation-ready vehicle and run real Chrono vehicle dynamics with front and rear active aero: Corner Mode and Straight Mode coefficient sets, switched by designated track zones. Increase only the Corner Mode front-flap angle by 2 degrees and compare cornering, top speed and energy use, keeping Straight Mode, track, environment and power-unit model fixed. Mark guessed coefficients and unavailable proprietary data. Save native source, separated moving components, mode trace, raw results, source provenance and a reproducible report. Do the work through your available tools; never claim completion without execution evidence. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "F1 class",
+        "year": 2026
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {
+      ".jarvis-runtime/discovery/scenario-projects/scenario-fbee0aad1bc44fe3800140ec89d1173d/LICENSE-CHRONO.txt": "5f625eb4c9e0ddf86db9d1ed9b6adb5b30296ea81919282b2f38c977136bf079",
+      ".jarvis-runtime/discovery/scenario-projects/scenario-fbee0aad1bc44fe3800140ec89d1173d/physical_model.json": "4e1ce4ace5f88e615e68dcdbd5cfa74251829458f00c0c10f39eab72831e1fa2",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/274ac10def50419d98f3b78d23f40d9e/assumed-inputs.json": "b4df6430ec4b3b50dc03ce7f7702ea2b4029fd919c6d52aa3633e7c51446852b",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/274ac10def50419d98f3b78d23f40d9e/baseline-components.json": "4d89e5c456c372f3293c0cf5d51c92f3dc120d74ba16360c7b371654ffc15338",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/274ac10def50419d98f3b78d23f40d9e/brake.json": "0f7de9f31df4ff6675978160733d92688af9e4988d453759e6fce9754d36f445",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/274ac10def50419d98f3b78d23f40d9e/chassis.json": "a61d578affabeb55264dc74ca1ca870078187adaac1dbcf87bdb950a4167583d",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/274ac10def50419d98f3b78d23f40d9e/driveline.json": "fb717a1fe68233896e0f39cadf33fa408461724ad40dec6054ac279df4d53d69",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/274ac10def50419d98f3b78d23f40d9e/engine.json": "f5e1e217916ef6576cf337a8ba0d55dba17495e10b1afa57df2e9dd9d07d83a0",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/274ac10def50419d98f3b78d23f40d9e/steering.json": "a79c10f8506bd60d23bb9d5700d6add076364387a9e96baccf0866d2d79bc937",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/274ac10def50419d98f3b78d23f40d9e/suspension.json": "8c2ea1cce68bc6ad10930302daee0754196d5f4cb016d93e36e8fea5381098de",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/274ac10def50419d98f3b78d23f40d9e/template-provenance.json": "fbe63de603bbb3f9a5813e55287a066d71caa8e4e7e1a3ae7da84a23c891b2c4",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/274ac10def50419d98f3b78d23f40d9e/terrain.json": "923e376f398886981556a121feeffe2acab02893fbf5116d460a1e92c1150e05",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/274ac10def50419d98f3b78d23f40d9e/tire.json": "0f3488fa670a93f99be721fa37038ad163254f72302eba7626e21786f29d8376",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/274ac10def50419d98f3b78d23f40d9e/transmission.json": "b5e505abf345e9ef7c95c5696affab8c5ab25a403ee2cf908d19b6dae236ffad",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/274ac10def50419d98f3b78d23f40d9e/vehicle.json": "cb0baf5f64aefc3e9e004db91e8d9e2be2a19798e5ab13494cbdc217e0220ecf",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/274ac10def50419d98f3b78d23f40d9e/wheel.json": "74890af5bb8c7d93d566fddd6a411110e0fca88f6a9804900574d075920004cf"
+    },
+    "budget_usage": {
+      "cpu_s": 0.03125,
+      "slot": 25,
+      "worker_sha256": "db887c905bcd21eb1950bd2982d2d60c00574073f038e133a6c20eb3805bc60d"
+    }
+  },
+  {
+    "stage": "validate_model",
+    "action": "scenario.validate_model",
+    "run_id": "scenario-fbee0aad1bc44fe3800140ec89d1173d",
+    "fingerprint": "68ff8236b03ed112a71254b558caf20eb4ad893694b1d797c86550817be7ea5e",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "d23b5700ac089237c58c873ff2286aecf3385f428ef4ce56e98563f03902e180",
+    "post_digest": "a06b2b3d770017460ad0acc3f0e8916a91223cd7b9f83a37bd596852744e10f1",
+    "result_ref": "artifact://sha256/12df13ae4b55c191a32dae16523a243a7fc46fc064c19da01e36e545877d3d7c",
+    "seconds": 0.125,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "assemble_physical_vehicle": "artifact://sha256/ab8f50a1813a565081393035c0eeb2faca659af2163521881bc4348e5f197345",
+        "discover_assets": "artifact://sha256/a625e4faa8754ad83fd18ea61dc906f89a4227b0977c45ecdc309f722738e453",
+        "generate_parametric_surrogate": "artifact://sha256/83a6127823b311029458bcaa85e22129fe3af4800ec34adefb13feb84c5ebd4d",
+        "inspect_asset": "artifact://sha256/0105f2a7e12e2a319f2a6e133181f2a348d31060cf1cefaaca3886d400c39632",
+        "requirements_and_sources": "artifact://sha256/39de3c8d896e6fa90bc5fb6f9ee56dc4b329ade5d5d761f6b50e4c276e21887c",
+        "resolve_target": "artifact://sha256/7563f370b24ebb68f5bac14c679a60f3d3b55b7f17999f5b73094798920b1803",
+        "validate_provenance": "artifact://sha256/6fede62d29879e329a5e026a826787fd01d9510c38e4e4b9be10c7a9b6147458"
+      },
+      "stage": "validate_model",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free model for a 2026-regulation F1 car and verify its license and era identity. Build an editable simulation-ready vehicle and run real Chrono vehicle dynamics with front and rear active aero: Corner Mode and Straight Mode coefficient sets, switched by designated track zones. Increase only the Corner Mode front-flap angle by 2 degrees and compare cornering, top speed and energy use, keeping Straight Mode, track, environment and power-unit model fixed. Mark guessed coefficients and unavailable proprietary data. Save native source, separated moving components, mode trace, raw results, source provenance and a reproducible report. Do the work through your available tools; never claim completion without execution evidence. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "F1 class",
+        "year": 2026
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {},
+    "budget_usage": {
+      "cpu_s": 0.03125,
+      "slot": 25,
+      "worker_sha256": "db887c905bcd21eb1950bd2982d2d60c00574073f038e133a6c20eb3805bc60d"
+    }
+  },
+  {
+    "stage": "simulate",
+    "action": "scenario.simulate",
+    "run_id": "scenario-fbee0aad1bc44fe3800140ec89d1173d",
+    "fingerprint": "575aa804e4f2fa793b141e74db42ab0f9c88f0a87efe41ffa1fcaaa757434968",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "a06b2b3d770017460ad0acc3f0e8916a91223cd7b9f83a37bd596852744e10f1",
+    "post_digest": "798a0f4584800b240bd05f96155cc7ae7c5e61c1a56b29c150bb32e5fe5eeae9",
+    "result_ref": "artifact://sha256/8301c2277d6b4c7a149c7e8197d15a0306ff8fc1c3b3236c081870b991daeb66",
+    "seconds": 55.21899999999732,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "assemble_physical_vehicle": "artifact://sha256/ab8f50a1813a565081393035c0eeb2faca659af2163521881bc4348e5f197345",
+        "discover_assets": "artifact://sha256/a625e4faa8754ad83fd18ea61dc906f89a4227b0977c45ecdc309f722738e453",
+        "generate_parametric_surrogate": "artifact://sha256/83a6127823b311029458bcaa85e22129fe3af4800ec34adefb13feb84c5ebd4d",
+        "inspect_asset": "artifact://sha256/0105f2a7e12e2a319f2a6e133181f2a348d31060cf1cefaaca3886d400c39632",
+        "requirements_and_sources": "artifact://sha256/39de3c8d896e6fa90bc5fb6f9ee56dc4b329ade5d5d761f6b50e4c276e21887c",
+        "resolve_target": "artifact://sha256/7563f370b24ebb68f5bac14c679a60f3d3b55b7f17999f5b73094798920b1803",
+        "validate_model": "artifact://sha256/12df13ae4b55c191a32dae16523a243a7fc46fc064c19da01e36e545877d3d7c",
+        "validate_provenance": "artifact://sha256/6fede62d29879e329a5e026a826787fd01d9510c38e4e4b9be10c7a9b6147458"
+      },
+      "stage": "simulate",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free model for a 2026-regulation F1 car and verify its license and era identity. Build an editable simulation-ready vehicle and run real Chrono vehicle dynamics with front and rear active aero: Corner Mode and Straight Mode coefficient sets, switched by designated track zones. Increase only the Corner Mode front-flap angle by 2 degrees and compare cornering, top speed and energy use, keeping Straight Mode, track, environment and power-unit model fixed. Mark guessed coefficients and unavailable proprietary data. Save native source, separated moving components, mode trace, raw results, source provenance and a reproducible report. Do the work through your available tools; never claim completion without execution evidence. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "F1 class",
+        "year": 2026
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/fdf5a9d11d88fa8a0eb228dbe10eb96d/assumed-inputs.json": "b4df6430ec4b3b50dc03ce7f7702ea2b4029fd919c6d52aa3633e7c51446852b",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/fdf5a9d11d88fa8a0eb228dbe10eb96d/baseline-components.json": "0b54956f8bc21f547a50730f3cd6d8dfbf428cc9065702454598e2bfba179df5",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/fdf5a9d11d88fa8a0eb228dbe10eb96d/brake.json": "0f7de9f31df4ff6675978160733d92688af9e4988d453759e6fce9754d36f445",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/fdf5a9d11d88fa8a0eb228dbe10eb96d/candidate-components.json": "0fb5cedc15d592437b92e790a720787ae33f45ac86eb0b39b737be979550b050",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/fdf5a9d11d88fa8a0eb228dbe10eb96d/chassis.json": "a61d578affabeb55264dc74ca1ca870078187adaac1dbcf87bdb950a4167583d",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/fdf5a9d11d88fa8a0eb228dbe10eb96d/driveline.json": "fb717a1fe68233896e0f39cadf33fa408461724ad40dec6054ac279df4d53d69",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/fdf5a9d11d88fa8a0eb228dbe10eb96d/engine.json": "f5e1e217916ef6576cf337a8ba0d55dba17495e10b1afa57df2e9dd9d07d83a0",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/fdf5a9d11d88fa8a0eb228dbe10eb96d/steering.json": "a79c10f8506bd60d23bb9d5700d6add076364387a9e96baccf0866d2d79bc937",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/fdf5a9d11d88fa8a0eb228dbe10eb96d/suspension.json": "8c2ea1cce68bc6ad10930302daee0754196d5f4cb016d93e36e8fea5381098de",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/fdf5a9d11d88fa8a0eb228dbe10eb96d/template-provenance.json": "fbe63de603bbb3f9a5813e55287a066d71caa8e4e7e1a3ae7da84a23c891b2c4",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/fdf5a9d11d88fa8a0eb228dbe10eb96d/terrain.json": "923e376f398886981556a121feeffe2acab02893fbf5116d460a1e92c1150e05",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/fdf5a9d11d88fa8a0eb228dbe10eb96d/tire.json": "0f3488fa670a93f99be721fa37038ad163254f72302eba7626e21786f29d8376",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/fdf5a9d11d88fa8a0eb228dbe10eb96d/transmission.json": "b5e505abf345e9ef7c95c5696affab8c5ab25a403ee2cf908d19b6dae236ffad",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/fdf5a9d11d88fa8a0eb228dbe10eb96d/vehicle.json": "cb0baf5f64aefc3e9e004db91e8d9e2be2a19798e5ab13494cbdc217e0220ecf",
+      ".jarvis-runtime/discovery/vehicle-runs/9c0c2e69836fe319029e8c317d9ba55eaadd5efe08080081f437231c85250d31/fdf5a9d11d88fa8a0eb228dbe10eb96d/wheel.json": "74890af5bb8c7d93d566fddd6a411110e0fca88f6a9804900574d075920004cf",
+      ".jarvis-runtime/discovery/vehicle-runs/be3443baada8d3bee1543a042525918feb3988de9746761eb570d05a502faa39/c88d34e201fc4d30771eb0dff3819633/assumed-inputs.json": "93eb070eff80e7c8936d13a3ed10738f125f7ada4c59ce4d9f4fca6b136eb4d7",
+      ".jarvis-runtime/discovery/vehicle-runs/be3443baada8d3bee1543a042525918feb3988de9746761eb570d05a502faa39/c88d34e201fc4d30771eb0dff3819633/baseline-components.json": "9393512327c32b475d2c676261187becd90633576daa6fda1c2cddbe34da863d",
+      ".jarvis-runtime/discovery/vehicle-runs/be3443baada8d3bee1543a042525918feb3988de9746761eb570d05a502faa39/c88d34e201fc4d30771eb0dff3819633/brake.json": "0f7de9f31df4ff6675978160733d92688af9e4988d453759e6fce9754d36f445",
+      ".jarvis-runtime/discovery/vehicle-runs/be3443baada8d3bee1543a042525918feb3988de9746761eb570d05a502faa39/c88d34e201fc4d30771eb0dff3819633/candidate-components.json": "2b017eaa06403adc9ed0d2f2c815b570513c2fb3a03dda5a4217e38d70b10556",
+      ".jarvis-runtime/discovery/vehicle-runs/be3443baada8d3bee1543a042525918feb3988de9746761eb570d05a502faa39/c88d34e201fc4d30771eb0dff3819633/chassis.json": "a61d578affabeb55264dc74ca1ca870078187adaac1dbcf87bdb950a4167583d",
+      ".jarvis-runtime/discovery/vehicle-runs/be3443baada8d3bee1543a042525918feb3988de9746761eb570d05a502faa39/c88d34e201fc4d30771eb0dff3819633/driveline.json": "fb717a1fe68233896e0f39cadf33fa408461724ad40dec6054ac279df4d53d69",
+      ".jarvis-runtime/discovery/vehicle-runs/be3443baada8d3bee1543a042525918feb3988de9746761eb570d05a502faa39/c88d34e201fc4d30771eb0dff3819633/engine.json": "f5e1e217916ef6576cf337a8ba0d55dba17495e10b1afa57df2e9dd9d07d83a0",
+      ".jarvis-runtime/discovery/vehicle-runs/be3443baada8d3bee1543a042525918feb3988de9746761eb570d05a502faa39/c88d34e201fc4d30771eb0dff3819633/steering.json": "a79c10f8506bd60d23bb9d5700d6add076364387a9e96baccf0866d2d79bc937",
+      ".jarvis-runtime/discovery/vehicle-runs/be3443baada8d3bee1543a042525918feb3988de9746761eb570d05a502faa39/c88d34e201fc4d30771eb0dff3819633/suspension.json": "8c2ea1cce68bc6ad10930302daee0754196d5f4cb016d93e36e8fea5381098de",
+      ".jarvis-runtime/discovery/vehicle-runs/be3443baada8d3bee1543a042525918feb3988de9746761eb570d05a502faa39/c88d34e201fc4d30771eb0dff3819633/template-provenance.json": "fbe63de603bbb3f9a5813e55287a066d71caa8e4e7e1a3ae7da84a23c891b2c4",
+      ".jarvis-runtime/discovery/vehicle-runs/be3443baada8d3bee1543a042525918feb3988de9746761eb570d05a502faa39/c88d34e201fc4d30771eb0dff3819633/terrain.json": "923e376f398886981556a121feeffe2acab02893fbf5116d460a1e92c1150e05",
+      ".jarvis-runtime/discovery/vehicle-runs/be3443baada8d3bee1543a042525918feb3988de9746761eb570d05a502faa39/c88d34e201fc4d30771eb0dff3819633/tire.json": "0f3488fa670a93f99be721fa37038ad163254f72302eba7626e21786f29d8376",
+      ".jarvis-runtime/discovery/vehicle-runs/be3443baada8d3bee1543a042525918feb3988de9746761eb570d05a502faa39/c88d34e201fc4d30771eb0dff3819633/transmission.json": "b5e505abf345e9ef7c95c5696affab8c5ab25a403ee2cf908d19b6dae236ffad",
+      ".jarvis-runtime/discovery/vehicle-runs/be3443baada8d3bee1543a042525918feb3988de9746761eb570d05a502faa39/c88d34e201fc4d30771eb0dff3819633/vehicle.json": "cb0baf5f64aefc3e9e004db91e8d9e2be2a19798e5ab13494cbdc217e0220ecf",
+      ".jarvis-runtime/discovery/vehicle-runs/be3443baada8d3bee1543a042525918feb3988de9746761eb570d05a502faa39/c88d34e201fc4d30771eb0dff3819633/wheel.json": "74890af5bb8c7d93d566fddd6a411110e0fca88f6a9804900574d075920004cf",
+      ".jarvis-runtime/discovery/vehicle-runs/ee955d0541dbb84885265e4b3ff075e2ffa8f41188734ff6b87c3da0aff3adb1/fc62d42ec2b47ba1fe5b542c023a42dd/assumed-inputs.json": "5f559c5a5766927e934d334428a26e8cf9f4f2db40ec4aa73310169e54b169bf",
+      ".jarvis-runtime/discovery/vehicle-runs/ee955d0541dbb84885265e4b3ff075e2ffa8f41188734ff6b87c3da0aff3adb1/fc62d42ec2b47ba1fe5b542c023a42dd/baseline-components.json": "12675978d8f5e29b3ad9f2881ccd4278633348094a7e26e85678d85ccd008d63",
+      ".jarvis-runtime/discovery/vehicle-runs/ee955d0541dbb84885265e4b3ff075e2ffa8f41188734ff6b87c3da0aff3adb1/fc62d42ec2b47ba1fe5b542c023a42dd/brake.json": "0f7de9f31df4ff6675978160733d92688af9e4988d453759e6fce9754d36f445",
+      ".jarvis-runtime/discovery/vehicle-runs/ee955d0541dbb84885265e4b3ff075e2ffa8f41188734ff6b87c3da0aff3adb1/fc62d42ec2b47ba1fe5b542c023a42dd/candidate-components.json": "52011e84d8fde97bc12fbecdb9b32881555db1b16c0392a561b48c78236d4500",
+      ".jarvis-runtime/discovery/vehicle-runs/ee955d0541dbb84885265e4b3ff075e2ffa8f41188734ff6b87c3da0aff3adb1/fc62d42ec2b47ba1fe5b542c023a42dd/chassis.json": "a61d578affabeb55264dc74ca1ca870078187adaac1dbcf87bdb950a4167583d",
+      ".jarvis-runtime/discovery/vehicle-runs/ee955d0541dbb84885265e4b3ff075e2ffa8f41188734ff6b87c3da0aff3adb1/fc62d42ec2b47ba1fe5b542c023a42dd/driveline.json": "fb717a1fe68233896e0f39cadf33fa408461724ad40dec6054ac279df4d53d69",
+      ".jarvis-runtime/discovery/vehicle-runs/ee955d0541dbb84885265e4b3ff075e2ffa8f41188734ff6b87c3da0aff3adb1/fc62d42ec2b47ba1fe5b542c023a42dd/engine.json": "f5e1e217916ef6576cf337a8ba0d55dba17495e10b1afa57df2e9dd9d07d83a0",
+      ".jarvis-runtime/discovery/vehicle-runs/ee955d0541dbb84885265e4b3ff075e2ffa8f41188734ff6b87c3da0aff3adb1/fc62d42ec2b47ba1fe5b542c023a42dd/steering.json": "a79c10f8506bd60d23bb9d5700d6add076364387a9e96baccf0866d2d79bc937",
+      ".jarvis-runtime/discovery/vehicle-runs/ee955d0541dbb84885265e4b3ff075e2ffa8f41188734ff6b87c3da0aff3adb1/fc62d42ec2b47ba1fe5b542c023a42dd/suspension.json": "8c2ea1cce68bc6ad10930302daee0754196d5f4cb016d93e36e8fea5381098de",
+      ".jarvis-runtime/discovery/vehicle-runs/ee955d0541dbb84885265e4b3ff075e2ffa8f41188734ff6b87c3da0aff3adb1/fc62d42ec2b47ba1fe5b542c023a42dd/template-provenance.json": "fbe63de603bbb3f9a5813e55287a066d71caa8e4e7e1a3ae7da84a23c891b2c4",
+      ".jarvis-runtime/discovery/vehicle-runs/ee955d0541dbb84885265e4b3ff075e2ffa8f41188734ff6b87c3da0aff3adb1/fc62d42ec2b47ba1fe5b542c023a42dd/terrain.json": "923e376f398886981556a121feeffe2acab02893fbf5116d460a1e92c1150e05",
+      ".jarvis-runtime/discovery/vehicle-runs/ee955d0541dbb84885265e4b3ff075e2ffa8f41188734ff6b87c3da0aff3adb1/fc62d42ec2b47ba1fe5b542c023a42dd/tire.json": "0f3488fa670a93f99be721fa37038ad163254f72302eba7626e21786f29d8376",
+      ".jarvis-runtime/discovery/vehicle-runs/ee955d0541dbb84885265e4b3ff075e2ffa8f41188734ff6b87c3da0aff3adb1/fc62d42ec2b47ba1fe5b542c023a42dd/transmission.json": "b5e505abf345e9ef7c95c5696affab8c5ab25a403ee2cf908d19b6dae236ffad",
+      ".jarvis-runtime/discovery/vehicle-runs/ee955d0541dbb84885265e4b3ff075e2ffa8f41188734ff6b87c3da0aff3adb1/fc62d42ec2b47ba1fe5b542c023a42dd/vehicle.json": "cb0baf5f64aefc3e9e004db91e8d9e2be2a19798e5ab13494cbdc217e0220ecf",
+      ".jarvis-runtime/discovery/vehicle-runs/ee955d0541dbb84885265e4b3ff075e2ffa8f41188734ff6b87c3da0aff3adb1/fc62d42ec2b47ba1fe5b542c023a42dd/wheel.json": "74890af5bb8c7d93d566fddd6a411110e0fca88f6a9804900574d075920004cf",
+      ".jarvis-runtime/discovery/vehicle-runs/fcb7c364f03e4ee065893f6347db43adcc831e927a3e967b9e93f27423c82177/d433af2dd6cfd331e311301600604c77/assumed-inputs.json": "4752bba9e0651582e34f4d6a0df3fd560d5d208267b2e98be470d7f1f4b90d77",
+      ".jarvis-runtime/discovery/vehicle-runs/fcb7c364f03e4ee065893f6347db43adcc831e927a3e967b9e93f27423c82177/d433af2dd6cfd331e311301600604c77/baseline-components.json": "29d6618b64516cf861b57d2b14a8af84b365052e5c83a1c9e3b695e2f1def77f",
+      ".jarvis-runtime/discovery/vehicle-runs/fcb7c364f03e4ee065893f6347db43adcc831e927a3e967b9e93f27423c82177/d433af2dd6cfd331e311301600604c77/brake.json": "0f7de9f31df4ff6675978160733d92688af9e4988d453759e6fce9754d36f445",
+      ".jarvis-runtime/discovery/vehicle-runs/fcb7c364f03e4ee065893f6347db43adcc831e927a3e967b9e93f27423c82177/d433af2dd6cfd331e311301600604c77/candidate-components.json": "7cf60854da48cc434b5c22d26fd73f122cc58692efb048ef6026b8e972a3b17c",
+      ".jarvis-runtime/discovery/vehicle-runs/fcb7c364f03e4ee065893f6347db43adcc831e927a3e967b9e93f27423c82177/d433af2dd6cfd331e311301600604c77/chassis.json": "a61d578affabeb55264dc74ca1ca870078187adaac1dbcf87bdb950a4167583d",
+      ".jarvis-runtime/discovery/vehicle-runs/fcb7c364f03e4ee065893f6347db43adcc831e927a3e967b9e93f27423c82177/d433af2dd6cfd331e311301600604c77/driveline.json": "fb717a1fe68233896e0f39cadf33fa408461724ad40dec6054ac279df4d53d69",
+      ".jarvis-runtime/discovery/vehicle-runs/fcb7c364f03e4ee065893f6347db43adcc831e927a3e967b9e93f27423c82177/d433af2dd6cfd331e311301600604c77/engine.json": "f5e1e217916ef6576cf337a8ba0d55dba17495e10b1afa57df2e9dd9d07d83a0",
+      ".jarvis-runtime/discovery/vehicle-runs/fcb7c364f03e4ee065893f6347db43adcc831e927a3e967b9e93f27423c82177/d433af2dd6cfd331e311301600604c77/steering.json": "a79c10f8506bd60d23bb9d5700d6add076364387a9e96baccf0866d2d79bc937",
+      ".jarvis-runtime/discovery/vehicle-runs/fcb7c364f03e4ee065893f6347db43adcc831e927a3e967b9e93f27423c82177/d433af2dd6cfd331e311301600604c77/suspension.json": "8c2ea1cce68bc6ad10930302daee0754196d5f4cb016d93e36e8fea5381098de",
+      ".jarvis-runtime/discovery/vehicle-runs/fcb7c364f03e4ee065893f6347db43adcc831e927a3e967b9e93f27423c82177/d433af2dd6cfd331e311301600604c77/template-provenance.json": "fbe63de603bbb3f9a5813e55287a066d71caa8e4e7e1a3ae7da84a23c891b2c4",
+      ".jarvis-runtime/discovery/vehicle-runs/fcb7c364f03e4ee065893f6347db43adcc831e927a3e967b9e93f27423c82177/d433af2dd6cfd331e311301600604c77/terrain.json": "923e376f398886981556a121feeffe2acab02893fbf5116d460a1e92c1150e05",
+      ".jarvis-runtime/discovery/vehicle-runs/fcb7c364f03e4ee065893f6347db43adcc831e927a3e967b9e93f27423c82177/d433af2dd6cfd331e311301600604c77/tire.json": "0f3488fa670a93f99be721fa37038ad163254f72302eba7626e21786f29d8376",
+      ".jarvis-runtime/discovery/vehicle-runs/fcb7c364f03e4ee065893f6347db43adcc831e927a3e967b9e93f27423c82177/d433af2dd6cfd331e311301600604c77/transmission.json": "b5e505abf345e9ef7c95c5696affab8c5ab25a403ee2cf908d19b6dae236ffad",
+      ".jarvis-runtime/discovery/vehicle-runs/fcb7c364f03e4ee065893f6347db43adcc831e927a3e967b9e93f27423c82177/d433af2dd6cfd331e311301600604c77/vehicle.json": "cb0baf5f64aefc3e9e004db91e8d9e2be2a19798e5ab13494cbdc217e0220ecf",
+      ".jarvis-runtime/discovery/vehicle-runs/fcb7c364f03e4ee065893f6347db43adcc831e927a3e967b9e93f27423c82177/d433af2dd6cfd331e311301600604c77/wheel.json": "74890af5bb8c7d93d566fddd6a411110e0fca88f6a9804900574d075920004cf"
+    },
+    "budget_usage": {
+      "cpu_s": 52.015625,
+      "slot": 26,
+      "worker_sha256": "db887c905bcd21eb1950bd2982d2d60c00574073f038e133a6c20eb3805bc60d"
+    }
+  },
+  {
+    "stage": "independently_check",
+    "action": "scenario.independently_check",
+    "run_id": "scenario-fbee0aad1bc44fe3800140ec89d1173d",
+    "fingerprint": "f210394c47b8b25c6e95199424e1244424e1e4becdb22011b13c531ee6b24753",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "798a0f4584800b240bd05f96155cc7ae7c5e61c1a56b29c150bb32e5fe5eeae9",
+    "post_digest": "46111ff38ba7d71ffc6d62ebbc6122935b93682b8a39942c643f3f2a7d4f3170",
+    "result_ref": "artifact://sha256/3754bea0188cd209a5534a468ad277703df25f335036298dd5f242d1f20dd937",
+    "seconds": 0.6560000000026776,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "assemble_physical_vehicle": "artifact://sha256/ab8f50a1813a565081393035c0eeb2faca659af2163521881bc4348e5f197345",
+        "discover_assets": "artifact://sha256/a625e4faa8754ad83fd18ea61dc906f89a4227b0977c45ecdc309f722738e453",
+        "generate_parametric_surrogate": "artifact://sha256/83a6127823b311029458bcaa85e22129fe3af4800ec34adefb13feb84c5ebd4d",
+        "inspect_asset": "artifact://sha256/0105f2a7e12e2a319f2a6e133181f2a348d31060cf1cefaaca3886d400c39632",
+        "requirements_and_sources": "artifact://sha256/39de3c8d896e6fa90bc5fb6f9ee56dc4b329ade5d5d761f6b50e4c276e21887c",
+        "resolve_target": "artifact://sha256/7563f370b24ebb68f5bac14c679a60f3d3b55b7f17999f5b73094798920b1803",
+        "simulate": "artifact://sha256/8301c2277d6b4c7a149c7e8197d15a0306ff8fc1c3b3236c081870b991daeb66",
+        "validate_model": "artifact://sha256/12df13ae4b55c191a32dae16523a243a7fc46fc064c19da01e36e545877d3d7c",
+        "validate_provenance": "artifact://sha256/6fede62d29879e329a5e026a826787fd01d9510c38e4e4b9be10c7a9b6147458"
+      },
+      "stage": "independently_check",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free model for a 2026-regulation F1 car and verify its license and era identity. Build an editable simulation-ready vehicle and run real Chrono vehicle dynamics with front and rear active aero: Corner Mode and Straight Mode coefficient sets, switched by designated track zones. Increase only the Corner Mode front-flap angle by 2 degrees and compare cornering, top speed and energy use, keeping Straight Mode, track, environment and power-unit model fixed. Mark guessed coefficients and unavailable proprietary data. Save native source, separated moving components, mode trace, raw results, source provenance and a reproducible report. Do the work through your available tools; never claim completion without execution evidence. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "F1 class",
+        "year": 2026
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {
+      ".jarvis-runtime/discovery/scenario-projects/scenario-fbee0aad1bc44fe3800140ec89d1173d/verification_report.json": "529f7fe5b90dbdecf36c05bc77ee3d88a4923769714397b9c81da24c90801ffe"
+    },
+    "budget_usage": {
+      "cpu_s": 52.015625,
+      "slot": 26,
+      "worker_sha256": "db887c905bcd21eb1950bd2982d2d60c00574073f038e133a6c20eb3805bc60d"
+    }
+  },
+  {
+    "stage": "compare",
+    "action": "scenario.compare",
+    "run_id": "scenario-fbee0aad1bc44fe3800140ec89d1173d",
+    "fingerprint": "ece857ba6963c451e47685a40cb1fcffc138d514595e4e11eb5f93c4a07955bb",
+    "attempt": 1,
+    "category": "verified",
+    "pre_digest": "46111ff38ba7d71ffc6d62ebbc6122935b93682b8a39942c643f3f2a7d4f3170",
+    "post_digest": "60db7d637592d085b44e0d840960a85558f8bfc46d53d474f370d66cb1800ea8",
+    "result_ref": "artifact://sha256/7a3cdd2b8d85cd2be58b4535ca7b0c788760dd8a78de627989e2f3795b563968",
+    "seconds": 0.06300000000192085,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "assemble_physical_vehicle": "artifact://sha256/ab8f50a1813a565081393035c0eeb2faca659af2163521881bc4348e5f197345",
+        "discover_assets": "artifact://sha256/a625e4faa8754ad83fd18ea61dc906f89a4227b0977c45ecdc309f722738e453",
+        "generate_parametric_surrogate": "artifact://sha256/83a6127823b311029458bcaa85e22129fe3af4800ec34adefb13feb84c5ebd4d",
+        "independently_check": "artifact://sha256/3754bea0188cd209a5534a468ad277703df25f335036298dd5f242d1f20dd937",
+        "inspect_asset": "artifact://sha256/0105f2a7e12e2a319f2a6e133181f2a348d31060cf1cefaaca3886d400c39632",
+        "requirements_and_sources": "artifact://sha256/39de3c8d896e6fa90bc5fb6f9ee56dc4b329ade5d5d761f6b50e4c276e21887c",
+        "resolve_target": "artifact://sha256/7563f370b24ebb68f5bac14c679a60f3d3b55b7f17999f5b73094798920b1803",
+        "simulate": "artifact://sha256/8301c2277d6b4c7a149c7e8197d15a0306ff8fc1c3b3236c081870b991daeb66",
+        "validate_model": "artifact://sha256/12df13ae4b55c191a32dae16523a243a7fc46fc064c19da01e36e545877d3d7c",
+        "validate_provenance": "artifact://sha256/6fede62d29879e329a5e026a826787fd01d9510c38e4e4b9be10c7a9b6147458"
+      },
+      "stage": "compare",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free model for a 2026-regulation F1 car and verify its license and era identity. Build an editable simulation-ready vehicle and run real Chrono vehicle dynamics with front and rear active aero: Corner Mode and Straight Mode coefficient sets, switched by designated track zones. Increase only the Corner Mode front-flap angle by 2 degrees and compare cornering, top speed and energy use, keeping Straight Mode, track, environment and power-unit model fixed. Mark guessed coefficients and unavailable proprietary data. Save native source, separated moving components, mode trace, raw results, source provenance and a reproducible report. Do the work through your available tools; never claim completion without execution evidence. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "F1 class",
+        "year": 2026
+      }
+    },
+    "evidence_changed": true,
+    "artifact_files": {},
+    "budget_usage": {}
+  },
+  {
+    "stage": "present_evidence",
+    "action": "scenario.present_evidence",
+    "run_id": "scenario-fbee0aad1bc44fe3800140ec89d1173d",
+    "fingerprint": "200b879299d88fd4da7013f0e00bd1c1d602de6703f31b45f2a59771b5b4482b",
+    "attempt": 1,
+    "category": "claimed",
+    "pre_digest": "60db7d637592d085b44e0d840960a85558f8bfc46d53d474f370d66cb1800ea8",
+    "post_digest": null,
+    "result_ref": null,
+    "seconds": 0.0,
+    "retry_reason": "",
+    "arguments": {
+      "previous_artifacts": {
+        "assemble_physical_vehicle": "artifact://sha256/ab8f50a1813a565081393035c0eeb2faca659af2163521881bc4348e5f197345",
+        "compare": "artifact://sha256/7a3cdd2b8d85cd2be58b4535ca7b0c788760dd8a78de627989e2f3795b563968",
+        "discover_assets": "artifact://sha256/a625e4faa8754ad83fd18ea61dc906f89a4227b0977c45ecdc309f722738e453",
+        "generate_parametric_surrogate": "artifact://sha256/83a6127823b311029458bcaa85e22129fe3af4800ec34adefb13feb84c5ebd4d",
+        "independently_check": "artifact://sha256/3754bea0188cd209a5534a468ad277703df25f335036298dd5f242d1f20dd937",
+        "inspect_asset": "artifact://sha256/0105f2a7e12e2a319f2a6e133181f2a348d31060cf1cefaaca3886d400c39632",
+        "requirements_and_sources": "artifact://sha256/39de3c8d896e6fa90bc5fb6f9ee56dc4b329ade5d5d761f6b50e4c276e21887c",
+        "resolve_target": "artifact://sha256/7563f370b24ebb68f5bac14c679a60f3d3b55b7f17999f5b73094798920b1803",
+        "simulate": "artifact://sha256/8301c2277d6b4c7a149c7e8197d15a0306ff8fc1c3b3236c081870b991daeb66",
+        "validate_model": "artifact://sha256/12df13ae4b55c191a32dae16523a243a7fc46fc064c19da01e36e545877d3d7c",
+        "validate_provenance": "artifact://sha256/6fede62d29879e329a5e026a826787fd01d9510c38e4e4b9be10c7a9b6147458"
+      },
+      "stage": "present_evidence",
+      "target": {
+        "allow_surrogate": true,
+        "front_delta_deg": 2.0,
+        "goal": "Find a legal free model for a 2026-regulation F1 car and verify its license and era identity. Build an editable simulation-ready vehicle and run real Chrono vehicle dynamics with front and rear active aero: Corner Mode and Straight Mode coefficient sets, switched by designated track zones. Increase only the Corner Mode front-flap angle by 2 degrees and compare cornering, top speed and energy use, keeping Straight Mode, track, environment and power-unit model fixed. Mark guessed coefficients and unavailable proprietary data. Save native source, separated moving components, mode trace, raw results, source provenance and a reproducible report. Do the work through your available tools; never claim completion without execution evidence. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+        "team_or_class": "F1 class",
+        "year": 2026
+      }
+    },
+    "evidence_changed": false,
+    "artifact_files": {},
+    "budget_usage": {}
+  }
+]

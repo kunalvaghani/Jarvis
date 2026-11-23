@@ -1,0 +1,42 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "operator_assisted_final_text_ingress": true,
+  "microphone_used": false,
+  "browser_already_connected": true,
+  "cpu_checkpoint_already_resident": true,
+  "new_cpu_choice_attempts_upper_bound": 1,
+  "records": [
+    {
+      "label": "real scoped long-read interface",
+      "goal_id": "g-4e37ba40dde1433d",
+      "state": "verified",
+      "seconds": 0.3130000000237487,
+      "error_type": null
+    },
+    {
+      "label": "exact label choice; no model",
+      "goal_id": "g-534d6e5333fe41be",
+      "state": "verified",
+      "seconds": 0.061999999976251274,
+      "error_type": null
+    },
+    {
+      "label": "one public owned portal read",
+      "goal_id": "g-da010af21bbe43fe",
+      "state": "uncertain",
+      "seconds": 4.969000000040978,
+      "error_type": "ValueError"
+    },
+    {
+      "label": "one resident CPU Laya closed-choice attempt",
+      "goal_id": "g-9a7afaf1f6cb4d02",
+      "state": "verified",
+      "seconds": 0.9679999999934807,
+      "error_type": null
+    }
+  ],
+  "new_google_writes": 0,
+  "new_services_started": 0,
+  "new_downloads_or_installs": 0,
+  "global_configuration_changed": false
+}

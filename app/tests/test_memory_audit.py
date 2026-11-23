@@ -263,13 +263,14 @@ def test_summary_excludes_sensitive_turn_before_fake_model(curator):
 
 
 def test_atomic_fact_commit_survives_derived_view_failure(curator):
-    c=curator;original=Path.write_text
+    c=curator;original=Path.replace
     def write(path,*args,**kwargs):
-        if path.name=='Jarvis Memory.md':raise OSError('derived view unavailable')
+        if Path(args[0]).name=='Jarvis Memory.md':raise OSError('derived view unavailable')
         return original(path,*args,**kwargs)
-    with patch.object(Path,'write_text',write):
+    with patch.object(Path,'replace',write):
         with pytest.raises(OSError):c.add('Kunal likes tea')
     assert c.facts==MemoryCurator(c.vault).facts
+    assert list(c.vault.glob('.jarvis-checkpoint-*'))  # Failed derived metadata remains inspectable.
 
 
 def test_legacy_json_and_sqlite_reopen(tmp_path):

@@ -1,0 +1,25 @@
+{
+  "identity": {
+    "manufacturer": "Demonstration Team",
+    "model": "DemoWing",
+    "year": 2025,
+    "rule_set": "EXAMPLE-2025"
+  },
+  "target": {
+    "manufacturer": "Demonstration Team",
+    "model": "DemoWing",
+    "year": 2026,
+    "rule_set": "EXAMPLE-2026"
+  },
+  "representation": "concept",
+  "relative_file": "examples/discovery/synthetic-visual.json",
+  "source": {
+    "id": "source-model",
+    "locator": "local:examples/discovery/synthetic-visual.json",
+    "author": "Jarvis synthetic example",
+    "sha256": "39759b4a61cccbc6a7c133e97b5e7e7b8083dfb134bd81b19325ba310c82a31c",
+    "license": "CC0-1.0",
+    "justification": "Synthetic metadata authored for this example; not a real vehicle source."
+  },
+  "license_confirmed": true
+}

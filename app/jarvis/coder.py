@@ -143,8 +143,20 @@ def coding_folder(actions, goal, cancelled, prior=None):
 USE_APP = re.compile(r"\b(?:use|using|open|opening|launch|start|in|with)\s+(?:the\s+)?[a-z][\w ]{0,30}?\s+app\b", re.I)
 
 
+def _coding_intent_text(goal):
+    """Negative constraints name tools without requesting their use.
+
+    This affects only deterministic routing; the complete goal, including every
+    constraint, is still passed to the planner and authorization checks.
+    """
+    clauses = re.split(r'(?<=[.!?;])\s+', goal)
+    return ' '.join(clause for clause in clauses
+                    if not re.match(r"\s*(?:no\b|do not\b|don't\b|never\b)", clause, re.I))
+
+
 def workspace_coding_request(goal):
     goal = normalize_spoken_code_request(goal)
+    goal = _coding_intent_text(goal)
     goal = USE_APP.sub(' ', goal)  # Varied live gate 2026-10-31: "Use the Calculator app: add 2025 and 375" asked for a project folder.
     # Notes/data workflows remain file operations even when their subject is
     # called "project". A plain folder scope is not a code-generation request.
@@ -461,7 +473,8 @@ class Coder:
 
     def run(self, project, goal, cancelled=lambda: False, selected=False):
         from .campaign_pause import assert_allowed
-        assert_allowed(project=project,run=self.actions.base)
+        from .runtime_scope import optional_actor_base
+        assert_allowed(project=project,run=optional_actor_base(self.actions))
         from .small_program import route  # Upgrade v2 control.api_routes (default off): None keeps the coder.
         small = route(self.actions, Path(project), goal, cancelled)
         if small is not None:

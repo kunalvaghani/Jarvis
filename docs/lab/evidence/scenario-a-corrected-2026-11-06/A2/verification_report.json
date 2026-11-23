@@ -1,0 +1,27 @@
+{
+  "study_ref": "artifact://sha256/dbacb3a1351f8fe3a648932c5c4486afd4f5b6a6b725c9af35bf712ed3849634",
+  "verification": {
+    "checks": [
+      "real 4-wheel contact/gravity equilibrium",
+      "positive actual inertia/masses",
+      "measured steering/acceleration/braking/turning",
+      "finite tire force/slip response",
+      "actual joint residuals",
+      "half-step numerical comparison",
+      "declared joint aero uncertainty envelope"
+    ],
+    "maximum_constraint_residual": 0.0013022435399488441,
+    "constraint_residual_units": "mixed generalized Chrono constraint coordinates",
+    "maximum_equilibrium_relative_error": 0.00016819836394159918,
+    "timestep_metric_relative_errors": {
+      "baseline:maximum_observed_lateral_acceleration_m_s2": 0.004895431852767014,
+      "baseline:maximum_observed_speed_m_s": 0.007039443663624668,
+      "baseline:mechanical_engine_energy_j": 0.0006722203991503634,
+      "candidate:maximum_observed_lateral_acceleration_m_s2": 0.007530805439775914,
+      "candidate:maximum_observed_speed_m_s": 0.007100384549544407,
+      "candidate:mechanical_engine_energy_j": 0.00047572420720173804
+    },
+    "physical_validation": false,
+    "scope": "Numerical verification of declared educational model, not experimental F1 validation."
+  }
+}

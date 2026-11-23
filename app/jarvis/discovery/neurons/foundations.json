@@ -1,0 +1,109 @@
+[
+  {
+    "node_id": "discovery.status@v1",
+    "kind": "skill",
+    "inputs": [],
+    "outputs": [
+      "report:Report"
+    ],
+    "intents": [
+      "what can you do in the lab",
+      "show lab capabilities",
+      "lab status"
+    ],
+    "feature": "enabled",
+    "entrypoint": "status",
+    "golden_test": "foundation_status",
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.verify.status@v1",
+    "kind": "verifier",
+    "inputs": [
+      "report:Report"
+    ],
+    "outputs": [
+      "verdict:Verdict"
+    ],
+    "intents": [
+      "verify lab capability description"
+    ],
+    "feature": "enabled",
+    "entrypoint": "verify_status",
+    "golden_test": "foundation_status",
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.units.convert@v1",
+    "kind": "skill",
+    "inputs": [
+      "request:Report"
+    ],
+    "outputs": [
+      "report:Report"
+    ],
+    "intents": [
+      "lab convert 1 km to m",
+      "convert scientific units",
+      "lab convert 180 degree to radian"
+    ],
+    "feature": "sim",
+    "entrypoint": "convert_units",
+    "golden_test": "pint_si_and_temperature",
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.verify.units@v1",
+    "kind": "verifier",
+    "inputs": [
+      "request:Report",
+      "report:Report"
+    ],
+    "outputs": [
+      "verdict:Verdict"
+    ],
+    "intents": [
+      "verify scientific unit conversion"
+    ],
+    "feature": "sim",
+    "entrypoint": "verify_units",
+    "golden_test": "pint_si_and_temperature",
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.electronics.divider@v1",
+    "kind": "skill",
+    "inputs": [
+      "request:Report"
+    ],
+    "outputs": [
+      "report:Report"
+    ],
+    "intents": [
+      "lab simulate divider 10 V 1000 ohm 1000 ohm",
+      "simulate ideal DC resistor divider"
+    ],
+    "feature": "sim",
+    "entrypoint": "simulate_divider",
+    "golden_test": "ngspice_dc_divider",
+    "model_hint": "none"
+  },
+  {
+    "node_id": "discovery.verify.divider@v1",
+    "kind": "verifier",
+    "inputs": [
+      "request:Report",
+      "report:Report"
+    ],
+    "outputs": [
+      "verdict:Verdict"
+    ],
+    "intents": [
+      "verify DC divider numerical result"
+    ],
+    "feature": "sim",
+    "entrypoint": "verify_divider",
+    "golden_test": "ngspice_dc_divider",
+    "model_hint": "none"
+  }
+]

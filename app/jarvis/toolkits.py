@@ -139,7 +139,20 @@ def requires_folder(name):
                 'runtime_capabilities', 'toolkit_status', 'mcp_status', 'mcp_list_tools', 'mcp_call', 'integration_status', 'application_search'}))
 
 
+def virtual_scope_error(step):
+    """Skill namespaces never grant a filesystem scope."""
+    if (step.get('folder') in {'@jarvis','@hermes','@deerflow'}
+            and step.get('action') in {'list_files','read_file','search_files','knowledge_search','query_resource','read_batch','find_in_file'}):
+        return ('That @ namespace is for skill_list/skill_read guidance, not a filesystem folder. '
+                'Use an actual configured folder/path for file tools. Structured Lab requests accept your JSON directly '
+                'with the quoted {request} placeholder; they do not require a pre-existing user request file. '
+                'Use actual source references already returned by the source workflow. No file operation was executed.')
+    return None
+
+
 def validate_step(step):
+    problem=virtual_scope_error(step)
+    if problem:raise ValueError(problem)
     if step["action"] not in TOOLS:
         return
     if not isinstance(step.get("value"), str) or not step["value"] or not isinstance(step.get("content", ""), str):

@@ -1,0 +1,6 @@
+Jarvis ideal DC divider
+V1 vin 0 DC 9
+R1 vin vout 1000
+R2 vout 0 1000
+.op
+.end

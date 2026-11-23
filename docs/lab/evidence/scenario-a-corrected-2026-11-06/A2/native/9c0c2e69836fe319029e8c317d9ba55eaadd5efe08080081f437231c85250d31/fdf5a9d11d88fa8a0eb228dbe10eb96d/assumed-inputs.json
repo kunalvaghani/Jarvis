@@ -1,0 +1,90 @@
+{
+  "name": "2026 F1-class educational surrogate (not exact F1 class CAD)",
+  "year": 2026,
+  "representation": "assumed_parametric_double_wishbone_surrogate",
+  "source_refs": [
+    "fia-2026-698d14b6c3b340c3a2890096c5ae1e276d90f07f92e3558d625b41ff6dbef2ff",
+    "catalog-search-9bc956b4753bbd9cbfd51837ba1d5db4e3c337c71817b58a4627466220c62af3-310ae489"
+  ],
+  "assumptions": [
+    "Regulation-referenced envelope only; not a complete FIA legality or proprietary team reconstruction.",
+    "Chassis mass, inertia, wheel/tire construction and suspension parameters are explicit assumed educational values.",
+    "TMeasy semi-empirical tire parameters are generated from assumed bearing capacity, not measured F1 tire data.",
+    "Lumped 500 kW engine and drivetrain are assumed; hybrid conversion/storage and real power-unit maps are not modeled.",
+    "Aero coefficients/slopes are unmeasured illustrative values; no aerodynamic curve is inferred from exterior photos.",
+    "Flat 2000 m road, prescribed 13 s settle/accelerate/turn/brake controls; maximum observed speed is not terminal speed or lap performance.",
+    "Gravity 9.81 m/s2, air density 1.225 kg/m3 and friction 1.1 are fixed test assumptions, not measured conditions.",
+    "All unexplained geometric offsets and component masses inherited from the BSD Chrono Sedan topology remain assumptions."
+  ],
+  "chassis_mass_kg": 620.0,
+  "chassis_inertia_kg_m2": [
+    180.0,
+    650.0,
+    700.0
+  ],
+  "wheelbase_m": 3.332,
+  "track_m": 1.5,
+  "wheel_radius_m": 0.35,
+  "wheel_width_m": 0.3,
+  "wheel_mass_kg": 12.0,
+  "spring_n_m": 180000.0,
+  "damping_n_s_m": 10000.0,
+  "tire_friction": 1.1,
+  "maximum_engine_power_w": 500000.0,
+  "maximum_engine_torque_n_m": 550.0,
+  "maximum_engine_speed_rad_s": 1500.0,
+  "air_density_kg_m3": 1.225,
+  "reference_area_m2": 1.5,
+  "corner": {
+    "front_downforce_coefficient": 1.0,
+    "rear_downforce_coefficient": 1.4,
+    "drag_coefficient": 0.9,
+    "front_flap_angle_deg": 12.0
+  },
+  "straight": {
+    "front_downforce_coefficient": 0.4,
+    "rear_downforce_coefficient": 0.5,
+    "drag_coefficient": 0.65,
+    "front_flap_angle_deg": 4.0
+  },
+  "candidate_corner_front_delta_deg": 2.0,
+  "front_lift_slope_per_deg": 0.04,
+  "drag_slope_per_deg": 0.004,
+  "straight_zones": [
+    {
+      "x_min_m": 8.0,
+      "x_max_m": 30.0,
+      "y_min_m": -100.0,
+      "y_max_m": 100.0
+    }
+  ],
+  "duration_s": 13.0,
+  "timestep_s": 0.002,
+  "sample_every": 100,
+  "controls": [
+    {
+      "time_s": 0.0,
+      "steering": 0.0,
+      "throttle": 0.0,
+      "braking": 0.0
+    },
+    {
+      "time_s": 2.0,
+      "steering": 0.0,
+      "throttle": 0.8,
+      "braking": 0.0
+    },
+    {
+      "time_s": 7.0,
+      "steering": 0.15,
+      "throttle": 0.4,
+      "braking": 0.0
+    },
+    {
+      "time_s": 10.0,
+      "steering": 0.0,
+      "throttle": 0.0,
+      "braking": 0.8
+    }
+  ]
+}

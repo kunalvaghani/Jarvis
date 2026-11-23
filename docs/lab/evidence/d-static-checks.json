@@ -1,0 +1,27 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "links_checked": 657,
+  "missing_links": [],
+  "ast": "passed",
+  "lab_flags": {
+    "enabled": false,
+    "sim": false,
+    "research": false,
+    "learning": false
+  },
+  "mypy": {
+    "result": "passed",
+    "source_files": 18
+  },
+  "host_launcher_check": "ready",
+  "no_new_installs": true,
+  "live_proof_inputs_unchanged": true,
+  "current_local_trials": {
+    "blender-pendulum": 16,
+    "scipy-pendulum": 22
+  },
+  "original_C4_history_still_unchanged": true,
+  "registered_contracts": 27,
+  "final_source_sha256": "ce4f149e5c5ccc983b5f5179fe1a6f43dc2419dc6eb335c4c1828bcbe48f129e",
+  "final_full_exact_baseline_ids": true
+}

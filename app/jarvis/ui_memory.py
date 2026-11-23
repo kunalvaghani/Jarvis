@@ -19,9 +19,8 @@ class UIMemory:
 
     def save(self, data):
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        temporary = self.path.with_suffix(".tmp")
-        temporary.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-        temporary.replace(self.path)
+        from .checkpoint_io import write_checkpoint
+        write_checkpoint(self.path,json.dumps(data, ensure_ascii=False, indent=2) + '\n',(self.path).parent)
 
     def remember(self, context, control, verb):
         if not context:

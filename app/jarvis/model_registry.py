@@ -28,9 +28,8 @@ class ModelRegistry:
 
     def _save(self, rows):
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        temporary = self.path.with_suffix('.tmp')
-        temporary.write_text(json.dumps(rows, indent=1), encoding='utf-8')
-        temporary.replace(self.path)
+        from .checkpoint_io import write_checkpoint
+        write_checkpoint(self.path,json.dumps(rows, indent=1),(self.path).parent)
 
     def register(self, adapter, base_sha256, dataset_sha256, gate_report, export_check=None):
         adapter = Path(adapter)

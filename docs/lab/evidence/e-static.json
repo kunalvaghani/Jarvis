@@ -1,0 +1,17 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "source_sha256": "02ee9f4d047fe4eab146426f2b55f789d43060990fd2bdb04f96b86b39997303",
+  "strict_neural_mypy_files": 18,
+  "strict_neural_mypy": "passed",
+  "read_only_readiness": "ready; no missing/incomplete dependencies/configured services; no live inference/startup",
+  "slots": {
+    "scipy": 25,
+    "blender": 16,
+    "ngspice": 39,
+    "limit_each": 50,
+    "phase_e_google_creates": 2
+  },
+  "shipped_lab_flags": "all false",
+  "repair_campaign": "PAUSED_BY_USER",
+  "new_models_installs_downloads_paid_calls": 0
+}

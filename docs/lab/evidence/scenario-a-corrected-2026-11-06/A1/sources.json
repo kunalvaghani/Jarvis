@@ -1,0 +1,192 @@
+{
+  "regulation": {
+    "regulation": {
+      "active_aero": false,
+      "cached_pdf": ".jarvis-runtime/discovery/official-sources/454b76e2b388e61db50c0d116ff59477848a0b7e081f38142242808213dc0826.pdf",
+      "content_is_untrusted": true,
+      "edition": 3,
+      "index_sha256": "2298d80fc2e2928e29db0391bfc48b4ca477733d2948e1a034f4b1175b1e15e5",
+      "index_url": "https://www.fia.com/regulation/category/110/technical-regulations",
+      "license": "FIA copyright; retained for source verification, not licensed CAD",
+      "limits": {
+        "maximum_non_tyre_half_width_m": 1.0,
+        "maximum_wheelbase_m": 3.6
+      },
+      "page_locators": {
+        "wheelbase": 15,
+        "width": 15
+      },
+      "publication_date": "2025-04-07",
+      "retrieved_at": "2026-11-05T20:12:41.265033+00:00",
+      "scope": "Only stated envelope dimensions and season-specific aero modes; not full FIA compliance or team engineering data.",
+      "sha256": "454b76e2b388e61db50c0d116ff59477848a0b7e081f38142242808213dc0826",
+      "title": "FIA 2025 Formula 1 Technical Regulations - Issue 03 - 2025-04-07 Published on 07.04.25",
+      "url": "https://www.fia.com/sites/default/files/documents/fia_2025_formula_1_technical_regulations_-_issue_03_-_2025-04-07.pdf",
+      "year": 2025
+    },
+    "source_refs": [
+      "fia-2025-454b76e2b388e61db50c0d116ff59477848a0b7e081f38142242808213dc0826"
+    ]
+  },
+  "asset_search": {
+    "candidates": [
+      {
+        "creator": "chwashere123",
+        "description": "2021 Gulf Mclaren F1 livery on the 2022 F1 car\n\nModel by @TheoDevF12",
+        "description_partial": false,
+        "downloadable_declared": true,
+        "engineering_suitability": "UNASSESSED",
+        "geometry_acquired": false,
+        "identity_verified": false,
+        "license_declared": {
+          "fullName": "",
+          "label": "CC Attribution",
+          "requirements": "",
+          "uid": "322a749bcfa841b29dff1e8a1bb74b0b",
+          "url": ""
+        },
+        "name": "Gulf Mclaren F1 2022 Car",
+        "uid": "dabbf81921e94065bfadbb5fd1b2ee5b",
+        "viewer_url": "https://sketchfab.com/3d-models/none-dabbf81921e94065bfadbb5fd1b2ee5b"
+      },
+      {
+        "creator": "excalibur",
+        "description": "F1 2021 McLaren MCL35M 3D model for Grand Prix 4 game.\nShape and livery version: Emilia Romagna - Imola GP\n\n08/07/2021: Exceptionally, this car is now Free to download. You can use it for personal projects. For public use, I will just ask you to credit me as the original author.\nIt is strictly forbidden to sell this 3d model on stock 3D models resellers, such as Turbosquid or Renderhub.\nIf so, it will be reported and I won't allow to download this car for free anymore.\nThank you for your support.",
+        "description_partial": false,
+        "downloadable_declared": true,
+        "engineering_suitability": "UNASSESSED",
+        "geometry_acquired": false,
+        "identity_verified": false,
+        "license_declared": {
+          "fullName": "",
+          "label": "CC Attribution",
+          "requirements": "",
+          "uid": "322a749bcfa841b29dff1e8a1bb74b0b",
+          "url": ""
+        },
+        "name": "F1 2021 McLaren MCL35M",
+        "uid": "967ecec37468412083c40c62b3d7234d",
+        "viewer_url": "https://sketchfab.com/3d-models/none-967ecec37468412083c40c62b3d7234d"
+      },
+      {
+        "creator": "ddiaz-design",
+        "description": "Repositorio de modelos 3D de Ddiaz Design\n\nOne of the rarest McLaren roadcars ever built, the McLaren F1 GT, is on display at the 2015 Goodwood Festival of Speed.\n\nKindly loaned to McLaren, chassis #58F1GT is one of only three examples, designed and built to homologate the McLaren F1 GTR 'Longtail' for GT racing during the 1997 season. The livery echoes the famous monochrome design of the Formula 1 team during the late 1990s, driven to back-to-back world titles by Finnish racing driver Mika Hakkinen in 1998 and 1999.\n\nInstagram del proyecto: https://www.instagram.com/ddiaz.design/\n\nPaypal Donations: https://paypal.me/sergiodd\n\nModel from CSR2\n\nCredits: https://www.facebook.com/p/GM25-100042237200164/",
+        "description_partial": false,
+        "downloadable_declared": true,
+        "engineering_suitability": "UNASSESSED",
+        "geometry_acquired": false,
+        "identity_verified": false,
+        "license_declared": {
+          "fullName": "",
+          "label": "CC Attribution-NonCommercial-ShareAlike",
+          "requirements": "",
+          "uid": "2628dbe5140a4e9592126c8df566c0b7",
+          "url": ""
+        },
+        "name": "1997 McLaren F1 GT",
+        "uid": "c1cc76945ca84c10a7ff8330fb1dd1ab",
+        "viewer_url": "https://sketchfab.com/3d-models/none-c1cc76945ca84c10a7ff8330fb1dd1ab"
+      },
+      {
+        "creator": "shunqi",
+        "description": "This is a fully original F1 2025 concept car, designed from scratch in Blender with a custom body shape and aerodynamic details \u2014 not based on any existing chassis. The livery included is inspired by the McLaren MCL39, applied using high-quality PBR textures.\n\nThe model is fully UV-unwrapped and compatible with any texturing workflow. After downloading, you're free to repaint or design your own team livery using your favorite tools. Just swap out the texture maps and make it yours.\n\n![image](https://pbs.twimg.com/media/GqUXLApbAAM3kxQ?format=jpg&name=900x900)\nThis is a puzzle of other cars I drew using this model; the file only contains the texture for the MCL39.",
+        "description_partial": false,
+        "downloadable_declared": true,
+        "engineering_suitability": "UNASSESSED",
+        "geometry_acquired": false,
+        "identity_verified": false,
+        "license_declared": {
+          "fullName": "",
+          "label": "CC Attribution",
+          "requirements": "",
+          "uid": "322a749bcfa841b29dff1e8a1bb74b0b",
+          "url": ""
+        },
+        "name": "F1 2025 McLaren MCL39",
+        "uid": "c6194270002b401bb25be7e35ab56e34",
+        "viewer_url": "https://sketchfab.com/3d-models/none-c6194270002b401bb25be7e35ab56e34"
+      },
+      {
+        "creator": "ddiaz-design",
+        "description": "Repositorio de modelos 3D de Ddiaz Design\n\n![](https://cdn.mos.cms.futurecdn.net/vMA3aJndKWqsynwzQc2Kt8.jpg)\n\nThe new McLaren W1 is the ground-breaking successor to two of the greatest supercars ever - the McLaren F1 and McLaren P1TM - and elevates the McLaren '1' car lineage to new heights in every aspect of performance.\n\nThe Ultimate expression of a real supercar, the new W1 has been created according to the McLaren ethos of class-leading performance, informed by the core principles that underpin every McLaren supercar: epic power applied through cutting-edge aerodynamics and lightweight chassis technologies; the highest levels of dynamic excellence and the purest driver connection; the perfect driver environment, for all driving situations; and awe-inspiring visual and aural drama.\n\nInstagram del proyecto: https://www.instagram.com/ddiaz.design/\n\nPaypal Donations: https://paypal.me/sergiodd\n\nBased on a CSR2 3d model\n\nCredits: ZD 3D Modelling and Design Discord Server (discord.gg/ZwWHzxk2zu)",
+        "description_partial": false,
+        "downloadable_declared": true,
+        "engineering_suitability": "UNASSESSED",
+        "geometry_acquired": false,
+        "identity_verified": false,
+        "license_declared": {
+          "fullName": "",
+          "label": "CC Attribution-NonCommercial-ShareAlike",
+          "requirements": "",
+          "uid": "2628dbe5140a4e9592126c8df566c0b7",
+          "url": ""
+        },
+        "name": "2025 McLaren W1",
+        "uid": "519ee6f9089b4d548cd4384ef159f62e",
+        "viewer_url": "https://sketchfab.com/3d-models/none-519ee6f9089b4d548cd4384ef159f62e"
+      },
+      {
+        "creator": "Alex.Ka.",
+        "description": "SPECIAL PHOTOSET<br>\nhttps://www.behance.net/AlexKa-ALsCARS\n\nhttps://eu.zonerama.com/AlexKaNFSMWMODS/Album/12122702\n\n---\nALLOWED use this model -<br>\nfor games.\nvisual and art projects.\npresentations.\n(with showing credits)\n\nFORBIDDEN -<br>\nsell.\nmake a profit with it.\nassign their authorship.\nupload on other sites.\nreupload on Sketchfab.\n---\n<br>\nBased on the model from - NFS: Shift<br>\nParts from - Forza Motorsport 4, Project CARS<br>\nPolycount - Midpoly<br>\nHD detailed exterior work - Alex.Ka.<br>\nGeometry edited and modified - Alex.Ka.<br>\nNFS2 (ND 4 SPD) Licence plae modeling  - Alex.Ka.<br>\nTextures: NFS: Shift, NFS: Most Wanted, Alex.Ka.<br>\nQquality and realistic textures By Alex.Ka.<br>\nSpecial \"Antares INGENS A1\" tire texture By Alex.Ka.<br>\nIndividual textures for windows<br>\nCorrect mirrors reflection<br>\nWheels not hanging in the void (close by suspension)<br>\n<br>\nPrepared for Sketchfab by Alex.Ka.<br>\n30.09.2024<br>",
+        "description_partial": false,
+        "downloadable_declared": true,
+        "engineering_suitability": "UNASSESSED",
+        "geometry_acquired": false,
+        "identity_verified": false,
+        "license_declared": {
+          "fullName": "",
+          "label": "CC Attribution-NonCommercial",
+          "requirements": "",
+          "uid": "bbfe3f7dbcdd4122b966b85b9786a989",
+          "url": ""
+        },
+        "name": "McLaren F1 1993 NFS2 Edition. Scene Version",
+        "uid": "49502d9e4874458aa6223222a56ff0b7",
+        "viewer_url": "https://sketchfab.com/3d-models/none-49502d9e4874458aa6223222a56ff0b7"
+      },
+      {
+        "creator": "The_3D_Dude",
+        "description": "Very basic model of the mclaren f1 2022 car\n\nIt is missing some details but the basic shape is about right.\n\nYouTube video:\nhttps://youtu.be/fxg7OfQq9FE",
+        "description_partial": false,
+        "downloadable_declared": true,
+        "engineering_suitability": "UNASSESSED",
+        "geometry_acquired": false,
+        "identity_verified": false,
+        "license_declared": {
+          "fullName": "",
+          "label": "CC Attribution",
+          "requirements": "",
+          "uid": "322a749bcfa841b29dff1e8a1bb74b0b",
+          "url": ""
+        },
+        "name": "Mclaren Mcl36",
+        "uid": "273d819de35d41a09a16213863ed0936",
+        "viewer_url": "https://sketchfab.com/3d-models/none-273d819de35d41a09a16213863ed0936"
+      },
+      {
+        "creator": "heynic",
+        "description": "Credit [Excalibur] https://sketchfab.com/excalibur/models\n\n\nCredit [SINNIK] Only one was built, because of course it was, and it was allegedly sold to a mysterious collector with pockets deeper than the Mariana Trench\u2014possibly Ferdinand Pi\u00ebch, or maybe Cristiano Ronaldo. No one knows. No one tells. That\u2019s part of the theatre.\n\nhttps://www.vecarz.com/journal/museum-v1-2",
+        "description_partial": false,
+        "downloadable_declared": true,
+        "engineering_suitability": "UNASSESSED",
+        "geometry_acquired": false,
+        "identity_verified": false,
+        "license_declared": {
+          "fullName": "",
+          "label": "CC Attribution",
+          "requirements": "",
+          "uid": "322a749bcfa841b29dff1e8a1bb74b0b",
+          "url": ""
+        },
+        "name": "Mclaren 35M 2021 | www.vecarz.com",
+        "uid": "5094ae7c57c544e7832fcd9ca39bba2f",
+        "viewer_url": "https://sketchfab.com/3d-models/none-5094ae7c57c544e7832fcd9ca39bba2f"
+      }
+    ],
+    "payload_sha256": "98cb893e7091df2f6d0eb45b0b4af644430c054528e798477750c1739c6e6c0b",
+    "provider_failure": null,
+    "query": "2025 McLaren F1 model",
+    "source_goal_id": "g-e1e393c3bfa64cb8",
+    "source_ref": "catalog-search-98cb893e7091df2f6d0eb45b0b4af644430c054528e798477750c1739c6e6c0b-6f29f40b"
+  }
+}

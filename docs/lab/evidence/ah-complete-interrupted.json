@@ -1,0 +1,31 @@
+{
+  "scope": "Interrupted diagnostic; never a complete regression receipt",
+  "terminal_receipt_written": false,
+  "reported_lower_bound": 3100,
+  "failures": [
+    {
+      "run_id": "24f76ad6ad51",
+      "source_sha256": "e157754d0b3a682d69f61a1124a583fd1c8740f8f91fb2499cfff3af7fa29f87",
+      "event": "failure",
+      "test": "tests/test_experience_memory.py::ExperienceMemoryTests::test_context_budget_and_no_automatic_dispatch",
+      "phase": "call",
+      "outcome": "failed",
+      "seconds": 0.3630441000000246,
+      "failure_kind": "KeyError",
+      "failure_location": "tests/test_experience_memory.py:46"
+    },
+    {
+      "run_id": "24f76ad6ad51",
+      "source_sha256": "e157754d0b3a682d69f61a1124a583fd1c8740f8f91fb2499cfff3af7fa29f87",
+      "event": "failure",
+      "test": "tests/test_experience_memory.py::ExperienceMemoryTests::test_retention_shutdown_disable_and_invalid_options",
+      "phase": "call",
+      "outcome": "failed",
+      "seconds": 0.3651789999998982,
+      "failure_kind": "AssertionError"
+    }
+  ],
+  "source_stability_certified": false,
+  "stop_reason": "Two experience-memory failures reproduced by one controlled sharing denial; stopped owned run before applying shared-writer fix",
+  "all_eight_autonomous_scenarios_passed": false
+}

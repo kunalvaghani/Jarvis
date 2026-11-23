@@ -1,0 +1,19 @@
+{
+  "date_local": "2026-11-05 Asia/Calcutta",
+  "exit_code": 1,
+  "source_sha256": "42c8fda3ba0d6bd5bd7a16223b1204952944af7af55750ff4eae9988d31cd508",
+  "scope": "Read-only readiness, not live acceptance or inference",
+  "status": "repair_required",
+  "missing": [
+    "docker: unavailable (DockerEngineUnavailable)",
+    "ollama: unavailable (ConnectionError)"
+  ],
+  "incomplete": [],
+  "services_started": false,
+  "inference_performed": false,
+  "observed": {
+    "ollama": "localhost11434 connection refused (WinError10061)",
+    "docker": "dockerDesktopLinuxEngine pipe absent"
+  },
+  "all_eight_autonomous_scenarios_passed": false
+}

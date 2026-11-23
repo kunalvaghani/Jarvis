@@ -100,7 +100,7 @@ def paired():
     (OUT/'benchmark-paired.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
     print(json.dumps(result['summaries'],indent=2))
 
-def inventory():
+def inventory(destination=None):
     from jarvis.tools import SPECS,ToolRegistry
     from jarvis.toolkits import status
     modules={}
@@ -128,8 +128,10 @@ def inventory():
     result={'observed_at':datetime.now().astimezone().isoformat(),'map_sha256':hashlib.sha256(map_text.encode()).hexdigest(),'modules':modules,
         'tools':tools,'registered_tool_count':len(registry.specs),'manifest_services':manifest['services'],
         'scope':'Static code symbols, registry metadata and prerequisite presence. No app/model/account actions, no capability certification.'}
-    OUT.mkdir(parents=True,exist_ok=True);(OUT/'source-inventory.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
+    destination=Path(destination) if destination is not None else OUT
+    destination.mkdir(parents=True,exist_ok=True);(destination/'source-inventory.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
     print('Modules',len(modules),'tools',len(tools),'services',len(manifest['services']))
+    return result
 
 def dependencies():
     rows=[]

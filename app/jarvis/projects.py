@@ -122,6 +122,5 @@ class Projects:
         data = self._memory()
         data[str(path)] = time.time()
         self.memory_path.parent.mkdir(parents=True, exist_ok=True)
-        temporary = self.memory_path.with_suffix(".tmp")
-        temporary.write_text(json.dumps(data, indent=2), encoding="utf-8")
-        temporary.replace(self.memory_path)
+        from .checkpoint_io import write_checkpoint
+        write_checkpoint(self.memory_path,json.dumps(data, indent=2),(self.memory_path).parent)

@@ -7,6 +7,8 @@ from functools import lru_cache
 
 # These are runtime associations, not saved actions or provider-specific tool names.
 ROUTES = {
+    'scientific_lab': (r'\b(?:simulate|simulation|dynamics|physics|aero|suspension)\b',
+                       ('discovery_call','web_search','tool_search'), ('vehicle-comparison','lab-evidence')),
     'deerflow': (r'\b(deerflow|deer[- ]flow)\b',
                  ('deerflow_status', 'deerflow_skill_search', 'deerflow_skill_read', 'deerflow_research', 'deerflow_web_research', 'deerflow_sandbox_task', 'deerflow_free_media'), ('web-research', 'project-coding')),
     'sandbox': (r'\b(sandbox|isolated|offline media|free media)\b', ('deerflow_sandbox_task', 'deerflow_status'), ('project-coding',)),
@@ -315,11 +317,29 @@ def runtime_context(goal, tool_rows, skills=None, memory_context=None, coding=Fa
     relevant += [row['action'] for row in tool_rows if tokens(goal) & tokens(row['action'].replace('_', ' '))]
     from .execution_strategy import hint
     strategy = hint(goal, names)
-    return {'intents': intents(goal), 'tools': list(dict.fromkeys(relevant))[:16] if not coding else [],
+    result = {'intents': intents(goal), 'tools': list(dict.fromkeys(relevant))[:16] if not coding else [],
             **({'execution_strategy': strategy} if strategy else {}),
             'skills': selected, 'programs': apps, 'unavailable': unavailable,
             'preferred_runner': 'Qwen coder with repository inspection and streamed drafts' if coding else 'direct workflow when supported; otherwise fresh-state planner',
             'contract': CONTRACT}
+    if 'scientific_lab' in intents(goal) and 'discovery_call' in names:
+        # Introspect only metadata already offered by the current ToolRegistry.
+        # Flags-off tasks neither import Lab modules nor inspect solver files.
+        row=next(r for r in tool_rows if r['action']=='discovery_call')
+        topics=row.get('parameters',{}).get('properties',{}).get('topic',{}).get('enum',[])
+        science={'schemas_offered':topics,'inspect_schema':'discovery_call operation=help, topic=<offered topic>',
+                 'source_reads':['lab assets search "<exact variant/year and object query>"',
+                                 'lab assets inspect "<model UID from source results>"',
+                                 'lab background "<public query>"','lab portal read "<public URL>"'],
+                 'source_contract':'Retain actual Source IDs from tool results. A guessed URL or model statement is not evidence.',
+                 'completion_contract':'Actual solver receipts, native artifacts and independent whole-goal checks are required; screenshots alone do not prove physics.'}
+        if 'vehicle' in topics and re.search(r'\b(?:vehicles?|cars?|suspension|aero|F1|formula)\b',goal,re.I):
+            from .discovery.adapters.chrono import qualification
+            science['vehicle_runtime']=qualification()
+            science['vehicle_workflow']='lab compare vehicle "{request}"'
+            science['vehicle_limits']='Conditional assumed-topology comparison only; full asset/visual/track/terminal-speed acceptance remains separate.'
+        result['scientific_lab']=science
+    return result
 
 
 def sync_note(skills):

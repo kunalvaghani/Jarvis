@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-06",
+  "status": "PRIOR_A1_PASS_WITHDRAWN",
+  "affected_audits": [
+    "scenario-a1-attempt-17-audit.json",
+    "scenario-a1-attempt-18-audit.json"
+  ],
+  "affected_bundle": "scenario-a-2026-11-06/A1",
+  "reason": "2026 regulation title contained a 2025 publication date; prior selector and PDF validator matched any occurrence of year. A1 therefore used the wrong season dimensions. Prior receipts/files retained unchanged as failed historical evidence.",
+  "fix": "Match the named regulation season in both index title and PDF heading; independently reselect and hash-check the captured official index. Added adversarial publication/copyright-year regression test.",
+  "prior_full_regression": "scenario-a-full-2026-11-06 interrupted before completion; no current full-regression claim.",
+  "replacement": "New source-frozen A1/A2 runs and full regression required.",
+  "exact_team_acceptance": false,
+  "physical_validation": false
+}

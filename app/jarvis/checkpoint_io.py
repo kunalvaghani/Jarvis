@@ -1,7 +1,39 @@
 """Commit unchanged Jarvis-owned metadata after known Windows sharing failures."""
 import hashlib
+import os
 from pathlib import Path
+import threading
 import time
+import weakref
+
+_METADATA_LOCKS=weakref.WeakValueDictionary()
+_METADATA_LOCKS_GUARD=threading.Lock()
+
+
+def _metadata_lock(path):
+    # Separate instances can write the same cache/ledger. Serialize only that
+    # canonical file; foreign-process changes still fail the signature checks.
+    key=os.path.normcase(str(Path(path).resolve()))
+    with _METADATA_LOCKS_GUARD:
+        lock=_METADATA_LOCKS.get(key)
+        if lock is None:
+            lock=threading.RLock();_METADATA_LOCKS[key]=lock
+        return lock
+
+
+def write_checkpoint(target, text, root):
+    """Write owned metadata once; retain pending bytes if its commit is blocked."""
+    import tempfile
+    target,root=Path(target),Path(root).resolve()
+    if not target.resolve().is_relative_to(root):
+        raise ValueError('Checkpoint write escaped its owned root.')
+    with _metadata_lock(target):
+        target.parent.mkdir(parents=True,exist_ok=True)
+        with tempfile.NamedTemporaryFile('w',encoding='utf-8',dir=target.parent,
+                                         prefix='.jarvis-checkpoint-',delete=False) as stream:
+            pending=Path(stream.name)
+            stream.write(text);stream.flush();os.fsync(stream.fileno())
+        replace_checkpoint(pending,target,root)
 
 
 def replace_checkpoint(source, target, root, *, wait=time.sleep, report=None):

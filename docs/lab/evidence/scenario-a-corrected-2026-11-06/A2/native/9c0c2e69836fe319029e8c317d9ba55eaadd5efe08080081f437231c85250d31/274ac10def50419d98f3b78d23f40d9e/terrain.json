@@ -1,0 +1,41 @@
+{
+  "Name": "Rigid plane",
+  "Type": "Terrain",
+  "Template": "RigidTerrain",
+  "Patches": [
+    {
+      "Location": [
+        0,
+        0,
+        0
+      ],
+      "Orientation": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "Geometry": {
+        "Dimensions": [
+          2000,
+          2000,
+          2
+        ]
+      },
+      "Contact Material": {
+        "Coefficient of Friction": 1.1,
+        "Coefficient of Restitution": 0.01,
+        "Properties": {
+          "Young Modulus": 20000000.0,
+          "Poisson Ratio": 0.3
+        },
+        "Coefficients": {
+          "Normal Stiffness": 200000.0,
+          "Normal Damping": 40.0,
+          "Tangential Stiffness": 200000.0,
+          "Tangential Damping": 20.0
+        }
+      }
+    }
+  ]
+}

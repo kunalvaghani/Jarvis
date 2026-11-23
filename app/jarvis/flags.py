@@ -36,6 +36,10 @@ FLAGS: Dict[Tuple[str, str], Any] = {
     ('memory_v2', 'context_pack'): False,
     ('memory_v2', 'resolver'): 'off',
     ('proactive', 'enabled'): False,
+    ('lab', 'enabled'): False,
+    ('lab', 'sim'): False,
+    ('lab', 'research'): False,
+    ('lab', 'learning'): False,
 }
 SECTIONS: Tuple[str, ...] = tuple(sorted({section for section, _ in FLAGS}))
 

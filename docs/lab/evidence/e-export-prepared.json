@@ -1,0 +1,72 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "max_creates": 2,
+  "folder_id": "0AMVTcmM1XWY0Uk9PVA",
+  "scope": "PREPARED ONLY; Phase E implementation is not consent to external writes",
+  "deliveries": [
+    {
+      "id": "delivery-959cbde02f6404ec6e3e09cda4ebc592c50e0b504a25652edef7a33004ce390b",
+      "payload": {
+        "input_refs": [
+          "artifact://sha256/5ce386c99e015bba838410ad063694a446e82d61b59574254cdad1f2fff7c4a5"
+        ],
+        "kind": "report",
+        "parent_id": "0AMVTcmM1XWY0Uk9PVA",
+        "source_ids": [
+          "study-b430f47737b94c30108996c856a0d414-input"
+        ],
+        "text": "Jarvis Phase E partial qualification 2026-11-04\nEvidence: SIMULATION_PASSED_WITH_ASSUMPTIONS\nPhysical validation is not established by this export.\nSource artifact: phase-e-study-report\nSHA-256: 04fb07faed15a336b0039a0f23b49df968778d27ded005b990ed99d5c143c2e8\n\n{\"baseline_error_s\": 0.5751002980005147, \"best\": {\"decision\": \"CANDIDATE\", \"detail\": \"numerically verified; constraints evaluated separately\", \"error_s\": 0.012098142789198185, \"feasible\": true, \"gravity_moment_nm\": 1.9489461350995507, \"length_m\": 1.0, \"number\": 2, \"period_s\": 2.012098142789198, \"run_ref\": \"artifact://sha256/048878b82fa25c2b312ef99058509cc770c5aff05b990eafa6bd82b4fef61b09\", \"state\": \"COMPLETED\"}, \"candidates_m\": [0.5, 1.5, 1.0], \"evidence_status\": \"SIMULATION_PASSED_WITH_ASSUMPTIONS\", \"objective\": {\"target_period_s\": 2.0, \"tolerance_s\": 0.02}, \"objective_met\": true, \"physical_validation\": false, \"scenario_sha256\": \"970819b30f6557f5c26e8fd3e6c647c353eb2d18b88a468ae1b3ecc59f1c979d\", \"scope\": \"ideal pendulum bounded grid search; objective/constraint decision is separate from numerical verification\", \"state\": \"COMPLETED\", \"study_id\": \"study-b430f47737b94c30108996c856a0d414\", \"trials\": [{\"decision\": \"CANDIDATE\", \"detail\": \"numerically verified; constraints evaluated separately\", \"error_s\": 0.5751002980005147, \"feasible\": true, \"gravity_moment_nm\": 0.9744730675497754, \"length_m\": 0.5, \"number\": 0, \"period_s\": 1.4248997019994853, \"run_ref\": \"artifact://sha256/e5db9cc619016f5e786a728aacad6626e9d71ccc8e11127887604134cf8e1a29\", \"state\": \"COMPLETED\"}, {\"decision\": \"REJECTED_CONSTRAINT\", \"detail\": \"numerically verified; constraints evaluated separately\", \"error_s\": 0.46362439656394816, \"feasible\": false, \"gravity_moment_nm\": 2.9234192026493258, \"length_m\": 1.5, \"number\": 1, \"period_s\": 2.463624396563948, \"run_ref\": \"artifact://sha256/de810a41b77a8b31b2f42f504bf507eb2dffd1e2247a030c95b93a4537a40435\", \"state\": \"COMPLETED\"}, {\"decision\": \"CANDIDATE\", \"detail\": \"numerically verified; constraints evaluated separately\", \"error_s\": 0.012098142789198185, \"feasible\": true, \"gravity_moment_nm\": 1.9489461350995507, \"length_m\": 1.0, \"number\": 2, \"period_s\": 2.012098142789198, \"run_ref\": \"artifact://sha256/048878b82fa25c2b312ef99058509cc770c5aff05b990eafa6bd82b4fef61b09\", \"state\": \"COMPLETED\"}]}",
+        "title": "Jarvis Phase E partial qualification 2026-11-04"
+      }
+    },
+    {
+      "id": "delivery-3da7c2fc642e689fb66742dd3c2e74839bb78b4ad80d0dae5630085a342c69de",
+      "payload": {
+        "expected_sum": "5.9006222413526313",
+        "input_refs": [
+          "artifact://sha256/e5db9cc619016f5e786a728aacad6626e9d71ccc8e11127887604134cf8e1a29",
+          "artifact://sha256/de810a41b77a8b31b2f42f504bf507eb2dffd1e2247a030c95b93a4537a40435",
+          "artifact://sha256/048878b82fa25c2b312ef99058509cc770c5aff05b990eafa6bd82b4fef61b09"
+        ],
+        "kind": "table",
+        "parent_id": "0AMVTcmM1XWY0Uk9PVA",
+        "rows": [
+          [
+            "Experiment",
+            "Value",
+            "Unit",
+            "Evidence"
+          ],
+          [
+            "study-b430f47737b94c30108996c856a0d414-trial-0-experiment",
+            "1.4248997019994853",
+            "s",
+            "SIMULATION_PASSED_WITH_ASSUMPTIONS"
+          ],
+          [
+            "study-b430f47737b94c30108996c856a0d414-trial-1-experiment",
+            "2.463624396563948",
+            "s",
+            "SIMULATION_PASSED_WITH_ASSUMPTIONS"
+          ],
+          [
+            "study-b430f47737b94c30108996c856a0d414-trial-2-experiment",
+            "2.012098142789198",
+            "s",
+            "SIMULATION_PASSED_WITH_ASSUMPTIONS"
+          ],
+          [
+            "Total",
+            "=SUM(B2:B4)",
+            "s",
+            "Formula over recorded values; not a feasibility claim"
+          ]
+        ],
+        "source_ids": [
+          "study-b430f47737b94c30108996c856a0d414-input"
+        ],
+        "title": "Jarvis Phase E conditional study 2026-11-04"
+      }
+    }
+  ]
+}

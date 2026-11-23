@@ -237,6 +237,52 @@ GOAL_VERIFIER = {'code.bug_fix': 'final_check', 'research.answer': 'check', 'fil
 
 
 def compile_goal(goal: str, journal: Any, config: Any, graph_version: int = 0) -> Optional[Plan]:
+    from ..flags import enabled
+    if enabled(config, 'lab', 'enabled'):
+        from ..discovery.scenario_project import compile_goal as scenario_goal
+        scenario_plan: Optional[Plan] = scenario_goal(goal,journal,config,graph_version)
+        if scenario_plan is not None:
+            return scenario_plan
+        from ..discovery.mechanical_flow import compile_goal as mechanics_goal
+        plan: Optional[Plan] = mechanics_goal(goal, journal, config, graph_version)
+        if plan is not None:
+            return plan
+        from ..discovery.vehicle_flow import compile_goal as vehicle_goal
+        plan = vehicle_goal(goal, journal, config, graph_version)
+        if plan is not None:
+            return plan
+        from ..discovery.asset_search import compile_goal as asset_goal
+        plan = asset_goal(goal, journal, config, graph_version)
+        if plan is not None:
+            return plan
+        from ..discovery.integration import compile_goal as lab_goal
+        plan = lab_goal(goal, journal, config, graph_version)
+        if plan is not None:
+            return plan
+        from ..discovery.c1 import compile_goal as c1_goal
+        plan = c1_goal(goal, journal, config, graph_version)
+        if plan is not None:
+            return plan
+        from ..discovery.c2 import compile_goal as c2_goal
+        plan = c2_goal(goal, journal, config, graph_version)
+        if plan is not None:
+            return plan
+        from ..discovery.c3 import compile_goal as c3_goal
+        plan = c3_goal(goal, journal, config, graph_version)
+        if plan is not None:
+            return plan
+        from ..discovery.c4 import compile_goal as c4_goal
+        plan = c4_goal(goal, journal, config, graph_version)
+        if plan is not None:
+            return plan
+        from ..discovery.d import compile_goal as d_goal
+        plan = d_goal(goal, journal, config, graph_version)
+        if plan is not None:
+            return plan
+        from ..discovery.d2 import compile_goal as d2_goal
+        plan = d2_goal(goal, journal, config, graph_version)
+        if plan is not None:
+            return plan
     for name, template in WORKFLOWS.items():
         steps = template(goal, journal, config)
         if steps:

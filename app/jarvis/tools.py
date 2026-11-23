@@ -21,14 +21,15 @@ class ToolSpec:
 
 
 SPECS = (
+    ToolSpec('discovery_call', 'toolkit', 'Scientific Lab for qualified CPU Chrono vehicle/aero comparisons, MuJoCo primitive mechanics, units, circuits, conditional relativity, literature and bounded optimization. First inspect help or a schema topic, then run an exact supported lab command with its structured request object. This is an implemented runtime adapter to the existing neural brain, not a skill name. Legacy fields: value=help [topic] or lab command; content=optional JSON request, with a quoted "{request}" placeholder. Results are conditional solver outputs; model-proposed parameters are unverified assumptions. Existing approvals and resource gates remain required.'),
     ToolSpec('workflow_expand', 'toolkit', 'Propose bounded subtasks in the CURRENT durable workflow. value=stable expansion key; content=JSON {requests:[{kind:"task"|"ask"|"jarvis_status"|"system_info"|"screen_info",value:"...",extra:""}],join:optional existing task UUID}. Maximum 20 children/call, 50/workflow, depth 3. Children wait for a verified parent result; effectful children additionally require explicit scope review and existing tool approvals. Does not execute children or grant permissions.'),
     ToolSpec('application_inspect', 'desktop', 'Read a configured app executable/version and sanitized foreground controls. value MUST be an exact configured application name or current for the current configured app. Cube, Modifier and other object/control names are invalid; use select for controls. Read-only: never selects objects, launches, types, clicks, installs or executes scripts.'),
     ToolSpec('realtime_query', 'realtime', 'Read one of the green public APIs. value=provider ID or catalog; content=JSON arguments {query,id,symbol,latitude,longitude,timezone,base,target,country,route,to_latitude,to_longitude}. No arbitrary URLs or writes. Returns timestamps, coverage and failures. Use catalog first to choose an exact provider; self-hosted sources require configured endpoints.'),
     ToolSpec("open", "desktop", "Open a configured app or named file/folder. Folder values can include a spoken drive constraint; preserve it. Existing full paths avoid app-name ambiguity. Folder-opening preferences do not authorize writes."),
     ToolSpec("browse", "browser", "Only SHOW the user a website in their own browser. Jarvis cannot read, answer from or act on that page; for any goal that needs the page content or interaction use web_open instead."),
     ToolSpec("browser_search", "browser", "Search the web using the exact query."),
-    ToolSpec("web_open", "control", "Open a website in Jarvis's own Chrome (clean Jarvis profile) and read it. value=URL or domain. content optional JSON {\"profile\":\"personal\" ONLY when the user asks to use their signed-in browser, \"new_tab\":true}. Returns the outcome then the page's text and elements as lines like text \"Total\" or button \"Search\" [ref_12]. Use those refs with web_act."),
-    ToolSpec("web_read", "control", "Read the current page in Jarvis's Chrome again. value optional: all (default: text and controls), interactive (controls only) or visible (on screen). content optional JSON {\"find\":\"words\"} to search elements, or {\"ref\":\"ref_12\"} to read inside one element. Refs change after navigation: read again instead of guessing."),
+    ToolSpec("web_open", "control", "Open a website in Jarvis's own Chrome (clean Jarvis profile) and read it. value=URL or domain. content optional JSON {\"profile\":\"personal\" ONLY when the user asks to use their signed-in browser, \"new_tab\":true}. Returns the outcome then the page's text and elements as lines like text \"Total\" or button \"Search\" [ref_12]. Use those refs with web_act. web_read value=links reads bounded actual public hrefs when the connected browser supports it; never invent URLs from labels."),
+    ToolSpec("web_read", "control", "Read the current page in Jarvis's Chrome again. value optional: all (default: text and controls), interactive (controls only), visible (on screen), or links (bounded actual public hrefs bound to the observed page URL; requires browser support). content optional JSON {\"find\":\"words\"} to search elements, or {\"ref\":\"ref_12\"} to read inside one element. Refs change after navigation: read again instead of guessing."),
     ToolSpec("web_act", "control", "Act on the current page by ref. value=click|double_click|right_click|hover|fill|select|check|type|key|scroll|scroll_to|back|forward|reload|new_tab|switch_tab|close_tab|wait. content JSON: {\"ref\":\"ref_12\"} for element actions; fill/select add \"text\"; check adds \"checked\":true|false; type/key add \"text\" (key examples: Enter, ctrl+a); scroll adds \"direction\":up|down and \"amount\":1-10; tabs use \"tab\":\"tab-2\"; new_tab \"url\"; wait \"seconds\". Returns the result and the page's fresh refs. Clicks on send/buy/delete/submit-like targets ask the user first. Never fills passwords."),
     ToolSpec("app_open", "control", "Open an allowed Windows app (notepad, calculator, explorer, paint) and read its window. value=app name; content optional JSON {\"path\":\"file or folder inside the approved test folder\"}. Returns the window handle and its controls as lines like Button \"Seven\" [u12]."),
     ToolSpec("app_read", "control", "Read a Windows app window's controls with refs. value=part of the window title, or its handle number, or all to read every open window at once; content optional JSON {\"filter\":\"all\"} to include text and labels."),
@@ -61,6 +62,7 @@ TOOL_NAMES = tuple(spec.name for spec in SPECS)
 
 # Fields each built-in tool reads: (required, optional). Toolkit tools are checked by toolkits.validate_step.
 _FIELDS = {
+    'discovery_call': ({'value'}, {'content'}),
     'workflow_expand': ({'value','content'}, set()),
     'application_inspect': ({'value'}, set()), 'realtime_query': ({'value'}, {'content'}),
     'open': ({'value'}, set()), 'browse': ({'value'}, {'browser'}), 'browser_search': ({'value'}, {'browser'}),
@@ -215,6 +217,8 @@ class ToolRegistry:
         if isinstance(allowed, (set, frozenset)):
             rows = [row for row in rows if row['action'] in allowed]
         config = getattr(self.actions, 'config', {})
+        if goal is not None and not flags.enabled(config, 'lab', 'enabled'):
+            rows = [row for row in rows if row['action'] != 'discovery_call']
         from .control.backends import pc_backend, web_backend
         hidden = set()
         if pc_backend(config if isinstance(config, dict) else {}) == 'agent_desktop':
@@ -237,7 +241,17 @@ class ToolRegistry:
             rows=limit_tools(rows, goal, selected)
         from .repo_tools import definitions
         from .utility_profiles import decorate
-        return decorate(rows)+definitions(self.actions,goal or '.',6)
+        return self._lab_metadata(decorate(rows))+definitions(self.actions,goal or '.',6)
+
+    def _lab_metadata(self,rows):
+        config=getattr(self.actions,'config',{})
+        if not flags.enabled(config,'lab','enabled'):return rows
+        from .discovery.native_wire import parameters
+        topics=[]
+        if flags.enabled(config,'lab','sim'):topics+=['mechanics','pendulum','study','vehicle']
+        if flags.enabled(config,'lab','sim') and flags.enabled(config,'lab','research'):topics+=['dilation']
+        return [{**row,'lab_workflow':True,'parameters':parameters(topics),'native_protocol':'discovery-v2'}
+                if row['action']=='discovery_call' else row for row in rows]
 
     def search(self, query, limit=12):
         """Rank configured deferred tools; never expose credentials or start providers."""
@@ -250,11 +264,13 @@ class ToolRegistry:
         else:
             skills = None
         names = rank_tools(self.specs, query, allowed, skills, limit)
+        if not flags.enabled(getattr(self.actions, 'config', {}), 'lab', 'enabled'):
+            names = [name for name in names if name != 'discovery_call']
         from .repo_tools import definitions
         from .utility_profiles import decorate
-        return (decorate([{'action': spec.name, 'backend': spec.backend, 'description': spec.description,
+        return (self._lab_metadata(decorate([{'action': spec.name, 'backend': spec.backend, 'description': spec.description,
                  'approval': spec.approval} for spec in (self.specs[name] for name in names)]
-                )+definitions(self.actions,query,min(limit,6)))
+                ))+definitions(self.actions,query,min(limit,6)))
 
     @timed_tool  # Upgrade v2 timing ledger (flag telemetry.timing_ledger, default off).
     def execute(self, step, cancelled, activate=None):
@@ -312,6 +328,11 @@ class ToolRegistry:
             raise ValueError("Unsupported tool: " + str(name))
         if cancelled():
             raise ValueError("Task cancelled before tool execution.")
+        if name == 'discovery_call':
+            if not flags.enabled(getattr(self.actions, 'config', {}), 'lab', 'enabled'):
+                raise ValueError('The scientific Lab is disabled')
+            from .discovery.planner_access import execute
+            return ToolResult(name, 'neural_dispatcher', execute(self.actions, step['value'], step.get('content',''), cancelled))
         if name == 'workflow_expand':
             ingress = getattr(self.actions,'ingress',None)
             parent = getattr(ingress.scheduler.local,'identity',None) if ingress else None

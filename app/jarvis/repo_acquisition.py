@@ -23,10 +23,11 @@ def environment():
     return env
 
 
-def command(argv, cancelled=lambda:False, timeout=60, input_bytes=None, limit=32000000):
+def command(argv, cancelled=lambda:False, timeout=60, input_bytes=None, limit=32000000, *, resource_limits=None, usage=None):
     """Bounded owned trusted CLI invocation. This is not an untrusted-code sandbox."""
     if cancelled():raise ValueError('Operation cancelled before CLI dispatch.')
-    job=OwnedJob()
+    if usage is not None and not isinstance(usage,dict):raise ValueError('Owned resource evidence sink must be a dictionary.')
+    job=OwnedJob(**resource_limits) if resource_limits is not None else OwnedJob()
     with tempfile.TemporaryFile() as output,tempfile.TemporaryFile() as source:
         if input_bytes is not None:source.write(input_bytes);source.seek(0)
         process=None
@@ -40,6 +41,7 @@ def command(argv, cancelled=lambda:False, timeout=60, input_bytes=None, limit=32
             output.seek(0);raw=output.read(limit+1)
             if len(raw)>limit:raise ValueError('CLI output exceeded budget.')
             if process.returncode:raise ValueError('CLI failed: '+raw.decode('utf-8',errors='replace')[-700:])
+            if usage is not None:usage.update(job.usage())
             return raw
         finally:
             try:

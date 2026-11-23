@@ -10,7 +10,7 @@ import time
 import uuid
 
 from .repo_sandbox import RepositorySandbox
-from .skill_memory import atomic, linked
+from .skill_memory import linked
 
 IMAGE = 'jarvis-deerflow-runtime:1'
 
@@ -60,7 +60,8 @@ class SandboxJob:
 
     def save(self):
         self._local(self.root/'state.json')
-        atomic(self.root / 'state.json', json.dumps(self.state, indent=2,ensure_ascii=False))
+        from .checkpoint_io import write_checkpoint
+        write_checkpoint(self.root/'state.json',json.dumps(self.state,indent=2,ensure_ascii=False),self.root)
 
     def create(self):
         self._local(self.root)

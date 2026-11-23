@@ -1,0 +1,48 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "mode": "fresh-process current-code read-only audit",
+  "original_oracle_sha256": "f2b4983b93b92cc54a7074d706af13dd6adf4f27a717a4b95401e31382e7fb25",
+  "current_oracle_sha256": "433cb33780ce8f0bd6a6cac1d46498033339dd4ffc28eb6644ae1a58ea0b4916",
+  "harness_sha256": "8c46d27185067ad1afde7a18a37e517f7cd896b3bfc25f9300e2dfe7c0bc6e08",
+  "source_sha256": "02ee9f4d047fe4eab146426f2b55f789d43060990fd2bdb04f96b86b39997303",
+  "cases": [
+    [
+      "A1",
+      "UNMET"
+    ],
+    [
+      "A2",
+      "UNMET"
+    ],
+    [
+      "B",
+      "UNMET"
+    ],
+    [
+      "C",
+      "UNMET"
+    ],
+    [
+      "D",
+      "PARTIAL"
+    ],
+    [
+      "E",
+      "PARTIAL"
+    ],
+    [
+      "F",
+      "PARTIAL"
+    ],
+    [
+      "G",
+      "UNMET"
+    ],
+    [
+      "H",
+      "UNMET"
+    ]
+  ],
+  "new_solver_model_remote_calls": 0,
+  "full_acceptance_passed": false
+}

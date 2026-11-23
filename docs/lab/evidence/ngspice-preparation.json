@@ -1,0 +1,21 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "source": "https://downloads.sourceforge.net/project/ngspice/ng-spice-rework/47/ngspice-47_64.7z",
+  "final_url": "https://excellmedia.dl.sourceforge.net/project/ngspice/ng-spice-rework/47/ngspice-47_64.7z",
+  "bytes": 13814879,
+  "sha256": "59225971bd68cdd1199443649aa4615a9e6d684933f205ab49006a3942518f5a",
+  "hash_status": "observed download hash, not an independent upstream attestation",
+  "authorization": "download/extract/inspect only; no execution",
+  "executed": false,
+  "files": 811,
+  "unpacked_bytes": 56970477,
+  "path_and_link_checks": "PASS",
+  "license_file": "Spice64/docs/COPYING",
+  "license_summary": "Modified BSD main license with listed LGPL/GPL/MPL and other component exceptions; not classified as uniformly permissive.",
+  "executable_paths": [
+    "Spice64/bin/ngspice.exe",
+    "Spice64/bin/ngspice_con.exe"
+  ],
+  "license_sha256": "6d939001e899ede403277fb37124c2af6f1cf92926465cd8f4bf59859e06f579",
+  "execution_status": "NOT_RUN; preparation approval only; Windows binaries do not run in existing Linux sandbox"
+}

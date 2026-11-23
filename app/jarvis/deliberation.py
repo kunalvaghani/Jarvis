@@ -424,9 +424,8 @@ class Deliberation:
                     for line in existing:
                         lines.append(line.rstrip('\n'))
             lines.append(json.dumps(entry, ensure_ascii=True, allow_nan=False))
-            tmp = self.ledger_path.with_suffix(".jsonl.tmp")
-            tmp.write_text("\n".join(lines) + "\n", encoding="utf-8")
-            tmp.replace(self.ledger_path)
+            from .checkpoint_io import write_checkpoint
+            write_checkpoint(self.ledger_path,"\n".join(lines)+"\n",self.ledger_path.parent)
             self.last_ledger_error = None
         except (OSError, ValueError) as exc:
             self.last_ledger_error = type(exc).__name__

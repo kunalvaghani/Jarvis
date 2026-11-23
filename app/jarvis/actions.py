@@ -183,7 +183,8 @@ class Actions:
         self.catalog.memory = self.memory
         from .skill_memory import SkillMemory
         self.memory.engineering_options = config.get('engineering_judgment', {})
-        self.skills = SkillMemory(self.memory)
+        from .flags import enabled as flag_enabled
+        self.skills = SkillMemory(self.memory, discovery=flag_enabled(config, 'lab', 'enabled'))
         from .engineering_judgment import EngineeringJudgmentEngine
         self.engineering = EngineeringJudgmentEngine(self, config.get('engineering_judgment', {}))
         self.skills.task_id_provider = self.task_state.running_identity  # Living-skill telemetry per running task.
@@ -425,6 +426,24 @@ class Actions:
         self.report("question", "")
 
     def submit(self, command, expected_generation=None):
+        from .flags import enabled as flag_enabled
+        if flag_enabled(getattr(self, 'config', {}), 'lab', 'enabled'):
+            from .discovery.integration import route_command
+            from .discovery.speech_units import normalize_command
+            command = normalize_command(command)
+            command = route_command(command)
+            from .discovery.c1 import route_command as c1_route
+            command = c1_route(command)
+            from .discovery.c2 import route_command as c2_route
+            command = c2_route(command)
+            from .discovery.c3 import route_command as c3_route
+            command = c3_route(command)
+            from .discovery.c4 import route_command as c4_route
+            command = c4_route(command)
+            from .discovery.d import route_command as d_route
+            command = d_route(command)
+            from .discovery.d2 import route_command as d2_route
+            command = d2_route(command)
         if command.kind in {'ask', 'task'} and not command.extra and (expected_generation is None or expected_generation == self.generation):
             from .engineering_judgment import engine_for
             engineering = engine_for(self)
@@ -1274,6 +1293,31 @@ class Actions:
 
     def _execute_command(self, command, cancelled=lambda: False):
         """Brain shadow hook (neural.mode shadow; off by default), then the audited legacy path."""
+        from .flags import enabled as flag_enabled
+        if command.kind in {'task','ask'} and re.match(r'^\s*lab (?:audit integration|memory wire|export|source drive|portal read|read long|background|choose|jobs)\b',command.value,re.I):
+            from .neural import brain_mode
+            if not flag_enabled(getattr(self,'config',{}),'lab','enabled') or brain_mode(getattr(self,'config',{}))!='on':
+                raise ValueError('Lab integration inspection requires the enabled Lab and existing brain; no planner fallback')
+        if command.kind in {'task','ask'} and re.match(r'^\s*lab optimize\b',command.value,re.I) and not (
+                flag_enabled(getattr(self,'config',{}),'lab','enabled') and flag_enabled(getattr(self,'config',{}),'lab','sim')):
+            raise ValueError('Lab optimization is disabled; queued studies never fall back to the general planner')
+        if flag_enabled(getattr(self, 'config', {}), 'lab', 'enabled'):
+            from .discovery.integration import route_command
+            from .discovery.speech_units import normalize_command
+            command = normalize_command(command)
+            command = route_command(command)
+            from .discovery.c1 import route_command as c1_route
+            command = c1_route(command)
+            from .discovery.c2 import route_command as c2_route
+            command = c2_route(command)
+            from .discovery.c3 import route_command as c3_route
+            command = c3_route(command)
+            from .discovery.c4 import route_command as c4_route
+            command = c4_route(command)
+            from .discovery.d import route_command as d_route
+            command = d_route(command)
+            from .discovery.d2 import route_command as d2_route
+            command = d2_route(command)
         if command.kind in {"task", "open", "run_command", "click_control", "write_text", "compose_text"}:
             from .request_safety import refusal
             refused = refusal(command.value)  # Before the brain or any plan: no step is ever tried.

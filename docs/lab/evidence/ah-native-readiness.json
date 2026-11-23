@@ -1,0 +1,22 @@
+{
+  "date_local": "2026-11-05 Asia/Calcutta",
+  "exit_code": 0,
+  "source_sha256": "7569cd7960d56ba36c50e6a4620fefebc2e83afa16b37f2904e79e78b800e7c3",
+  "scope": "Read-only readiness, not live acceptance or inference",
+  "status": "ready",
+  "missing": [],
+  "incomplete": [],
+  "invariants": {
+    "lab_flags": {
+      "enabled": false,
+      "sim": false,
+      "research": false,
+      "learning": false
+    },
+    "campaign_status": "PAUSED_BY_USER",
+    "mechanics_slots_used": 5
+  },
+  "services_started": false,
+  "inference_performed": false,
+  "all_eight_autonomous_scenarios_passed": false
+}

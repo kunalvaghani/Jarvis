@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-06",
+  "source_sha256": "6d82f0d7ec8434dea64db5e3ecf5c58ad92552f9d927aeff6a5c2f3dbc35d609",
+  "strict_typecheck": {
+    "exit_code": 0,
+    "source_files": 79,
+    "command": "From app/: .venv/Scripts/python.exe -B -m mypy --config-file mypy.ini",
+    "scope": "Configured control/neural typing gate; not strict typing of every legacy/discovery module"
+  },
+  "readiness": {
+    "exit_code": 0,
+    "status": "ready",
+    "missing": [],
+    "incomplete": [],
+    "scope": "dependencies_and_configured_services",
+    "docker": "available 29.8.2 linux",
+    "ollama": "available; required models present; no inference",
+    "services_started": false,
+    "command": "From app/: .venv/Scripts/python.exe -B -m jarvis.launcher --check"
+  },
+  "full_AH_acceptance": false
+}

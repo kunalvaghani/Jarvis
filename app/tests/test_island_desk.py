@@ -221,12 +221,8 @@ class ApprovalAndMediaTests(unittest.TestCase):
         # Match production isolation: WinRT native factories live in a child,
         # not in the Tk/speech test runner's COM apartment and DLL lifetime.
         if os.environ.get('JARVIS_STREAM_TEST_CHILD')!='1':
-            environment=dict(os.environ,JARVIS_STREAM_TEST_CHILD='1',
-                PYTHONPATH=str(Path(__file__).resolve().parent)+os.pathsep+os.environ.get('PYTHONPATH',''))
-            result=subprocess.run([sys.executable,'-m','unittest',
-                'test_island_desk.ApprovalAndMediaTests.test_media_metadata_reads_real_winrt_memory_stream_and_excludes_browser_session'],
-                capture_output=True,text=True,timeout=15,env=environment,
-                creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
+            from tests.native_winrt_fixture import run_fixture
+            result=run_fixture('test_island_desk.ApprovalAndMediaTests.test_media_metadata_reads_real_winrt_memory_stream_and_excludes_browser_session')
             self.assertEqual(result.returncode,0,result.stderr)
             return
         async def exercise():
@@ -256,11 +252,8 @@ class ApprovalAndMediaTests(unittest.TestCase):
 
     def test_media_metadata_multiple_sources_and_missing_properties_are_explicit(self):
         if os.environ.get('JARVIS_STREAM_TEST_CHILD')!='1':
-            result=subprocess.run([sys.executable,'-m','unittest',
-                'test_island_desk.ApprovalAndMediaTests.test_media_metadata_multiple_sources_and_missing_properties_are_explicit'],
-                capture_output=True,text=True,timeout=15,env=dict(os.environ,JARVIS_STREAM_TEST_CHILD='1',
-                    PYTHONPATH=str(Path(__file__).resolve().parent)+os.pathsep+os.environ.get('PYTHONPATH','')),
-                creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
+            from tests.native_winrt_fixture import run_fixture
+            result=run_fixture('test_island_desk.ApprovalAndMediaTests.test_media_metadata_multiple_sources_and_missing_properties_are_explicit')
             self.assertEqual(result.returncode,0,result.stderr)
             return
         spotify=SimpleNamespace(source_app_user_model_id='SpotifyAB.SpotifyMusic_zpdnekdrzrea0!Spotify')

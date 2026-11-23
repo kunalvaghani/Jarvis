@@ -1,0 +1,38 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "scope": {
+    "scope": "user-approved-d2-two-creates-2026-11-04",
+    "max_creates": 2,
+    "parent_id": "0AMVTcmM1XWY0Uk9PVA",
+    "payloads": {
+      "delivery-aaa68516f2dc8ab6353774c12f7a9aa7d84fb5285e8b58c8a3a2039f4ef8c7b0": "aaa68516f2dc8ab6353774c12f7a9aa7d84fb5285e8b58c8a3a2039f4ef8c7b0",
+      "delivery-00a0b563f8d6b217e91c0e434a5754006a9b9a1b5e1d880acd335f4018dd5935": "00a0b563f8d6b217e91c0e434a5754006a9b9a1b5e1d880acd335f4018dd5935"
+    }
+  },
+  "outcomes": [
+    {
+      "kind": "report",
+      "delivery_id": "delivery-aaa68516f2dc8ab6353774c12f7a9aa7d84fb5285e8b58c8a3a2039f4ef8c7b0",
+      "state": "VERIFIED",
+      "remote_id": "1MlR8MOHjs2kYyaT2eqqopeEu0suxi_1GZ3qPUfxelUE",
+      "url": "https://docs.google.com/document/d/1MlR8MOHjs2kYyaT2eqqopeEu0suxi_1GZ3qPUfxelUE/edit",
+      "seconds": 1.7190000000409782,
+      "error_type": null
+    },
+    {
+      "kind": "table",
+      "delivery_id": "delivery-00a0b563f8d6b217e91c0e434a5754006a9b9a1b5e1d880acd335f4018dd5935",
+      "state": "VERIFIED",
+      "remote_id": "1to1tbmtKwRHQZYSpLko3jx2cWUKQqCv427Zw3MEX7TU",
+      "url": "https://docs.google.com/spreadsheets/d/1to1tbmtKwRHQZYSpLko3jx2cWUKQqCv427Zw3MEX7TU/edit",
+      "seconds": 1.6089999999967404,
+      "error_type": null
+    }
+  ],
+  "created_doc_source_read_verified": true,
+  "new_model_solver_calls": 0,
+  "new_folders": 0,
+  "shared_or_deleted": false,
+  "global_flags_changed": false,
+  "paid_services": false
+}

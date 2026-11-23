@@ -7,3 +7,9 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/
+
+# Private, short-path regression workspaces, outside live application/runtime ancestry.
+/.jtmp/
+
+# Backups the skill learner writes before changing .jarvis/mcp.json
+app/.jarvis/mcp.json.*.bak

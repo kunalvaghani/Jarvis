@@ -1,0 +1,11 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "reason": "final invalid supported request now refuses inside brain instead of falling back to general planner; implementation hash changed",
+  "prior_qualification": "DEGRADED by existing lifecycle",
+  "consumed_attempts": 24,
+  "currently_authorized_limit": 24,
+  "requested_additional_attempts": 4,
+  "extension_status": "user approved four additional attempts; final requalification and fresh-process reuse PASS",
+  "new_solver_invocations_since_request": 7,
+  "boundary_tests": "177 focused checks passed; no extra solver dispatch in unit tests"
+}

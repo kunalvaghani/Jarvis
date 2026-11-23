@@ -1,0 +1,35 @@
+{
+  "assumed_aero_envelope_candidate_ranges": {
+    "maximum_observed_lateral_acceleration_m_s2": [
+      6.801491714826554,
+      6.8392253258365905
+    ],
+    "maximum_observed_speed_m_s": [
+      10.934516021955433,
+      10.939691646791863
+    ],
+    "mechanical_engine_energy_j": [
+      2002027.144042558,
+      2002461.8474435494
+    ]
+  },
+  "baseline": {
+    "maximum_observed_lateral_acceleration_m_s2": 6.804384657889096,
+    "maximum_observed_speed_m_s": 10.937531963643067,
+    "mechanical_engine_energy_j": 2002306.534108539
+  },
+  "candidate": {
+    "maximum_observed_lateral_acceleration_m_s2": 6.801491714826554,
+    "maximum_observed_speed_m_s": 10.937785323322391,
+    "mechanical_engine_energy_j": 2002174.490051253
+  },
+  "candidate_minus_baseline": {
+    "maximum_observed_lateral_acceleration_m_s2": -0.0028929430625419528,
+    "maximum_observed_speed_m_s": 0.0002533596793234949,
+    "mechanical_engine_energy_j": -132.04405728611164
+  },
+  "energy_scope": "mechanical engine shaft energy only; fuel/hybrid losses unsupported",
+  "physical_validation": false,
+  "scenario_sha256": "c350e2f33c4485c8d11924006b41ac403b2ef569da9b413a91a7d0dd568aa6ce",
+  "speed_scope": "maximum observed in the fixed 13-second road test, not terminal or lap speed"
+}

@@ -1,0 +1,51 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "mode": "fresh-process-reuse",
+  "operator_assisted": true,
+  "voice_acceptance": "NOT_RUN",
+  "seconds": 3.702999999979511,
+  "capability": {
+    "id": "discovery.learned.2c3ddbd96ab243ba@v1",
+    "revision": 2,
+    "evidence_status": "INSUFFICIENT_EVIDENCE",
+    "justification": "Golden and three distinct independently verified Journal goals passed.",
+    "source_ids": [
+      "debian-ngspice-44.2"
+    ],
+    "kind": "Capability",
+    "neuron_id": "discovery.learned.2c3ddbd96ab243ba@v1",
+    "intents": [
+      "reuse qualified ngspice"
+    ],
+    "verification": "VERIFIED",
+    "golden_ref": "artifact://sha256/c4ec01de1845c146bf2d76d9174e93c9eb5018c30a5d79d5d7263ab5b03002e7"
+  },
+  "goals": [
+    {
+      "request": "lab simulate divider 8 V 1000 ohm 3000 ohm",
+      "goal_id": "g-d204790dcf6e48a4",
+      "seconds": 2.875,
+      "fired": [
+        "discovery.learned.2c3ddbd96ab243ba@v1",
+        "discovery.verify.divider@v1",
+        "motor.report@v1"
+      ],
+      "answer": "{'vectors': {'input_v': 8.0, 'output_v': 6.0, 'supply_current_a': -0.002}, 'solver': 'ngspice-shared', 'solver_version': '44.2', 'netlist_sha256': '81c1a67733fa1f62281b0b0f761ff43dd9ebd5a2bda0acf9cacca6b32a281247', 'cpu_s': 0.009097278000000014, 'input': {'supply_v': 8.0, 'upper_ohm': 1000.0, 'lower_ohm': 3000.0}, 'image_id': 'sha256:fc3e504b26346d8fcfcadbb393fb7020c4f2b92c81f78c188b3711d2f40a9e0e', 'request_ref': 'artifact://sha256/1ade185c89141738d1be32288df4612288a5886b363bdf1a05a5908a375b3a53', 'proof_slot': 30, 'checks': ['voltage-source constraint', 'independent Ohm-law solution', 'source-current sign', 'Kirchhoff current balance'], 'evidence_status': 'SIMULATION_PASSED_WITH_ASSUMPTIONS', 'justification': 'Ideal linear DC resistors and ideal voltage source; no physical validation or temperature model.', 'solver_ref': 'artifact://sha256/c2db8649e7b05bb8684f7ec92259fc0c98e7b35efa5b412266f2b4d0aa887dd4', 'request_digest': '0708596ebce1da28ffd66e795561676b02f1c27deacdccaded6439fa0a43b40b'}\n\n(Checked: actual sandbox receipt; independent Ohm/Kirchhoff checks.)"
+    }
+  ],
+  "experiment_records": 28,
+  "runtime": {
+    "ready": true,
+    "problems": [],
+    "image_id": "sha256:fc3e504b26346d8fcfcadbb393fb7020c4f2b92c81f78c188b3711d2f40a9e0e",
+    "version": "44.2+ds-1",
+    "environment": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\discovery\\tools\\ngspice-linux-44.2",
+    "library_hashes": {
+      "libngspice0/usr/lib/x86_64-linux-gnu/libngspice.so.0.0.12": "8b24e526865425243ee57efa9dcbdde99e7220393eb77a1ab863e849a2e0d761",
+      "libgomp1/usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0": "6456b504ac347bd50c419667440b691f6966ad8aff5309d2f06c977fe2f9debe"
+    },
+    "worker_sha256": "a136be74ab3583010230d911a07ec89dae3418d0fcfdd0434215e2803455da96",
+    "max_invocations": 50,
+    "used_slots": 31
+  }
+}

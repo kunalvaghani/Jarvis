@@ -82,9 +82,8 @@ class MailReplies:
 
     def _save(self) -> None:
         self.state_path.parent.mkdir(parents=True, exist_ok=True)
-        temporary = self.state_path.with_suffix('.tmp')
-        temporary.write_text(json.dumps(self.state, indent=1), encoding='utf-8')
-        temporary.replace(self.state_path)
+        from .checkpoint_io import write_checkpoint
+        write_checkpoint(self.state_path,json.dumps(self.state, indent=1),(self.state_path).parent)
 
     def _mark(self, message_id: str, **row: Any) -> None:
         done = self.state.setdefault('messages', {})

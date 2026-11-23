@@ -34,9 +34,8 @@ class BlenderJobs:
 
     def _save(self):
         self.path.parent.mkdir(parents=True,exist_ok=True)
-        temporary=self.path.with_suffix('.tmp')
-        temporary.write_text(json.dumps(list(self.jobs.values()),indent=2),encoding='utf-8')
-        temporary.replace(self.path)
+        from .checkpoint_io import write_checkpoint
+        write_checkpoint(self.path,json.dumps(list(self.jobs.values()), indent=2),(self.path).parent)
 
     def submit(self,scope,job_id):
         from .mcp_bridge import configurations

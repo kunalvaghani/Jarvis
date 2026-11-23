@@ -1,0 +1,24 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "scope": "Documentation links, audit utility syntax, snapshot consistency; not live feature acceptance",
+  "relative_links_checked": 52,
+  "missing_links": [],
+  "audit_utility_ast": "PASS",
+  "registry_neurons": 306,
+  "synapses": 426,
+  "dangling_snapshot_endpoints": 0,
+  "supplied_spec_hash_matches": true,
+  "focused_existing_tests": {
+    "passed": 72,
+    "failed": 0,
+    "seconds": 3.06
+  },
+  "initial_incompatible_harness": {
+    "passed": 89,
+    "failed": 4,
+    "errors": 4,
+    "seconds": 5.32
+  },
+  "full_regression": "NOT_RUN",
+  "live_benchmark": "NOT_RUN"
+}

@@ -1,0 +1,166 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "scope": "source registry in isolated audit Journal with Lab flags on; not production activation",
+  "registered_lab_neurons": [
+    {
+      "neuron_id": "discovery.status@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.integration",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.verify.status@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.integration",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.units.convert@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.integration",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.verify.units@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.integration",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.electronics.divider@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.integration",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.verify.divider@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.integration",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.components.inspect@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.c1",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.assets.inspect_local@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.c1",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.parameters.plan@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.c1",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.verify.c1@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.c1",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.mechanics.pendulum@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.c2",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.verify.pendulum@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.c2",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.geometry.pendulum@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.c2",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.verify.pendulum_native@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.c2",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.literature.collect@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.c3",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.hypotheses.load@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.c3",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.literature.review@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.c3",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.hypotheses.propose@v2",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.c3",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.hypotheses.skeptic@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.c3",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.verify.literature@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.c3",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.literature.remember@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.c3",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.theory.dilation@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.c3",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.verify.dilation@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.c3",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.optimization.advance@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.c4",
+      "contract": "explicit"
+    },
+    {
+      "neuron_id": "discovery.verify.optimization@v1",
+      "status": "UNVERIFIED",
+      "provider": "jarvis.discovery.c4",
+      "contract": "explicit"
+    }
+  ],
+  "count": 25,
+  "skills": [
+    "jarvis/skills/discovery/bounded-optimization/SKILL.md",
+    "jarvis/skills/discovery/component-planning/SKILL.md",
+    "jarvis/skills/discovery/lab-evidence/SKILL.md",
+    "jarvis/skills/discovery/lab-units/SKILL.md",
+    "jarvis/skills/discovery/literature-investigation/SKILL.md",
+    "jarvis/skills/discovery/ngspice-divider/SKILL.md",
+    "jarvis/skills/discovery/pendulum-lab/SKILL.md"
+  ]
+}

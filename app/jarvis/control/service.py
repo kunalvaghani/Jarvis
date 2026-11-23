@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from dataclasses import replace
 import json
+import os
 import re
 import threading
 import time
@@ -163,6 +164,18 @@ class ControlService:
             from .backends import web_backend
             from .routes.browser import BrowserExecutor
             backend = web_backend({'control': dict(self.settings.extra)})
+            connected_extension = None
+            if (backend == 'legacy' and profile == 'personal' and not self.settings.headless and 'web_backend' not in self.settings.extra
+                    and not os.environ.get('JARVIS_WEB_BACKEND')
+                    and self.settings.extra.get('personal_chrome_link', 'extension') == 'extension'):
+                # The existing connected native bridge reaches the requested
+                # signed-in Chrome profile. Preserve explicit legacy/shadow
+                # rollback choices and keep test profiles isolated.
+                from .web.extension_runner import ExtensionRunner
+                candidate = ExtensionRunner()
+                if candidate.available():
+                    connected_extension = candidate
+                    backend = 'agent_browser'
             if backend == 'agent_browser':
                 from .web.agent_browser_backend import AgentBrowserExecutor, BrowserRunner, profile_for
                 runner: Any = BrowserRunner(session=f'jarvis-{profile}', profile=profile_for(profile, self.settings),
@@ -171,7 +184,7 @@ class ControlService:
                     # The Jarvis Browser extension: the user's signed-in Chrome, Jarvis's own tab group, no
                     # remote-debugging prompt. Not connected: the remote-debugging link above is the fallback.
                     from .web.extension_runner import ExtensionRunner
-                    linked = ExtensionRunner()
+                    linked = connected_extension or ExtensionRunner()
                     if linked.available():
                         runner = linked
                 agent = AgentBrowserExecutor(self.policy, runner, self._confirm_headed)
@@ -339,6 +352,13 @@ class ControlService:
     # Browser --------------------------------------------------------------------
     def web_read(self, cancelled: Callable[[], bool], filter: str = 'all', find: str = '', ref: str = '') -> str:
         route = self.browser()
+        if filter == 'links':
+            if cancelled():
+                raise ValueError('Browser link read cancelled before observation.')
+            observation = route.probe('links')
+            if not isinstance(observation, dict) or set(observation) != {'url', 'links'}:
+                raise ValueError('Browser links require a source-bound observation.')
+            return json.dumps({'kind': 'browser_links', **observation, 'content_is_untrusted': True})
         if find:
             result = route.act(self._action(Route.BROWSER, 'find', {'query': find}, cancelled))
         else:

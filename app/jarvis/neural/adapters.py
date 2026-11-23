@@ -32,6 +32,7 @@ Adapter = Callable[[Any, Dict[str, Any], Env], Dict[str, Any]]
 
 # Tools -----------------------------------------------------------------------------------------------------
 TOOL_ARGS: Dict[str, Callable[[Dict[str, Any]], Dict[str, Any]]] = {
+    'discovery_call': lambda i: {'value':str(i['command']), 'content':json.dumps(i['parameters'],allow_nan=False) if 'parameters' in i else ''},
     'web_search': lambda i: {'value': str(i['query'])},
     'google_search': lambda i: {'value': str(i['query'])},
     'scrape_web': lambda i: {'value': str(i.get('url') or _first_url(i.get('results')))},

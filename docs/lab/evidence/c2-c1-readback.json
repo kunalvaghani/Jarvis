@@ -1,0 +1,24 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "goals": [
+    {
+      "request": "lab inspect project \".jarvis-runtime/discovery/experiments/pendulum-4cb2d3fa4e6a498b/component-project.json\"",
+      "goal_id": "g-e08d43c300af4cf5",
+      "state": "verified",
+      "answer": "{'workflow': 'project', 'input_sha256': '4bf90608b5c246d3189460f58bf2311eb3bc6284bd0ecfbfa25968e34334c507', 'result': {'project_id': 'pendulum-demo', 'revision': 4, 'project_sha256': '6725203ca61b5ef971b7ccbeba353ba99019645d234242da5329cff227424aab', 'scenario_sha256': '9a9f396459ba88aa66fd1aa5640df0bd9eb4bea0c12e3bb497738232e0dfcb89', 'components': [{'id': 'af543377-4f96-5145-b8cb-f7b623955faf', 'parent_id': None, 'reality_class': 'P1', 'unknown_mass': True, 'missing': ['material/strength not modeled']}, {'id': '62f3bca4-0ad6-50ef-8307-e75b3a1e8557', 'parent_id': 'af543377-4f96-5145-b8cb-f7b623955faf', 'reality_class': 'P1', 'unknown_mass': True, 'missing': ['material/strength not modeled']}, {'id': '0490382c-7398-5ba3-896e-5c07b08a261e', 'parent_id': 'af543377-4f96-5145-b8cb-f7b623955faf', 'reality_class': 'P1', 'unknown_mass': False, 'missing': ['material/strength not modeled']}], 'parameters': [{'id': '62f3bca4-0ad6-50ef-8307-e75b3a1e8557.length', 'component_id': '62f3bca4-0ad6-50ef-8307-e75b3a1e8557', 'path': 'geometry.length', 'mutable': True, 'affected': ['0490382c-7398-5ba3-896e-5c07b08a261e.inertia', '62f3bca4-0ad6-50ef-8307-e75b3a1e8557.geometry', 'af543377-4f96-5145-b8cb-f7b623955faf.mechanics', 'af543377-4f96-5145-b8cb-f7b623955faf.display']}, {'id': '0490382c-7398-5ba3-896e-5c07b08a261e.radius', 'component_id': '0490382c-7398-5ba3-896e-5c07b08a261e', 'path': 'geometry.radius', 'mutable': True, 'affected': ['0490382c-7398-5ba3-896e-5c07b08a261e.geometry', '0490382c-7398-5ba3-896e-5c07b08a261e.inertia', 'af543377-4f96-5145-b8cb-f7b623955faf.mechanics', 'af543377-4f96-5145-b8cb-f7b623955faf.display']}, {'id': '0490382c-7398-5ba3-896e-5c07b08a261e.mass', 'component_id': '0490382c-7398-5ba3-896e-5c07b08a261e', 'path': 'physical.mass', 'mutable': True, 'affected': ['0490382c-7398-5ba3-896e-5c07b08a261e.inertia', 'af543377-4f96-5145-b8cb-f7b623955faf.mechanics', 'af543377-4f96-5145-b8cb-f7b623955faf.display']}], 'dependency_count': 9, 'solver_executed': False, 'evidence_status': 'MODEL_CONSISTENT', 'justification': 'Assembly and explicit dependency integrity checked; supplied claims are not independently validated.'}}\n\n(Checked: scoped input hash, typed graph/asset checks and deterministic replay.)"
+    },
+    {
+      "request": "lab plan parameter \".jarvis-runtime/discovery/experiments/pendulum-4cb2d3fa4e6a498b/component-project.json\" 62f3bca4-0ad6-50ef-8307-e75b3a1e8557.length delta 0.1 m",
+      "goal_id": "g-09eaed5577524748",
+      "state": "verified",
+      "answer": "{'workflow': 'parameter', 'input_sha256': '4bf90608b5c246d3189460f58bf2311eb3bc6284bd0ecfbfa25968e34334c507', 'result': {'baseline_sha256': '6725203ca61b5ef971b7ccbeba353ba99019645d234242da5329cff227424aab', 'candidate_sha256': '5a660eb50cfcd1f6ba6b9beb4d07ffb5302c0b29d20f561a8db9b7f999364db2', 'scenario_sha256': '9a9f396459ba88aa66fd1aa5640df0bd9eb4bea0c12e3bb497738232e0dfcb89', 'before': {'id': '62f3bca4-0ad6-50ef-8307-e75b3a1e8557.length', 'revision': 4, 'evidence_status': 'INSUFFICIENT_EVIDENCE', 'justification': '', 'source_ids': [], 'kind': 'Parameter', 'name': 'length', 'quantity': {'value': 1.5, 'unit': 'm', 'origin': 'source', 'source_ref': 'artifact://sha256/ae94e3fe1c28779e5d9af27539b1c9778334c6f35a37c41c078d3fe7d82d8365'}, 'lower': 0.1, 'upper': 5.0}, 'after': {'id': '62f3bca4-0ad6-50ef-8307-e75b3a1e8557.length', 'revision': 5, 'evidence_status': 'INSUFFICIENT_EVIDENCE', 'justification': '', 'source_ids': [], 'kind': 'Parameter', 'name': 'length', 'quantity': {'value': 1.6, 'unit': 'm', 'origin': 'source', 'source_ref': 'user-parameter-request'}, 'lower': 0.1, 'upper': 5.0}, 'invalidated': ['0490382c-7398-5ba3-896e-5c07b08a261e.inertia', '62f3bca4-0ad6-50ef-8307-e75b3a1e8557.geometry', 'af543377-4f96-5145-b8cb-f7b623955faf.mechanics', 'af543377-4f96-5145-b8cb-f7b623955faf.display'], 'disposition': 'PLANNED_NOT_EXECUTED', 'evidence_status': 'MODEL_CONSISTENT'}}\n\n(Checked: scoped input hash, typed graph/asset checks and deterministic replay.)"
+    }
+  ],
+  "source_sha256": "4bf90608b5c246d3189460f58bf2311eb3bc6284bd0ecfbfa25968e34334c507",
+  "source_unchanged": true,
+  "ngspice_used_before_after": [
+    37,
+    37
+  ],
+  "scope": "Actual generated native component graph inspected and bounded downstream plan verified through C1; plan does not execute geometry or solvers."
+}

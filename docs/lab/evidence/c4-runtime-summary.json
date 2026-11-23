@@ -1,0 +1,43 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "versions": {
+    "scipy": "1.15.3",
+    "numpy": "2.2.6",
+    "pydantic": "2.14.2"
+  },
+  "study_source_sha256": "5ae1bf0b42b27bffbe736872e8377950d56d966fa076910f3e2b6e302483dc40",
+  "solver_code_sha256": "d88db1492a293351868136af0c2c97f709d35a32fbe6b7586dac3bcf47447aab",
+  "c3_current_code_sha256": "ee117835286229d49624681fb17eae29eeedee283715bcf9d9d9b8f8141d41bc",
+  "c4_typed_memory_counts": {
+    "Source": 3,
+    "Experiment": 4,
+    "RunArtifact": 4,
+    "Capability": 16
+  },
+  "new_dependencies": [],
+  "new_services": [],
+  "c4_gpu_work": false,
+  "local_tools": {
+    "scipy_used": 22,
+    "blender_used": 16,
+    "ngspice_used": 37,
+    "each_cap": 50
+  },
+  "neural_mypy": {
+    "result": "passed",
+    "files": 18,
+    "command": "from app: .venv/Scripts/python.exe -B -m mypy --config-file mypy.ini jarvis/neural"
+  },
+  "host_launcher_check": {
+    "status": "ready",
+    "docker_version": "29.8.2",
+    "ollama_required_models_present": true,
+    "started_services": false,
+    "rechecked_after_final_source": true
+  },
+  "earlier_harness_errors": [
+    "restricted host-service checks unavailable",
+    "broad mypy invoked outside app configuration",
+    "two preliminary full suites deliberately interrupted, no full acceptance derived"
+  ]
+}

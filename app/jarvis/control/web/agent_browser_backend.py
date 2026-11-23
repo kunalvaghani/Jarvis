@@ -26,6 +26,7 @@ import re
 import subprocess
 import threading
 import time
+from urllib.parse import urlsplit
 from typing import Any, Callable, Dict, List, Optional, Sequence, Set
 
 from pydantic import BaseModel, ConfigDict
@@ -40,6 +41,28 @@ DEFAULT_BINARY = APP / '.jarvis-runtime' / 'tools' / 'control-backends' / f'agen
 POLICY_FILE = APP / '.jarvis-runtime' / 'control' / 'agent-browser-policy.json'
 KEY_FILE = APP / 'secrets' / 'agent-browser.key'
 MAX_OUTPUT = 60000
+
+
+def navigation_barrier(url: str) -> bool:
+    """Known interstitial endpoints are not successful destination evidence.
+
+    No CAPTCHA interaction or bypass is attempted. Ordinary documentation about
+    challenges is unaffected; only provider-owned interstitial endpoints match.
+    """
+    parts = urlsplit(url)
+    host = (parts.hostname or '').casefold()
+    path = parts.path.casefold()
+    google = re.fullmatch(r'(?:www\.)?google\.(?:com|[a-z]{2}|co\.[a-z]{2})', host)
+    return bool((google and (path == '/sorry' or path.startswith('/sorry/')))
+                or host == 'challenges.cloudflare.com'
+                or path.startswith('/cdn-cgi/challenge-platform/'))
+
+
+def require_destination(url: str) -> None:
+    if navigation_barrier(url):
+        raise ControlError('The destination is an interactive traffic/security challenge, not the requested page. '
+                           'No challenge was solved or bypassed. Use another permitted public source or report this blocker.',
+                           ErrorCategory.VERIFICATION_FAILED, executed=True)
 # Protocol action names (agent-browser cli/src/native/actions.rs, v0.41.1).
 DENY = ('evaluate', 'evalhandle', 'addinitscript', 'addscript', 'addstyle', 'expose', 'route', 'unroute', 'headers',
         'offline', 'permissions', 'credentials', 'credentials_set', 'credentials_get', 'credentials_delete',
@@ -376,7 +399,144 @@ class AgentBrowserExecutor(RouteExecutor):
     def observe(self, scope: Optional[str] = None, **options: Any) -> Observation:
         return self.read_page(str(options.get('filter', 'all')), options.get('ref'))
 
+    def capture_model_download(self, uid: str, ref: str, maximum_bytes: int) -> Dict[str, Any]:
+        """Private workflow action, never an advertised arbitrary download tool.
+
+        The caller journals/adopts the resource admission and per-file rights.
+        A reply loss is uncertain and must never cause a second format click.
+        """
+        if not re.fullmatch(r'[a-f0-9]{32}', uid) or type(maximum_bytes) is not int or not 4 <= maximum_bytes <= 100_000_000 or not self.own_tab:
+            raise ControlError('An owned model and bounded byte admission are required.', ErrorCategory.INVALID_ARGUMENTS)
+        with self._lock:
+            self._own_tab()
+            before = self._final_url()
+            source = urlsplit(before)
+            if (source.scheme != 'https' or source.hostname not in ('sketchfab.com', 'www.sketchfab.com') or not source.path.endswith(uid)):
+                raise ControlError('Selected model page changed before download.', ErrorCategory.STALE_REF)
+            reply = self._call(['model_download', uid, self._ref(ref), str(maximum_bytes)], acting=True, timeout_s=20)
+            after = self._final_url()
+        data = reply.data if isinstance(reply.data, dict) else {}
+        archive = urlsplit(str(data.get('url', '')))
+        size = data.get('declared_bytes')
+        if (before != after or data.get('source_url') != before or type(size) is not int or not 4 <= size <= maximum_bytes
+                or archive.scheme != 'https' or archive.hostname != 'media.sketchfab.com' or archive.username or archive.password
+                or archive.fragment or archive.port not in (None,443) or not archive.path.startswith('/models/'+uid+'/')
+                or data.get('format') not in ('glb','zip') or not archive.path.lower().endswith('.'+data['format'])):
+            raise ControlError('Download handoff failed source/format/size verification; no retry.', ErrorCategory.UNCERTAIN, executed=True)
+        return data
+
     def probe(self, what: str, **params: Any) -> Any:
+        if what == 'asset_download_option':
+            uid = str(params.get('uid', ''))
+            if not re.fullmatch(r'[a-f0-9]{32}', uid) or not self.own_tab:
+                raise ControlError('An owned selected-model page is required.', ErrorCategory.INVALID_ARGUMENTS)
+            with self._lock:
+                self._own_tab()
+                before = self._final_url()
+                source = urlsplit(before)
+                if (source.scheme != 'https' or source.hostname not in ('sketchfab.com', 'www.sketchfab.com')
+                        or not source.path.endswith(uid)):
+                    raise ControlError('Selected model page changed.', ErrorCategory.STALE_REF)
+                reply = self._call(['get', 'model_download_option', self._ref(str(params.get('ref', ''))), uid], acting=False)
+                after = self._final_url()
+            data = reply.data if isinstance(reply.data, dict) else {}
+            if before != after or data.get('source_url') != before:
+                raise ControlError('Download format source changed.', ErrorCategory.STALE_REF)
+            return data
+        if what in ('asset_download_watch', 'asset_download_metadata'):
+            uid = str(params.get('uid', ''))
+            if not re.fullmatch(r'[a-f0-9]{32}', uid) or not self.own_tab:
+                raise ControlError('An owned selected-model page is required.', ErrorCategory.INVALID_ARGUMENTS)
+            with self._lock:
+                self._own_tab()
+                before = self._final_url()
+                source = urlsplit(before)
+                if (source.scheme != 'https' or source.hostname not in ('sketchfab.com', 'www.sketchfab.com')
+                        or not source.path.endswith(uid)):
+                    raise ControlError('Selected model page changed.', ErrorCategory.STALE_REF)
+                command = 'model_download_watch' if what == 'asset_download_watch' else 'model_download_metadata'
+                reply = self._call(['get', command, uid], acting=False)
+                after = self._final_url()
+            data = reply.data if isinstance(reply.data, dict) else {}
+            if before != after or data.get('source_url') != before:
+                raise ControlError('Download metadata source changed.', ErrorCategory.STALE_REF)
+            return data
+        if what == 'asset_screenshot':
+            uid = str(params.get('uid', ''))
+            if not re.fullmatch(r'[a-f0-9]{32}', uid) or not self.own_tab:
+                raise ControlError('An owned selected-model tab is required.', ErrorCategory.INVALID_ARGUMENTS)
+            with self._lock:
+                self._own_tab()
+                before = self._final_url()
+                source = urlsplit(before)
+                if (source.scheme != 'https' or source.hostname not in ('sketchfab.com', 'www.sketchfab.com')
+                        or not source.path.endswith(uid)):
+                    raise ControlError('The selected official model is no longer current.', ErrorCategory.STALE_REF)
+                reply = self._call(['get', 'model_screenshot', uid], acting=False)
+                after = self._final_url()
+            data = reply.data if isinstance(reply.data, dict) else {}
+            if before != after or data.get('source_url') != before or data.get('format') != 'jpeg':
+                raise ControlError('Model screenshot source changed.', ErrorCategory.STALE_REF)
+            return data
+        if what == 'asset_download_link':
+            # Private data-plane probe: never expose signed hrefs through the
+            # model-facing public links tool or persist their query strings.
+            uid = str(params.get('uid', ''))
+            if not re.fullmatch(r'[a-f0-9]{32}', uid):
+                raise ControlError('A qualified provider identity is required.', ErrorCategory.INVALID_ARGUMENTS)
+            with self._lock:
+                if not self.own_tab:
+                    raise ControlError('Open the selected model in an owned tab first.', ErrorCategory.UNSUPPORTED)
+                self._own_tab()
+                before = self._final_url()
+                source = urlsplit(before)
+                if (source.scheme != 'https' or source.hostname not in ('sketchfab.com', 'www.sketchfab.com')
+                        or not source.path.endswith(uid)):
+                    raise ControlError('The selected model page is no longer current.', ErrorCategory.STALE_REF)
+                reply = self._call(['get', 'href', self._ref(str(params.get('ref', '')))], acting=False)
+                href = str((reply.data or {}).get('url', ''))
+                after = self._final_url()
+            if after != before:
+                raise ControlError('The model page changed during download-link observation.', ErrorCategory.STALE_REF)
+            parsed = urlsplit(href)
+            if (parsed.scheme == 'https' and parsed.hostname == 'media.sketchfab.com'
+                    and parsed.port in (None, 443) and not parsed.username and not parsed.password
+                    and not parsed.fragment and parsed.path.startswith('/models/' + uid + '/')
+                    and parsed.path.lower().endswith(('.zip','.glb')) and len(href) <= 8000
+                    and not any(ord(c) < 32 for c in href)):
+                return {'kind': 'archive', 'url': href, 'source_url': before}
+            return {'kind': 'unavailable', 'source_url': before}
+        if what == 'links':
+            with self._lock:
+                if getattr(self.run, 'auto_connect', False):
+                    if not self.own_tab:
+                        raise ControlError('Open a Jarvis-owned research tab before reading links.', ErrorCategory.UNSUPPORTED)
+                    self._own_tab()
+                before = self._final_url()
+                reply = self._call(['get', 'links'], acting=False)
+                after = self._final_url()
+            data = reply.data if isinstance(reply.data, dict) else {}
+            if not before or before != after or data.get('url') != before:
+                raise ControlError('Research page changed while links were observed; read fresh state.', ErrorCategory.STALE_REF)
+            rows = data.get('links')
+            if not isinstance(rows, list) or len(rows) > 200:
+                raise ControlError('Browser did not return bounded link records.', ErrorCategory.UNSUPPORTED)
+            from urllib.parse import parse_qs
+            result = []
+            for row in rows:
+                if not isinstance(row, dict) or not isinstance(row.get('url'), str):
+                    continue
+                try:
+                    url = row['url']
+                    parsed = urlsplit(url)
+                    if len(url) > 2048 or parsed.scheme not in ('https', 'http') or not parsed.hostname or parsed.username or parsed.password:
+                        continue
+                    if any(re.search(r'(?i)token|secret|password|credential|signature|authorization|api.?key|access.?key|^sig$|^key$|^auth$|^jwt$',k) for k in parse_qs(parsed.query)):
+                        continue
+                except ValueError:
+                    continue
+                result.append({'url': url, 'text': str(row.get('text', ''))[:240]})
+            return {'url': before, 'links': result}
         if what == 'url':
             return self._final_url()
         if what == 'title':
@@ -437,8 +597,10 @@ class AgentBrowserExecutor(RouteExecutor):
                 if not same_site(checked, final):
                     raise ControlError(f'The page did not load {checked} (the tab shows {final or "nothing"}).',
                                        ErrorCategory.VERIFICATION_FAILED, executed=True)
+                require_destination(final)
                 return self._done(action, f'Navigated to {final}', verified=True, evidence=f'final URL {final}')
             final = self._final_url()
+            require_destination(final)
             return self._done(action, f'Navigated to {final}', verified=True, evidence=f'final URL {final}')
         if name == 'new_tab':
             args = ['tab', 'new'] + ([self.policy.check_url(str(p['url']))] if p.get('url') else [])
@@ -450,7 +612,7 @@ class AgentBrowserExecutor(RouteExecutor):
                 self.mine.update(fresh)
                 self.own_tab = fresh[0] if fresh else self.own_tab  # the new tab is where Jarvis works now
             if p.get('url'):
-                self._final_url()
+                require_destination(self._final_url())
             return self._done(action, verified=True)
         if name in ('switch_tab', 'close_tab'):
             if getattr(self.run, 'auto_connect', False):

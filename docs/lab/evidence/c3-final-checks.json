@@ -1,0 +1,25 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "local_links_checked": 1035,
+  "missing_links": [],
+  "canonical_discovery_ast": "PASS",
+  "final_source_matches_frozen_full": true,
+  "lab_flags": {
+    "enabled": false,
+    "sim": false,
+    "research": false,
+    "learning": false
+  },
+  "brain_settings": {
+    "mode": "act",
+    "learning": "shadow"
+  },
+  "owned_files_credential_scan": {
+    "files": 46,
+    "matching_files": []
+  },
+  "approved_additional_model_attempts": 2,
+  "consumed": 2,
+  "resumption_guard": "refused exhausted grant before network/inference",
+  "scope": "Structural/privacy/flag checks; not live scientific/model acceptance"
+}

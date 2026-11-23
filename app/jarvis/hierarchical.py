@@ -18,9 +18,11 @@ READ_TOOLS = frozenset({'read_file', 'list_files', 'search_files', 'query_resour
     'knowledge_search', 'tool_search', 'repository_map', 'repository_instructions',
     'skill_list', 'skill_read', 'git_status', 'git_diff', 'git_log', 'mcp_status',
     'application_search', 'windows_command_search', 'realtime_query'})
+from .google_contracts import READ_TOOLS as GOOGLE_READ_TOOLS
+READ_TOOLS = READ_TOOLS | GOOGLE_READ_TOOLS
 FILE_WRITES = frozenset({'create_file', 'modify_file', 'append_file'})
 NETWORK = frozenset({'web_search', 'scrape_web', 'github_search', 'github_read_file',
-                    'github_pull_request', 'github_pr_files'})
+                    'github_pull_request', 'github_pr_files'}) | GOOGLE_READ_TOOLS
 LOCAL_SCOPE = frozenset({'read_file', 'list_files', 'search_files', 'query_resource',
     'knowledge_search', 'repository_map', 'repository_instructions', 'git_status', 'git_diff', 'git_log'}) | FILE_WRITES
 ARGUMENTS = {'type': 'object', 'additionalProperties': False, 'required': ['value', 'expected'],

@@ -197,9 +197,8 @@ class Cognition:
             self._stats_dirty = False
         try:
             self.stats_path.parent.mkdir(parents=True, exist_ok=True)
-            temp = self.stats_path.with_suffix(".tmp")
-            temp.write_text(data, encoding="utf-8")
-            temp.replace(self.stats_path)
+            from .checkpoint_io import write_checkpoint
+            write_checkpoint(self.stats_path,data,(self.stats_path).parent)
         except OSError:
             with self.lock:
                 self._stats_dirty = True
@@ -656,9 +655,8 @@ class Cognition:
 
     def write_state(self):
         self.state_path.parent.mkdir(parents=True, exist_ok=True)
-        temporary = self.state_path.with_suffix('.tmp')
-        temporary.write_text(json.dumps(self.snapshot(),ensure_ascii=True,default=str),encoding='utf-8')
-        temporary.replace(self.state_path)
+        from .checkpoint_io import write_checkpoint
+        write_checkpoint(self.state_path,json.dumps(self.snapshot(), ensure_ascii=True, default=str),(self.state_path).parent)
 
     def status_text(self):
         s = self.snapshot()

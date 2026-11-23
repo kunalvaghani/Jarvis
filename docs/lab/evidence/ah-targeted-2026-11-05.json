@@ -1,0 +1,12 @@
+{
+  "date_local": "2026-11-05 Asia/Calcutta",
+  "passed": 81,
+  "failed": 0,
+  "skipped": 0,
+  "errors": 0,
+  "seconds_including_setup": 54.328,
+  "source_sha256": "6df11a4c37a2f130a85ca8184812214b40d66bd889c9090e0eab1d6f67d6e891",
+  "scope": "controlled mechanics contracts, planner delegation, real conditional-clock child workflow, wiring and toolkit regressions; no autonomous case pass",
+  "private_receipt": "app/.jarvis-runtime/lab-validation/ah-pre-full-targeted-v2.json",
+  "earlier_preflight": "ah-pre-full-targeted.json collected no tests: nonexistent test_config_contract.py selector; exit4 retained"
+}

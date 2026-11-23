@@ -1,0 +1,81 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "operator_assisted": true,
+  "goals": [
+    {
+      "request": "lab build pendulum \"examples/discovery/pendulum.json\"",
+      "goal_id": "g-3790985455ab46e3",
+      "seconds": 9.186999999976251,
+      "directory": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\discovery\\experiments\\pendulum-0329c5a5ef90457c",
+      "metrics": {
+        "checks": [
+          "finite SI grid",
+          "initial conditions",
+          "rigid length",
+          "energy/passive damping",
+          "ODE residual",
+          "elliptic period reference"
+        ],
+        "inertia_about_pivot_kg_m2": 1.001,
+        "max_ode_residual_rad_s2": 0.0012464807740175665,
+        "measured_period_s": 2.012098142789198,
+        "relative_energy_change": 3.974270269646206e-15,
+        "undamped_period_reference_s": 2.012098666142331
+      },
+      "answer": "{'directory': 'D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\app\\\\.jarvis-runtime\\\\discovery\\\\experiments\\\\pendulum-0329c5a5ef90457c', 'run_ref': 'artifact://sha256/2456bb832a33f1b8b39c8739d27688c2972d95391d52bb358f0b52989eec5b37', 'experiment_id': 'pendulum-0329c5a5ef90457c', 'component_ids': {'anchor': 'af543377-4f96-5145-b8cb-f7b623955faf', 'rod': '62f3bca4-0ad6-50ef-8307-e75b3a1e8557', 'bob': '0490382c-7398-5ba3-896e-5c07b08a261e'}, 'created': {'blender_version': '5.2.2 LTS', 'parts': [{'name': 'anchor', 'component_id': 'af543377-4f96-5145-b8cb-f7b623955faf', 'vertices': 8, 'polygons': 6, 'closed_manifold': True, 'mass_kg': 1.0}, {'name': 'rod', 'component_id': '62f3bca4-0ad6-50ef-8307-e75b3a1e8557', 'vertices': 48, 'polygons': 26, 'closed_manifold': True, 'mass_kg': None}, {'name': 'bob', 'component_id': '0490382c-7398-5ba3-896e-5c07b08a261e', 'vertices': 362, 'polygons': 384, 'closed_manifold': True, 'mass_kg': 1.0}], 'hinge': 'anchor->bob', 'kinematic_display': True, 'trajectory_checks': [{'sample_index': 0, 'position_m': [0.19866932928562164, 0.0, -0.9800665974617004]}, {'sample_index': 100, 'position_m': [0.1985296905040741, 0.0, -0.980094850063324]}, {'sample_index': 200, 'position_m': [0.1981109231710434, 0.0, -0.9801796078681946]}, {'sample_index': 400, 'position_m': [0.1964384764432907, 0.0, -0.9805161356925964]}], 'model_sha256': '94e122ef8a7ff46ab18c4f68ec294efe56cc95937465ccc095d3a9baec8ae7fb', 'trajectory_sha256': '0d4d839491c1e797d05c48f05a6235d2fd5e675250c1ca453fe6148570cb022e', 'bullet_dynamics_tested': False}, 'metrics': {'checks': ['finite SI grid', 'initial conditions', 'rigid length', 'energy/passive damping', 'ODE residual', 'elliptic period reference'], 'inertia_about_pivot_kg_m2': 1.001, 'max_ode_residual_rad_s2': 0.0012464807740175665, 'measured_period_s': 2.012098142789198, 'relative_energy_change': 3.974270269646206e-15, 'undamped_period_reference_s': 2.012098666142331}, 'model': {'damping_nm_s': 0.0, 'dt_s': 0.02, 'duration_s': 8.0, 'gravity_m_s2': 9.81, 'initial_angle_rad': 0.2, 'length_m': 1.0, 'mass_kg': 1.0, 'project_id': 'pendulum-demo', 'radius_m': 0.05}, 'parameter_change': None, 'evidence_status': 'SIMULATION_PASSED_WITH_ASSUMPTIONS', 'justification': 'Native rig/animation displays actual SciPy trace; no Bullet or physical validation.'}\n\n(Checked: fresh Blender readback; manifold mesh; native hinge/mass; solver-driven positions; real PNG and file hashes.)",
+      "native_build_verified": true,
+      "reused_existing_verified_goal": false
+    },
+    {
+      "request": "lab build pendulum \"examples/discovery/pendulum.json\" length delta 0.5 m",
+      "goal_id": "g-7b52adcd479d4ea9",
+      "seconds": 8.125,
+      "directory": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\discovery\\experiments\\pendulum-4cb2d3fa4e6a498b",
+      "metrics": {
+        "checks": [
+          "finite SI grid",
+          "initial conditions",
+          "rigid length",
+          "energy/passive damping",
+          "ODE residual",
+          "elliptic period reference"
+        ],
+        "inertia_about_pivot_kg_m2": 2.251,
+        "max_ode_residual_rad_s2": 0.0005546446382329595,
+        "measured_period_s": 2.463624396563948,
+        "relative_energy_change": 4.3527722000887014e-15,
+        "undamped_period_reference_s": 2.463623581160381
+      },
+      "answer": "{'directory': 'D:\\\\Kunals GitHub Repo\\\\Jarvis\\\\app\\\\.jarvis-runtime\\\\discovery\\\\experiments\\\\pendulum-4cb2d3fa4e6a498b', 'run_ref': 'artifact://sha256/ae94e3fe1c28779e5d9af27539b1c9778334c6f35a37c41c078d3fe7d82d8365', 'experiment_id': 'pendulum-4cb2d3fa4e6a498b', 'component_ids': {'anchor': 'af543377-4f96-5145-b8cb-f7b623955faf', 'rod': '62f3bca4-0ad6-50ef-8307-e75b3a1e8557', 'bob': '0490382c-7398-5ba3-896e-5c07b08a261e'}, 'created': {'blender_version': '5.2.2 LTS', 'parts': [{'name': 'anchor', 'component_id': 'af543377-4f96-5145-b8cb-f7b623955faf', 'vertices': 8, 'polygons': 6, 'closed_manifold': True, 'mass_kg': 1.0}, {'name': 'rod', 'component_id': '62f3bca4-0ad6-50ef-8307-e75b3a1e8557', 'vertices': 48, 'polygons': 26, 'closed_manifold': True, 'mass_kg': None}, {'name': 'bob', 'component_id': '0490382c-7398-5ba3-896e-5c07b08a261e', 'vertices': 362, 'polygons': 384, 'closed_manifold': True, 'mass_kg': 1.0}], 'hinge': 'anchor->bob', 'kinematic_display': True, 'trajectory_checks': [{'sample_index': 0, 'position_m': [0.29800400137901306, 0.0, -1.470099925994873]}, {'sample_index': 100, 'position_m': [0.1135789155960083, 0.0, -1.4956938028335571]}, {'sample_index': 200, 'position_m': [-0.2133193463087082, 0.0, -1.4847540855407715]}, {'sample_index': 400, 'position_m': [0.005188971757888794, 0.0, -1.4999910593032837]}], 'model_sha256': '9ee8ef683f1a6d56f91ac451f68a665855416014af820e7bf18f8bd48eeca472', 'trajectory_sha256': 'c4a24f2efb9a0d925af0b9a3fe7df34be00ec26a1f81113a4ddbf176d7d57b96', 'bullet_dynamics_tested': False}, 'metrics': {'checks': ['finite SI grid', 'initial conditions', 'rigid length', 'energy/passive damping', 'ODE residual', 'elliptic period reference'], 'inertia_about_pivot_kg_m2': 2.251, 'max_ode_residual_rad_s2': 0.0005546446382329595, 'measured_period_s': 2.463624396563948, 'relative_energy_change': 4.3527722000887014e-15, 'undamped_period_reference_s': 2.463623581160381}, 'model': {'damping_nm_s': 0.0, 'dt_s': 0.02, 'duration_s': 8.0, 'gravity_m_s2': 9.81, 'initial_angle_rad': 0.2, 'length_m': 1.5, 'mass_kg': 1.0, 'project_id': 'pendulum-demo', 'radius_m': 0.05}, 'parameter_change': {'after': {'evidence_status': 'INSUFFICIENT_EVIDENCE', 'id': '62f3bca4-0ad6-50ef-8307-e75b3a1e8557.length', 'justification': '', 'kind': 'Parameter', 'lower': 0.1, 'name': 'length', 'quantity': {'origin': 'source', 'source_ref': 'artifact://sha256/3b617938787cdb92059b631099eef478324df5cd9ca73e9677deb49d36ad1544', 'unit': 'm', 'value': 1.5}, 'revision': 5, 'source_ids': [], 'upper': 5.0}, 'baseline_sha256': '10021704e850b1da82ed1842820f604a11b537c3bad70454866d9673307ea42f', 'before': {'evidence_status': 'INSUFFICIENT_EVIDENCE', 'id': '62f3bca4-0ad6-50ef-8307-e75b3a1e8557.length', 'justification': '', 'kind': 'Parameter', 'lower': 0.1, 'name': 'length', 'quantity': {'origin': 'source', 'source_ref': 'artifact://sha256/3b617938787cdb92059b631099eef478324df5cd9ca73e9677deb49d36ad1544', 'unit': 'm', 'value': 1.0}, 'revision': 4, 'source_ids': [], 'upper': 5.0}, 'candidate_sha256': '162101a28548a1af95e0ed08ee8f4494f28a7ee42644f8e0dcba10ad0356ad04', 'disposition': 'PLANNED_NOT_EXECUTED', 'evidence_status': 'MODEL_CONSISTENT', 'invalidated': ['0490382c-7398-5ba3-896e-5c07b08a261e.inertia', '62f3bca4-0ad6-50ef-8307-e75b3a1e8557.geometry', 'af543377-4f96-5145-b8cb-f7b623955faf.mechanics', 'af543377-4f96-5145-b8cb-f7b623955faf.display'], 'scenario_sha256': '9a9f396459ba88aa66fd1aa5640df0bd9eb4bea0c12e3bb497738232e0dfcb89'}, 'evidence_status': 'SIMULATION_PASSED_WITH_ASSUMPTIONS', 'justification': 'Native rig/animation displays actual SciPy trace; no Bullet or physical validation.'}\n\n(Checked: fresh Blender readback; manifold mesh; native hinge/mass; solver-driven positions; real PNG and file hashes.)",
+      "native_build_verified": true,
+      "reused_existing_verified_goal": false
+    }
+  ],
+  "scoped_approvals": [
+    {
+      "goal": "lab build pendulum \"examples/discovery/pendulum.json\"",
+      "scope": "discovery.geometry.pendulum. Fixed C2 pendulum build; conditional model, no hardware (discovery.geometry.pendulum@v1)",
+      "basis": "user authorized fixed free-local C2 proof and new owned outputs; operator-assisted"
+    },
+    {
+      "goal": "lab build pendulum \"examples/discovery/pendulum.json\" length delta 0.5 m",
+      "scope": "discovery.geometry.pendulum. Fixed C2 pendulum build; conditional model, no hardware (discovery.geometry.pendulum@v1)",
+      "basis": "user authorized fixed free-local C2 proof and new owned outputs; operator-assisted"
+    }
+  ],
+  "controlled_comparison": {
+    "baseline_design_sha256": "d5f1177191f614aed1c76a224f42a72761974616829bffc2325cea38d08d4363",
+    "candidate_design_sha256": "8641588051aca0e4b10a8886af52fa433f367ffdddeae44bc43e1cc183bc1005",
+    "fixed_scenario_sha256": "970819b30f6557f5c26e8fd3e6c647c353eb2d18b88a468ae1b3ecc59f1c979d",
+    "baseline_period_s": 2.012098142789198,
+    "candidate_period_s": 2.463624396563948,
+    "period_difference_s": 0.45152625377475,
+    "evidence_status": "SIMULATION_PASSED_WITH_ASSUMPTIONS",
+    "physical_validation": false
+  },
+  "refinement_max_angle_difference_rad": 3.3306690738754696e-16,
+  "new_packages": 0,
+  "gpu_rendering": false,
+  "microphone_or_live_jarvis_ui": "NOT_RUN",
+  "scope": "ideal rigid pendulum, actual SciPy dynamics/native geometry/hinge/kinematic display; no Bullet/FEA/CFD or physical validation"
+}

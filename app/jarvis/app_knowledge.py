@@ -399,9 +399,8 @@ class AppKnowledge:
     def _save(self):
         try:
             self.path.parent.mkdir(parents=True, exist_ok=True)
-            temp = self.path.with_suffix(".tmp")
-            temp.write_text(json.dumps(self.learned, ensure_ascii=False, indent=1), encoding="utf-8")
-            temp.replace(self.path)
+            from .checkpoint_io import write_checkpoint
+            write_checkpoint(self.path,json.dumps(self.learned, ensure_ascii=False, indent=1),(self.path).parent)
             return True
         except OSError:
             return False

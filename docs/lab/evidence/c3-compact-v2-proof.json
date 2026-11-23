@@ -1,0 +1,64 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "scope": {
+    "scope": "user-approved-c3-compact-v2-420-2026-11-04",
+    "day": "2026-11-04",
+    "max_calls": 2,
+    "cpu_allowance": 420,
+    "journal": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\lab-validation\\c3-proof.sqlite3"
+  },
+  "attempts": [
+    {
+      "mode": "quick ",
+      "goal_id": "g-84667c1bafc44ed7",
+      "state": "failed",
+      "seconds": 1.4839999999967404,
+      "error": {
+        "type": "ValueError",
+        "message": "The brain stopped (failed): review failed: ValueError: No module named 'pydantic'"
+      },
+      "answer_sha256": null
+    },
+    {
+      "mode": "configured",
+      "goal_id": "g-8ea216dfdb1d46c3",
+      "state": "failed",
+      "seconds": 1.3439999999827705,
+      "error": {
+        "type": "ValueError",
+        "message": "The brain stopped (failed): review failed: ValueError: No module named 'pydantic'"
+      },
+      "answer_sha256": null
+    }
+  ],
+  "old_grant_reused": false,
+  "global_policy_changed": false,
+  "new_packages": 0,
+  "new_paid_inference": 0,
+  "model_reservations": [
+    {
+      "cpu_s": 90.0,
+      "state": "uncertain"
+    },
+    {
+      "cpu_s": 20.0,
+      "state": "uncertain"
+    },
+    {
+      "cpu_s": 90.0,
+      "state": "uncertain"
+    },
+    {
+      "cpu_s": 90.0,
+      "state": "uncertain"
+    },
+    {
+      "cpu_s": 20.0,
+      "state": "uncertain"
+    },
+    {
+      "cpu_s": 90.0,
+      "state": "uncertain"
+    }
+  ]
+}

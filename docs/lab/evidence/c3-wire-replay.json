@@ -1,0 +1,27 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "fresh_process_replay": [
+    {
+      "review_id": "c3-review-8909079dd6d81cfa424d9fa7cea6ee68",
+      "hypotheses": 3,
+      "null_count": 1,
+      "origin": "existing_local_model_unverified_proposals:qwen3.5:9b",
+      "citation_count": 1
+    },
+    {
+      "review_id": "c3-review-2452004511b3ecc2ac4c5bde94e334ff",
+      "hypotheses": 3,
+      "null_count": 1,
+      "origin": "existing_local_model_unverified_proposals:qwen3.5:0.8b",
+      "citation_count": 1
+    }
+  ],
+  "new_model_calls": 0,
+  "scope": "read retained proposals and re-run skeptic, not autonomous tool learning or new inference",
+  "both_reviews_match_current_code": true,
+  "code_sha256": "ee117835286229d49624681fb17eae29eeedee283715bcf9d9d9b8f8141d41bc",
+  "retained_model_admission": {
+    "reservations": 8,
+    "charged_units": 510.0
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "branch": "lab/phase-c1-components",
+  "commit": "not created; mixed earlier working edits retained",
+  "focused_source_fingerprint": "461e055ec95df4d9947e1c345f32743d365acdcf2f910696290c7d62d7ef3596",
+  "files": {
+    "app/jarvis/discovery/c1.py": "fc76fef7bd472cfed210976e8847b49a0a1f837942ff8f1bf436e536e6e301ab",
+    "app/jarvis/discovery/model/component_graph.py": "aac2a6e2246e377a0b4e319242d29cee2f12daba62c01be3add6b0410b51cca4",
+    "app/jarvis/discovery/model/parameter_registry.py": "37d872ec3365d0406bcaf67bc85574e1e101affb2133fe7dfe9170c2c7d05513",
+    "app/jarvis/discovery/model/project_store.py": "5cf0d98bf37911be8a4ea6a0e1cbe112720e30c2d5f2b6c2b07af8ff12aec17f",
+    "app/jarvis/discovery/adapters/assets.py": "7f06e6f6c55e596169f287edec19987ca425112ac0a8417c7a24c23c67232322",
+    "app/jarvis/discovery/adapters/drive_sources.py": "6167ee85bc9b099cdbeefc64ec043a7a046ce3b09b040e5fc90b2250dad00b62",
+    "app/tests/test_discovery_components.py": "d44d5adadb59853be1f698e217fe6e3831bbfda54fe95b3e0737b9373154239e"
+  },
+  "scope": "local C1 only; no scientific release acceptance",
+  "final_focused_passes": 204
+}

@@ -19,6 +19,12 @@ EXPLICIT = re.compile(rf'\b(?:open|launch|start|use|using|in|with|inside)\s+(?:t
 
 # target keyword pattern -> (label, ordered (tool, tier, how) rows)
 ROUTES = (
+    (r'\b(?:simulate|simulation|dynamics|physics|aero|suspension)\b', 'science', (
+        ('discovery_call', 'api', 'read help for actually registered solver/source workflows and current runtime qualification; '
+                                'inspect the schema before authoring physical assumptions; never substitute a visual render for numerical evidence'),
+        ('web_search', 'api', 'search public model/specification/license sources before choosing or generating a model'),
+        ('discovery_call', 'api', 'use lab background for public research and retain actual Source IDs; run supported structured '
+                                'comparisons and inspect raw outputs and independent verification; preserve blockers for unsupported physics'))),
     (r'\b(?:excel|spreadsheets?|workbooks?|xlsx)\b|\.xlsx?\b', 'spreadsheet', (
         ('office_xlsx', 'api', 'read/write cells and formulas, read back'),
         ('office_automation', 'structured', "Excel's own object model in a hidden instance"),

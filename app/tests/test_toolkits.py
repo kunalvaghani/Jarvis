@@ -118,10 +118,12 @@ class ToolkitTests(unittest.TestCase):
     def test_all_37_operations_available_to_every_plan_when_configured(self):
         self.actions.config = {'brain': {'visual_fallback': {'enabled': True}}}
         variables = {key: "test-configured" for data in TOOLS.values() for key in data[2]}
-        with patch.dict(os.environ, variables, clear=True):
+        # OAuth-backed Drive is configured by its credential store, not env keys.
+        # This controlled all-configured fixture must supply that prerequisite too.
+        with patch.dict(os.environ, variables, clear=True), patch('jarvis.google_files.available',return_value=True):
             for goal in ("Help me prepare for tomorrow", "Compare these options", "आज की बैठक की तैयारी करो"):
                 self.assertEqual({tool["action"] for tool in ToolRegistry(self.actions).catalog(goal)},
-                                 set(ToolRegistry(self.actions).specs))
+                                 set(ToolRegistry(self.actions).specs)-{'discovery_call'})
 
     def test_natural_commands_and_explicit_json_wait_for_final_speech(self):
         self.assertEqual(parse("read file notes.txt in Documents").value, "read_file")
@@ -280,6 +282,10 @@ class ToolkitTests(unittest.TestCase):
     def test_all_toolkit_operations_dispatch_from_autonomous_plans(self):
         variables = {key: "test-configured" for data in TOOLS.values() for key in data[2]}
         intents = {"cloud_architect_consult": "ask the cloud architect for advice",
+                   'google_docs_create': 'create a Google Doc',
+                   'google_sheets_create': 'create a Google Sheet',
+                   'google_drive_save_file': 'save the file in Google Drive',
+                   'google_drive_upload': 'upload the file to Google Drive',
                    "evolution_promote": "deploy the approved improvement proposal",
                    "evolution_rollback": "roll back the evolution release",
                    "github_add_file": "add to GitHub", "github_delete_file": "delete from GitHub",
@@ -290,7 +296,7 @@ class ToolkitTests(unittest.TestCase):
                    "mcp_list_tools": "List MCP tools", "mcp_call": "Call MCP tool",
                    "rea_analyze": "reverse engineer and analyze the target with REA",
                    "development_verify": "Verify the development project", "development_preview": "Start the development preview", "development_native": "Package the native app"}
-        with patch.dict(os.environ, variables, clear=True), patch("jarvis.toolkits.execute", return_value="Observed result") as dispatch:
+        with patch.dict(os.environ, variables, clear=True), patch('jarvis.google_files.available',return_value=True), patch("jarvis.toolkits.execute", return_value="Observed result") as dispatch:
             for name in TOOLS:
                 with self.subTest(tool=name):
                     brain = self.planned_brain()

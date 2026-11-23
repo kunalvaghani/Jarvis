@@ -1,0 +1,386 @@
+{
+  "deerflow": {
+    "pattern": "\\b(deerflow|deer[- ]flow)\\b",
+    "tools": [
+      "deerflow_status",
+      "deerflow_skill_search",
+      "deerflow_skill_read",
+      "deerflow_research",
+      "deerflow_web_research",
+      "deerflow_sandbox_task",
+      "deerflow_free_media"
+    ],
+    "skills": [
+      "web-research",
+      "project-coding"
+    ]
+  },
+  "sandbox": {
+    "pattern": "\\b(sandbox|isolated|offline media|free media)\\b",
+    "tools": [
+      "deerflow_sandbox_task",
+      "deerflow_status"
+    ],
+    "skills": [
+      "project-coding"
+    ]
+  },
+  "free_media": {
+    "pattern": "\\b(?:create|generate|render|make)\\b.*\\b(?:chart|slides|pptx|pdf|poster|slideshow|narration|podcast|free music)\\b",
+    "tools": [
+      "deerflow_free_media",
+      "deerflow_sandbox_task"
+    ],
+    "skills": []
+  },
+  "source_research": {
+    "pattern": "\\b(?:research|investigate|analy[sz]e|review|understand|explain)\\b.*\\b(?:codebase|repository|repo|project)\\b",
+    "tools": [
+      "repository_map",
+      "read_file",
+      "deerflow_research"
+    ],
+    "skills": [
+      "project-coding"
+    ]
+  },
+  "windows_commands": {
+    "pattern": "\\b(windows commands?|command reference|cpu details|battery report|network adapters)\\b",
+    "tools": [
+      "windows_command_search",
+      "windows_command"
+    ],
+    "skills": [
+      "app-navigation"
+    ]
+  },
+  "coding": {
+    "pattern": "\\b(code|coding|script|python|debug|refactor|bug|implementation|programming|unit tests?|fix.*project)\\b",
+    "tools": [
+      "repository_instructions",
+      "repository_map",
+      "read_file",
+      "read_batch",
+      "skill_list",
+      "skill_read",
+      "git_status",
+      "write_code",
+      "write_tests",
+      "improve_code"
+    ],
+    "skills": [
+      "project-coding"
+    ]
+  },
+  "research": {
+    "pattern": "\\b(research|compare|comparison|investigate|look up|latest|sources|documentation)\\b",
+    "tools": [
+      "web_search",
+      "scrape_web",
+      "github_search",
+      "firecrawl_search",
+      "firecrawl_scrape"
+    ],
+    "skills": [
+      "web-research"
+    ]
+  },
+  "firecrawl": {
+    "pattern": "\\bfirecrawl\\b",
+    "tools": [
+      "firecrawl_search",
+      "firecrawl_scrape",
+      "firecrawl_map"
+    ],
+    "skills": [
+      "web-research"
+    ]
+  },
+  "reverse_engineer": {
+    "pattern": "\\b(reverse[- ]engineer(?:ing)?|decompile|deconstruct|1:1 clone|clone (?:the|this|that|an?) (?:app|application|website|site|binary)|rea\\b)\\b",
+    "tools": [
+      "rea_status",
+      "rea_ingest",
+      "rea_analyze",
+      "rea_ledger",
+      "rea_record",
+      "repository_instructions",
+      "repository_map",
+      "read_file",
+      "write_code",
+      "write_tests",
+      "improve_code"
+    ],
+    "skills": [
+      "reverse-engineer-clone",
+      "project-coding"
+    ]
+  },
+  "github": {
+    "pattern": "\\b(github|pull request|repository|repo|git)\\b",
+    "tools": [
+      "github_search",
+      "github_read_file",
+      "github_pull_request",
+      "github_pr_files",
+      "git_status",
+      "git_diff",
+      "git_log"
+    ],
+    "skills": [
+      "project-coding",
+      "web-research"
+    ]
+  },
+  "browser": {
+    "pattern": "\\b(browser|website|webpage|web page|chrome|edge|firefox|form|textbox|tabs?|url|search (?:for|on))\\b|\\b\\w+\\.(?:com|org|net|io|dev|ai|in)\\b",
+    "tools": [
+      "web_open",
+      "web_read",
+      "web_act",
+      "browser_inspect",
+      "browser_navigate",
+      "browser_fill",
+      "browser_click"
+    ],
+    "skills": [
+      "browser-navigation",
+      "form-entry"
+    ]
+  },
+  "pc_control": {
+    "pattern": "\\b(notepad|calculator|paint|explorer|window|click|type|press|button|checkbox|menu|desktop|screen|canvas)\\b",
+    "tools": [
+      "app_open",
+      "app_read",
+      "app_act",
+      "screen_act"
+    ],
+    "skills": [
+      "app-navigation",
+      "form-entry"
+    ]
+  },
+  "control_health": {
+    "pattern": "\\b(connections?|control (?:check|status)|health check)\\b",
+    "tools": [
+      "control_check"
+    ],
+    "skills": []
+  },
+  "youtube": {
+    "pattern": "\\b(youtube|you tube)\\b",
+    "tools": [
+      "media_search",
+      "media_control",
+      "browser_inspect"
+    ],
+    "skills": [
+      "youtube-media"
+    ]
+  },
+  "youtube_lookup": {
+    "pattern": "(?=.*\\b(?:youtube|you tube|youtu\\.be)\\b)(?=.*\\b(?:playlists?|views?|how long|duration|length|uploaded|uploader|details?|channel|links?|ids?|list|top \\d+|results)\\b)",
+    "tools": [
+      "mcp_call",
+      "browser_navigate"
+    ],
+    "skills": [
+      "youtube-media"
+    ]
+  },
+  "spotify": {
+    "pattern": "\\bspotify\\b",
+    "tools": [
+      "mcp_call",
+      "mcp_list_tools",
+      "open",
+      "media_search",
+      "media_control"
+    ],
+    "skills": [
+      "spotify-media"
+    ]
+  },
+  "blender": {
+    "pattern": "\\bblender\\b|\\.blend\\b",
+    "tools": [
+      "mcp_list_tools",
+      "mcp_call"
+    ],
+    "skills": [
+      "blender-modeling"
+    ]
+  },
+  "files": {
+    "pattern": "\\b(files?|folders?|director(?:y|ies)|drive|rename|copy|append)\\b",
+    "tools": [
+      "open",
+      "list_files",
+      "search_files",
+      "read_file"
+    ],
+    "skills": [
+      "file-operations",
+      "app-navigation"
+    ]
+  },
+  "apps": {
+    "pattern": "\\b(open|launch|start|close|applications|installed apps)\\b",
+    "tools": [
+      "open",
+      "close_app",
+      "application_search"
+    ],
+    "skills": [
+      "app-navigation"
+    ]
+  },
+  "visual_dialogs": {
+    "pattern": "\\b(save|dialog|canvas|button|click|menu|textbox)\\b",
+    "tools": [
+      "select",
+      "fill_text",
+      "open_menu",
+      "handle_dialog",
+      "save_file"
+    ],
+    "skills": [
+      "app-navigation",
+      "file-operations",
+      "form-entry"
+    ]
+  },
+  "memory": {
+    "pattern": "\\b(memory|obsidian|remember|recall|knowledge|notes)\\b",
+    "tools": [
+      "knowledge_search",
+      "query_resource",
+      "runtime_capabilities"
+    ],
+    "skills": [
+      "runtime-questions"
+    ]
+  },
+  "skills": {
+    "pattern": "\\b(skills?|workflow|automate|automation|tools?|capabilities)\\b|\\$custom:|\\$hermes:",
+    "tools": [
+      "runtime_capabilities",
+      "skill_list",
+      "skill_read",
+      "tool_search"
+    ],
+    "skills": []
+  },
+  "mcp": {
+    "pattern": "\\b(mcp|plugins?|integrations?)\\b",
+    "tools": [
+      "integration_status",
+      "mcp_status",
+      "mcp_list_tools",
+      "mcp_call"
+    ],
+    "skills": []
+  },
+  "email": {
+    "pattern": "\\b(gmail|e-?mails?|mails?|inbox)\\b",
+    "tools": [
+      "skill_gmail_chrome",
+      "gmail_api_list",
+      "gmail_api_read",
+      "gmail_api_draft",
+      "gmail_api_list_drafts",
+      "gmail_api_read_draft",
+      "gmail_api_update_draft",
+      "gmail_api_send",
+      "gmail_api_send_draft",
+      "gmail_api_trash",
+      "gmail_api_untrash",
+      "gmail_api_modify_labels",
+      "gmail_api_list_labels",
+      "gmail_api_delete_draft",
+      "read_email",
+      "send_email"
+    ],
+    "skills": [
+      "form-entry"
+    ]
+  },
+  "calendar": {
+    "pattern": "\\b(calendar|appointment|schedule|event)\\b",
+    "tools": [
+      "calendar_list",
+      "calendar_details",
+      "calendar_create",
+      "calendar_delete"
+    ],
+    "skills": []
+  },
+  "jira": {
+    "pattern": "\\b(jira|ticket|jql)\\b",
+    "tools": [
+      "jira_projects",
+      "jira_search",
+      "jira_create",
+      "jira_edit"
+    ],
+    "skills": []
+  },
+  "slack": {
+    "pattern": "\\bslack\\b",
+    "tools": [
+      "slack_send"
+    ],
+    "skills": []
+  },
+  "documents": {
+    "pattern": "\\b(?:xlsx|xlsm|excel|spreadsheets?|workbooks?|worksheets?|docx|docm|word documents?|pdfs?|cells?|formulas?)\\b|\\.(?:xlsx|xlsm|docx|docm|pdf)\\b",
+    "tools": [
+      "strategy_execute",
+      "execution_methods",
+      "office_xlsx",
+      "office_docx",
+      "pdf_document",
+      "office_automation"
+    ],
+    "skills": [
+      "file-operations"
+    ]
+  },
+  "modeling_3d": {
+    "pattern": "\\b(?:blender|unreal(?: engine)?|3d (?:model|scene|object)s?|meshe?s?)\\b|\\.blend\\b",
+    "tools": [
+      "strategy_execute",
+      "execution_methods",
+      "blender_task",
+      "unreal_task"
+    ],
+    "skills": []
+  },
+  "vscode": {
+    "pattern": "\\b(?:vs ?code|visual studio code)\\b",
+    "tools": [
+      "vscode_cli",
+      "execution_methods"
+    ],
+    "skills": [
+      "project-coding"
+    ]
+  },
+  "cloud_architect": {
+    "pattern": "\\bcloud (?:architect|advice|consult\\w*)\\b",
+    "tools": [
+      "cloud_architect_consult"
+    ],
+    "skills": []
+  },
+  "evolution": {
+    "pattern": "\\b(?:self[- ]?(?:evolution|improvements?)|improvement proposals?|evolution (?:archive|status|proposals?|releases?))\\b",
+    "tools": [
+      "evolution_status",
+      "evolution_promote",
+      "evolution_rollback"
+    ],
+    "skills": []
+  }
+}

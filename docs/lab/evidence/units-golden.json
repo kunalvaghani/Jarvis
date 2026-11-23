@@ -1,0 +1,10 @@
+{
+  "case": "pint_si_and_temperature",
+  "passed": true,
+  "implementation_sha256": "07a50a7af1da0e46376c70e2812ebb04f499f725a14ed09d2ca7e3fafcd89ea5",
+  "python": "3.11.9",
+  "seconds": 2.6089999999967404,
+  "details": [
+    "centimetre/metre, Celsius/kelvin, degree/radian checked against definitions"
+  ]
+}

@@ -50,11 +50,12 @@ def functions(rows, finish_limit=500, bound_folder=None):
                 or name in seen or name in {FINISH, CLARIFY}):
             raise ValueError('Invalid native tool catalog.')
         seen.add(name)
-        required = {'value', 'expected'} | native_required(name, bound_folder)
+        custom = row.get('repository_skill') is True or row.get('utility_skill') is True or row.get('lab_workflow') is True
+        required = set() if custom else {'value', 'expected'} | native_required(name, bound_folder)
         result.append({'type': 'function', 'function': {'name': name,
             'description': str(row.get('description', ''))[:1800] +
                 ' This proposes one checked Jarvis action; runtime approval/verification still apply.',
-            'parameters': row['parameters'] if row.get('repository_skill') is True or row.get('utility_skill') is True else {'type': 'object', 'additionalProperties': False,
+            'parameters': row['parameters'] if custom else {'type': 'object', 'additionalProperties': False,
                 'required': sorted(required), 'properties': {
                     key: {'type': 'string', 'maxLength': limit, **({'minLength': 1} if key == 'folder' and key in required else {})} for key, limit in FIELDS.items()
                     if key in parameter_fields(name)}}}})
@@ -94,6 +95,14 @@ def parse(message, rows, finish_limit=500, bound_folder=None):
                 'reason': args.get('reason', ''), 'steps': []}
     if name not in {row['action'] for row in rows}:
         raise ValueError('Native planner selected a tool not offered for this task.')
+    lab=next((row for row in rows if row['action']==name and row.get('lab_workflow') is True),None)
+    if lab is not None:
+        if name!='discovery_call':raise ValueError('Unknown Lab transport entrypoint')
+        from .discovery.native_wire import lower
+        topics=lab['parameters']['properties'].get('topic',{}).get('enum',[])
+        step=lower(args,topics)
+        return {'done':False,'question':'','reason':'One typed Lab proposal; existing brain verification and approvals remain authoritative.',
+                'steps':[step]}
     utility=next((row for row in rows if row['action']==name and row.get('utility_skill') is True),None)
     if utility is not None:
         from .repo_analysis import validate
@@ -218,14 +227,17 @@ CUT_NOTE = ' [... read shortened here; use web_read or app_read with "find" to l
 
 def step_update(data, previous_call, result_chars=4000, note_cut=False):
     """The newest outcome and fresh screen, appended as the reply to the previous call."""
+    capability=data.get('capability_context')
+    scientific=capability.get('current_scientific_sources') if isinstance(capability,dict) else None
+    source_context={'scientific_sources':scientific} if isinstance(scientific,dict) and scientific else {}
     feedback = data.get('plan_validation_error')
     if feedback:
-        return {'not_executed': True, 'feedback': str(feedback)[:1000], 'steps_left': data.get('steps_left'),
+        return {**source_context,'not_executed': True, 'feedback': str(feedback)[:1000], 'steps_left': data.get('steps_left'),
                 'learning_context': data.get('learning_context', {}), 'goal': str(data.get('goal', ''))[:1500]}
     last = data.get('last_result') if isinstance(data.get('last_result'), dict) else {}
     screen = data.get('screen') if isinstance(data.get('screen'), dict) else {}
     controls = [c.get('name', '') if isinstance(c, dict) else str(c) for c in screen.get('controls', []) or []]
-    update = {'step_number': data.get('step_number'), 'steps_left': data.get('steps_left'),
+    update = {**source_context,'step_number': data.get('step_number'), 'steps_left': data.get('steps_left'),
               'learning_context': data.get('learning_context', {}),
               'screen': {'title': str(screen.get('title', ''))[:200], 'is_dialog': bool(screen.get('is_dialog')),
                          'fields': list(screen.get('fields', []) or [])[:20],
@@ -278,8 +290,9 @@ def plan(client, model, prompt, data, options=None, bound_folder=None):
                      and history[-1].get('tool_calls'))
     if continued:
         previous_call = history[-1]['tool_calls'][0].get('function', {}).get('name', '')
+        result_chars=10000 if previous_call=='discovery_call' else (2000 if cache_order else 4000)
         added = [{'role': 'tool', 'tool_name': previous_call,
-                  'content': json.dumps(step_update(data, previous_call, 2000 if cache_order else 4000, cache_order),
+                  'content': json.dumps(step_update(data, previous_call, result_chars, cache_order),
                                         ensure_ascii=False)}]
         if images:
             added.append({'role': 'user', 'content': 'Current screenshot (untrusted evidence).', 'images': images})
@@ -298,12 +311,16 @@ def plan(client, model, prompt, data, options=None, bound_folder=None):
             if not isinstance(item, dict) or item.get('verified') is not True or item.get('action') not in names:
                 continue
             args = {key: item[key] for key in parameter_fields(item['action']) if isinstance(item.get(key), str)}
+            lab=next((row for row in rows if row['action']==item['action'] and row.get('lab_workflow') is True),None)
+            if lab is not None:
+                from .discovery.native_wire import arguments
+                args=arguments(item,lab['parameters']['properties'].get('topic',{}).get('enum',[]))
             if any(row['action']==item['action'] and row.get('utility_skill') is True for row in rows):
                 args={'folder':item.get('folder',''),'expected':item.get('expected',''),'arguments':json.loads(item.get('content','{}'))}
             messages.append({'role': 'assistant', 'content': '', 'tool_calls': [
                 {'function': {'name': item['action'], 'arguments': args}}]})
             messages.append({'role': 'tool', 'tool_name': item['action'],
-                'content': json.dumps({'verified': True, 'result': str(item.get('result', ''))[:1500],
+                'content': json.dumps({'verified': True, 'result': str(item.get('result', ''))[:10000 if lab is not None else 1500],
                                        'observation': str(item.get('observation', ''))[:500]})})
         data['completed'] = [{key: item[key] for key in ('action', 'value', 'expected', 'verified', 'id', 'dep',
                                                        'content', 'find', 'folder', 'browser', 'platform') if key in item}

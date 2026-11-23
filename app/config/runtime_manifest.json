@@ -1,5 +1,103 @@
 {
   "version": 1,
+  "owned_metadata_commits": {
+    "date": "2026-11-05 IST",
+    "modules": [
+      "jarvis.checkpoint_io",
+      "jarvis.skill_memory",
+      "jarvis.deerflow_sandbox",
+      "jarvis.deliberation",
+      "jarvis.memory_curator"
+    ],
+    "contract": "Fsynced pending metadata, canonical per-file in-process serialization and existing root-confined checkpoint commit; independent files remain concurrent, foreign-writer changes remain refused; four attempts only for known Windows sharing errors while source/target remain unchanged. No external effect replay; permanent denial, changed metadata and failed commits retain pending bytes.",
+    "limits": "Existing checkpoint verification budget: 32 MiB per metadata file. Not a new limit on general asset/source-file tools; no new dependency, model or service.",
+    "hook_compatibility": "Existing demonstration reader keeps five-field tuples; new parents select --hook-v2 for ephemeral extra-info correlation. Legacy --hook retains four-number packets for already-running parents. Injection trust still uses Windows flags only."
+  },
+  "discovery_research": {
+    "date": "2026-11-04 IST",
+    "flags": "lab.enabled and lab.research; theory also lab.sim; shipped flags all false",
+    "modules": [
+      "jarvis.discovery.c3",
+      "jarvis.discovery.adapters.literature",
+      "jarvis.discovery.model.literature_review",
+      "jarvis.discovery.model.relativity"
+    ],
+    "dependencies": "Existing requests/Pydantic, stdlib XML/HTML/Decimal; existing local BrainClient and model/GPU scheduler only for explicit proposal requests. No new package, model or service.",
+    "neurons": "Nine explicit neurons in existing Registry/dispatcher; public metadata collector separate from local dossier loader and model proposer",
+    "network": "Anonymous allowlisted Crossref/arXiv metadata only, redirects/environment credentials disabled, 262144 bytes/response, bounded HTTP timeout, rolling-day 50 attempt cap per Journal, 24h successful cache and 5min failed/unfinished cooldown; no automatic retries or paid fallback",
+    "verification": "Actual provider receipts/hash/DOI identity, <=24-word exact excerpt locators, deterministic skeptic and coverage score; candidate contradictions require context review; no entailment/physical proof claim",
+    "models": "Explicit hypothesize uses configured local client, quick gives per-request installed 0.8B hint; 90s/20s deadlines, unknown worker resource reservations retained. Live proposal attempts timed out; proposer Capability DEGRADED. No global routing changes. Existing GPU arbiter controls residency, so local model requests are not claimed CPU-only.",
+    "theory": "Conditional constant-speed flat-spacetime SR, Decimal independent check and analytic limits; no gravity/acceleration/backward-travel engine or physical validation",
+    "memory": "Typed Source/Claim/Hypothesis/RunArtifact and derived_from edges, provider/verification indexes in existing Journal only. Actual verifier receipt required before review persistence.",
+    "limits": "Metadata/abstract coverage; no PaperQA2/OpenAlex installation, complete retraction/peer-review validation, full-text portal/Google report acceptance or autonomous scientific discovery.",
+    "rollback": "lab.enabled=false; retain all Journal/history, no always-on service",
+    "compact_proposer": {
+      "version": 2,
+      "modules": [
+        "jarvis.discovery.proposal_wire",
+        "jarvis.discovery.model.proposal_payload"
+      ],
+      "worker": "C3-only standard-library wire schema; requested context2048, output320, temperature0; all other worker paths unchanged",
+      "qualification": "Both approved corrected-worker local requests verified: quick17.797s, configured9B52.531s; historical failed calls and charges retained; capability remains UNVERIFIED pending broader qualification"
+    }
+  },
+  "discovery_pendulum": {
+    "date": "2026-11-04 IST",
+    "flags": "lab.enabled and lab.sim; all shipped Lab flags false",
+    "modules": [
+      "jarvis.discovery.c2",
+      "jarvis.discovery.model.pendulum",
+      "jarvis.discovery.model.pendulum_project",
+      "jarvis.discovery.adapters.blender_pendulum",
+      "jarvis.discovery.adapters.pendulum_scene",
+      "jarvis.discovery.sandbox.local_trials",
+      "jarvis.discovery.speech_units"
+    ],
+    "dependencies": "Existing SciPy 1.15.3, NumPy 2.2.6, Pillow 12.3.0, Pydantic and isolated approved Pint; discovered Blender 5.2.2 LTS at D:/blender.exe, build d13f752e3b9c; no new package or service",
+    "execution": "Four explicit neurons in existing brain; bounded CPU SciPy dynamics, independent analytic/energy/ODE checks, approval-gated owned native Blender output, fresh-process readback; existing hidden owned-process helpers and Journal budgets",
+    "resources": "User-approved free-local limit 50 attempts per known SciPy/Blender tool; atomic nonrefundable slots; existing 120 CPU-second daily budget remains; CPU Cycles 2 threads, no GPU/cloud/model call",
+    "isolation": "Trusted fixed factory scene only, background offline/disable-autoexec; not an OS sandbox for arbitrary assets/scripts. No live scene mutation or new MCP server",
+    "storage": "Existing Journal/LabMemory and C1 component/scenario/parameter snapshots; immutable native blend/OBJ/MTL/render/CSV/source outputs in owned experiment folders",
+    "acceptance": "Ideal pendulum numeric/native geometry/hinge/kinematic display and C1 length-change proof only; no Bullet dynamics, physical validation, STEP/FEM/CFD or general C2 completion. Live microphone/UI and scientific A-H gates remain open",
+    "rollback": "lab.enabled=false; retain journal/output history; no persistent service"
+  },
+  "discovery_components": {
+    "date": "2026-11-04 IST",
+    "flag": "lab.enabled; parameter plans also require lab.sim; shipped flags remain false",
+    "modules": [
+      "jarvis.discovery.c1",
+      "jarvis.discovery.model.component_graph",
+      "jarvis.discovery.model.parameter_registry",
+      "jarvis.discovery.model.project_store",
+      "jarvis.discovery.adapters.assets",
+      "jarvis.discovery.adapters.drive_sources"
+    ],
+    "dependencies": "Existing rustworkx 0.18.1/Pydantic and already-approved isolated Pint; no new package or service",
+    "execution": "Four explicit neurons in existing Registry/dispatcher; scoped local JSON inspection and parameter plans only; no CAD/solver/model execution or downloader",
+    "storage": "Existing Journal/LabMemory: typed components, parameters, scenario, source context and immutable project/artifact references; small inert cache capped at 500 KB",
+    "examples": "examples/discovery/*.json are synthetic metadata, not engineering meshes or real vehicle models",
+    "acceptance": "Local text-ingress proof; live Drive/catalog retrieval, geometry/physics and full scientific acceptance remain open",
+    "rollback": "lab.enabled=false; retain source and journal history; no service to stop"
+  },
+  "discovery_foundations": {
+    "date": "2026-11-04 IST",
+    "flags": "lab.enabled, lab.sim, lab.research, lab.learning; all shipped false",
+    "modules": [
+      "jarvis.discovery.catalog",
+      "jarvis.discovery.contracts",
+      "jarvis.discovery.integration",
+      "jarvis.discovery.memory",
+      "jarvis.discovery.golden",
+      "jarvis.discovery.learning",
+      "jarvis.discovery.jobs"
+    ],
+    "dependencies": "Existing core Pydantic/rustworkx reused. Approved Pint worker: requirements/discovery-units.txt in .venv-discovery-units. Optional extracted Debian libngspice0 44.2+ds-1 and libgomp1 14.2.0-19 in .jarvis-runtime/discovery/tools/ngspice-linux-44.2; no core/system install; hash pins in jarvis/discovery/adapters/ngspice.py.",
+    "services": [],
+    "execution": "Owned units worker via isolated interpreter, no shell, bounded JSON, 10-second timeout, measured CPU and Journal budget reservation; no GPU or model calls. Not an untrusted-code sandbox. Fixed ngspice divider uses the existing RepositorySandbox with immutable image pin, seccomp and operator-approved proof cap (initial 20, four-attempt extension, then explicit free-local 50-attempt scope); no host fallback.",
+    "memory": "Additive scientific artifact/reference tables in existing neural Journal; down migration deactivates without deleting history. Optional reference-only index in existing ReasoningBank.",
+    "rollback": "Set lab.enabled=false and keep existing brain/control/model settings. No always-on Lab services to stop.",
+    "acceptance": "Foundation candidate: operator-assisted ngspice golden/three verified brain uses/fresh-process reuse passed. Synthetic spoken-file ASR proof passed; live microphone/UI, general autonomous tool acquisition, full scientific A-H and release acceptance remain open."
+  },
   "realtime_voice": {
     "date": "2026-10-23 IST",
     "modules": [
@@ -1252,5 +1350,168 @@
     ],
     "flag": "neural.mode (off | shadow | on), environment override JARVIS_BRAIN_MODE; default off",
     "rollback": "set neural.mode to off (or JARVIS_BRAIN_MODE=off); the legacy orchestrator is unchanged"
+  },
+  "discovery_optimization": {
+    "status": "C4 bounded grid-search candidate, 2026-11-04; conditional numeric evidence only",
+    "flag": "lab.enabled and lab.sim; shipped false",
+    "modules": [
+      "jarvis.discovery.c4",
+      "jarvis.discovery.model.optimization"
+    ],
+    "dependencies": "Existing SciPy/NumPy/Pydantic only; deterministic bounded grid fallback, no Optuna installation",
+    "storage": "Existing brain Journal and LabMemory, existing ScheduledQueue/TaskStore and TaskState checkpoints",
+    "limits": "Ideal pendulum only, 2-12 trials, fixed scenario, declared length bounds, gravity-moment constraint (not structural qualification), CPU admission and shared 50-attempt SciPy ledger",
+    "recovery": "20-second owned trial lease; interrupted results retained uncertain and charged, never replayed; source/solver changes block resume",
+    "new_services": [],
+    "gpu_residency_mb": 0,
+    "rollback": "Disable lab.enabled/lab.sim; retain Journal and queue history"
+  },
+  "discovery_integration": {
+    "status": "Phase D typed contract/reference integration candidate, 2026-11-04",
+    "flag": "lab.enabled; shipped false",
+    "modules": [
+      "jarvis.discovery.d",
+      "jarvis.discovery.wiring",
+      "jarvis.discovery.memory_graph"
+    ],
+    "descriptors": "jarvis/discovery/neurons/integration.json constrains 44 built-in registered Lab contracts including primitive mechanics; metadata is not autonomous acceptance",
+    "storage": "Existing brain Journal/LabMemory records and edges; one additive audit-snapshot index, no new database",
+    "commands": [
+      "lab audit integration",
+      "lab memory wire"
+    ],
+    "dependencies": "Existing Pydantic/rustworkx; existing jarvis.names.rank for typed name resolution; no new dependency",
+    "qualification": "Inspection checks current golden receipts and three distinct independently verified Journal goals; never promotes or changes permissions",
+    "limits": "2000 record revisions/10000 edges; incomplete scan fails; external native file contents and live service qualification are outside this inventory audit",
+    "new_services": [],
+    "gpu_work": false,
+    "rollback": "Disable lab.enabled; preserve all immutable records, edges and audit history"
+  },
+  "discovery_delivery": {
+    "status": "D2 bounded service adapter candidate, 2026-11-04",
+    "flag": "lab.enabled plus existing research/sim gates; shipped false",
+    "modules": [
+      "jarvis.discovery.d2",
+      "jarvis.discovery.model.delivery",
+      "jarvis.discovery.adapters.delivery",
+      "jarvis.discovery.adapters.lab_reads",
+      "jarvis.discovery.adapters.lab_jobs"
+    ],
+    "neurons": "15 new explicit adapters, 42 built-in Lab neurons total; owned D descriptors and existing core dispatcher",
+    "google": "Existing Files OAuth/session. New files only in explicitly chosen existing folder. Local preview and existing approval gate; durable PREPARED/SENT/CREATED/VERIFIED/UNCERTAIN ledger in same Journal, no unknown-write retry. Known-ID read-only reconciliation, full content/number/formula checks.",
+    "portal": "Existing ExtensionRunner in a fresh owned session only; public HTTPS policy, frame AX snapshot, no login/upload/download, one cleanup attempt; UI operation is not replayable after uncertainty. Derived safe excerpts omit whole credential-like lines, retain unchanged source spans and explicit partial coverage; shared secret guard unchanged.",
+    "long_read": "Existing deterministic scouts, scoped non-credential UTF-8 text, explicit partial coverage; no model synthesis",
+    "background": "Existing public search plus at most two bounded owned-session page reads; extractive partial brief, optional source-verified/approved Doc composition; no LLM inference",
+    "choice": "Existing exact name matching or existing resident CPU-only Laya /health attestation and <=8 options, confidence>=0.9, no backup/start/device change; default Budget retains5 CPU admission units per model attempt",
+    "jobs": "Existing C4 Studies/ScheduledQueue/TaskStore only; owned tasks, no global unpause, uncertain dispatch resume refused, existing caps/checkpoints",
+    "dependencies": "Existing Pydantic, requests, Google Files, DDGS, extension, Laya and queue only; no new package/model/service",
+    "live_qualification": "User-approved one Doc and one Sheet created and read back; Doc import blank-paragraph normalization diagnosed; two create slots consumed, further operations read-only. See docs/lab/evidence/d2-google-live.json",
+    "rollback": "Disable lab.enabled; preserve receipts, delivery rows and existing remote IDs; never delete or recreate uncertain outputs",
+    "new_services": []
+  },
+  "discovery_acceptance": {
+    "status": "Phase E partial qualification harness, 2026-11-04; full A1-H unmet",
+    "entrypoint": "benchmarks/live/discovery_lab.py --run-local (one shot) or --inspect (audit only)",
+    "oracles": "jarvis.discovery.acceptance; actual compiled plan, fired/completed signals, content-addressed Journal outbox and independent numeric checks; no caller pass flag or capability promotion",
+    "runtime": "Existing Engine/Actions/BrainService and same Journal/LabMemory; existing C4 durable queue; no new scheduler/store/router/neurons or always-on service",
+    "scope": "Three conditional SR clocks, two ideal DC ngspice calls, three SciPy study trials, owned child checkpoint/crash23/fresh-process restore, hard rejection, zero budget and denied approvals. Operator-assisted final text only, not microphone/full scientific acceptance.",
+    "limits": "Existing free-local50 invocation ledgers retained; no install/download/model/paid/network/remote write or shared-service startup in local harness; consumed stage markers cannot be reset/replayed",
+    "grading": "All nine cases visible; full acceptance score0 certified; mandatory G/H unmet; controlled or bounded checks never substitute for full cases or paired live control benchmark",
+    "outputs": ".jarvis-runtime/lab-validation/e-local-2026-11-04 plus bounded public docs/lab/evidence/e-* receipts; source/harness hashes and reproduction audit command",
+    "defaults": "All shipped Lab flags remain false; no production configuration changes",
+    "dependencies": "Existing standard library/Pydantic/NumPy/SciPy/ngspice Docker sandbox only; no new dependency",
+    "external_exports": "Prepared full payload and independent explicit user approval required; D2's earlier two-create grant is exhausted and cannot be reused"
+  },
+  "discovery_planner_access": {
+    "date": "2026-11-05 IST",
+    "flag": "lab.enabled; shipped false",
+    "modules": [
+      "jarvis.discovery.planner_access"
+    ],
+    "entrypoint": "discovery_call in existing ToolRegistry/native planner; stdlib native operation=help|run, session-enabled topic, command and request object; help reports typed inputs and current solver qualification",
+    "execution": "Existing compiler, BrainService dispatcher, child verifier, Journal/LabMemory and approval flow; no new model, planner, scheduler or database",
+    "provenance": "Model-proposed JSON is immutable, source-labeled unverified assumptions; neither sourced measurements nor autonomous project acceptance",
+    "durability": "Additive discovery_planner_calls table in same Journal; task/request key recorded before dispatch, uncertain or failed calls are never automatically replayed",
+    "limits": "Only enabled registered Lab workflows; no code execution, permission claims, installs, paid fallback or global activation. Full A-H autonomous acceptance remains unmet."
+  },
+  "discovery_mechanics": {
+    "date": "2026-11-05 IST",
+    "flag": "lab.enabled and lab.sim; shipped false",
+    "modules": [
+      "jarvis.discovery.mechanical_flow",
+      "jarvis.discovery.model.mechanics",
+      "jarvis.discovery.adapters.mechanics",
+      "jarvis.discovery.adapters.mechanics_worker"
+    ],
+    "dependencies": "New approved .venv-discovery-mechanics only; requirements/discovery-mechanics.txt locks 21 Windows Python 3.11 wheels with official hashes. Main environment unchanged.",
+    "versions": {
+      "mujoco": "3.17.0",
+      "trimesh": "5.2.0",
+      "matplotlib": "3.11.2"
+    },
+    "resources": "CPU only, 16 primitive bodies, <=100000 fixed steps, <=5001 samples, 18s owned numeric-loop CPU guard, 30s parent wall deadline, 2MB output cap. Existing Journal daily admission; global nonrefundable 50-call proof grant.",
+    "isolation": "Fixed owned worker only, Python audit hook denies network/process creation; not an OS sandbox for arbitrary generated/downloaded code.",
+    "verification": "Final worker hash d6c2abbead757848ed2ce4f6df7b5e5f2af5117c603fe20fdc1b9bdd0a92e6f3 passed actual analytic free-fall and rigid-sphere pendulum tests. Five of 50 calls consumed: four canonical qualification calls and one autonomous primitive-mechanics smoke. The smoke passed independently; full A-H remains unmet.",
+    "limits": "Primitive sphere/box/capsule geometry and fixed/free/hinge/slide topology. Explicit masses/offsets/SI assumptions required. No contact, actuator, tires, CFD, strength/FEM or physical validation. Trimesh/Matplotlib installed but not yet exposed as qualified workflows.",
+    "storage": "Editable MJCF and actual trajectory in content-addressed Journal artifacts; typed source and run references in existing unified memory.",
+    "rollback": "lab.enabled=false; no always-on server or GPU worker; retain journals and artifacts"
+  },
+  "discovery_vehicle": {
+    "date": "2026-11-05 IST",
+    "flag": "lab.enabled and lab.sim; shipped false",
+    "modules": [
+      "jarvis.discovery.vehicle_flow",
+      "jarvis.discovery.vehicle_assurance",
+      "jarvis.discovery.model.vehicle",
+      "jarvis.discovery.adapters.chrono",
+      "jarvis.discovery.adapters.chrono_worker",
+      "jarvis.discovery.adapters.chrono_vehicle_worker"
+    ],
+    "dependency_lock": "requirements/discovery-chrono.lock.json",
+    "solver": "Chrono::Vehicle 10.0.0 / isolated Python 3.12",
+    "installation": "User-approved exact 72 archives; 1,913,155,814 bytes; 13,030,614,453 owned bytes after linking. Package scripts/pyc disabled; inspected licenses/paths, supplemental official upstream BSD text retained. Main environment/host PATH/drivers unchanged.",
+    "resources": "CPU only. Non-refundable global 50-invocation grant; 100 CPU-second fixed comparison worker guard, 120s parent deadline, 8 MB output cap. Existing daily Journal admission. No generated host code.",
+    "verification": "Current fixed worker canonical force/timestep refinement and four-wheel static vehicle passed. A separate controlled 3-second baseline/candidate fixture passed. Neither is autonomous Test A.",
+    "progress": "Existing brain reports and task checkpoints; read-only current-task receipt gate rejects unsupported F1 completion and uses existing bounded proposal correction. Inference-wait updates do not change deadlines.",
+    "limits": "Assumed double-wishbone surrogate with TMeasy tire and coefficient/slope aero. Prescribed controls/flat terrain; no exact CAD reconstruction, native visual linkage, calibrated F1 tire, CFD, complete track/lap, terminal speed or fuel/battery validation. Full A1/A2 remain unmet.",
+    "services": "No always-on process/server or solver GPU residency is requested."
+  },
+  "discovery_asset_catalog": {
+    "date": "2026-11-05 IST",
+    "flag": "lab.enabled and lab.research; shipped false",
+    "modules": [
+      "jarvis.discovery.asset_search",
+      "jarvis.discovery.asset_preflight",
+      "jarvis.discovery.adapters.asset_catalog"
+    ],
+    "provider": "Public Sketchfab Data API v3, fixed HTTPS origin only, no authentication or binary download",
+    "limits": "One bounded search/detail GET, <=1 MB metadata, <=8 records, 20s HTTP deadline. Same-origin redirects only, no environment proxy. Names/creator/license remain untrusted provider declarations.",
+    "verification": "Independent cached-byte hashes, matching request and actual source outbox/receipt. Generic cube API development read succeeded; not an F1 case.",
+    "workflow": "Explicit user F1 model lookup preflights through the existing compiler/dispatcher/source verifier before native planning, preserving the original user words/year. Source facts are not authored by the supervisor. Search year drift is rejected before action, with the existing bounded correction loop.",
+    "authentication_boundary": "Official authenticated Download API required for actual model acquisition; viewer scraping/restriction bypass is not implemented.",
+    "documentation": [
+      "https://sketchfab.com/developers/data-api/v3",
+      "https://sketchfab.com/developers/download-api"
+    ],
+    "services": "No install, key, paid service, background server or solver/model inference requested by metadata reads."
+  },
+  "discovery_scenario_a": {
+    "date": "2026-11-06 IST",
+    "flag": "existing lab.enabled + lab.sim + lab.research; shipped false",
+    "modules": [
+      "jarvis.discovery.scenario_project",
+      "jarvis.discovery.scenario_journal",
+      "jarvis.discovery.model.scenario_a",
+      "jarvis.discovery.scenario_checks",
+      "jarvis.discovery.scenario_verify",
+      "jarvis.discovery.vehicle_recipe",
+      "jarvis.discovery.vehicle_geometry",
+      "jarvis.discovery.vehicle_checks",
+      "jarvis.discovery.adapters.fia_sources"
+    ],
+    "dependencies": "Existing main Pydantic/pypdf/Pillow and approved isolated PyChrono 10.0.0; no new packages, services or global settings",
+    "workflow": "13 verified stages in the existing brain/Journal; explicit surrogate permission; source hashes, idempotency, uncertain-action stop, CSV/native geometry and independent numerical checks",
+    "limits": "Educational regulation-referenced class surrogate; not exact team CAD, full FIA legality, terminal/lap speed, fuel/hybrid energy or physical validation. Global 50-call grant and existing per-Journal CPU admission remain enforced.",
+    "verification": "Runtime qualification is evidence-gated. See dated docs/lab/SCENARIO_A_WORKFLOW.md and independent live/regression receipts; metadata alone never promotes scientific status."
   }
 }

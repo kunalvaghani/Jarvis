@@ -1,0 +1,224 @@
+{
+  "case": "A1",
+  "status": "PASS_CONDITIONAL_SURROGATE",
+  "exact_input": "Find a legal free downloadable 2025 McLaren F1 model. Verify its license and identity; say if it is only a concept or visual replica. Build an editable simulation-ready vehicle with separated moving components and explicitly marked physical assumptions. Run real Chrono vehicle dynamics, change the front-wing angle, and compare baseline versus candidate under exactly the same track, environment and power-unit model. Save native editable files, solver inputs, raw numerical outputs, provenance and a reproducible report. Do the work through your available tools; do not claim completion if a required capability or permission is unavailable. No paid usage, new installs, arbitrary downloaded/generated host scripts, purchases or account writes are authorized. If no suitable exact engineering asset is usable, I explicitly permit a clearly labelled regulation-referenced F1-class surrogate; do not call it exact team CAD.",
+  "original_exact_team_acceptance": false,
+  "physical_validation": false,
+  "operator_provided_solution": false,
+  "seconds": 91.1710000000021,
+  "model_calls": 0,
+  "stage_seconds": {
+    "resolve_target": 0.01599999999598367,
+    "requirements_and_sources": 26.29699999999866,
+    "discover_assets": 0.9680000000007567,
+    "validate_provenance": 0.0,
+    "inspect_asset": 0.01599999999598367,
+    "generate_parametric_surrogate": 0.15600000000267755,
+    "assemble_physical_vehicle": 0.9689999999973224,
+    "validate_model": 0.0930000000007567,
+    "simulate": 44.890999999995984,
+    "independently_check": 0.6710000000020955,
+    "compare": 0.046999999998661224,
+    "present_evidence": 1.2810000000026776,
+    "completed": 0.0
+  },
+  "stage_count": 13,
+  "no_repeated_transition": true,
+  "run_id": "scenario-d3fb7a2a94664a45987a9f6ee8370563",
+  "source_sha256": "076f51c536ec95b57518a1f83e2a17cb8269f7826eaf750de5e927ae151d6674",
+  "worker_sha256": "db887c905bcd21eb1950bd2982d2d60c00574073f038e133a6c20eb3805bc60d",
+  "solver": "Chrono::Vehicle 10.0.0 (actual approved CPU invocation)",
+  "regulation": {
+    "url": "https://www.fia.com/system/files/documents/fia_2026_f1_regulations_-_section_c_technical_-_iss_15_-_2025-12-10_0.pdf",
+    "publication_date": "2025-12-10",
+    "edition": 15,
+    "sha256": "68145096a7b72b5b87c2ef7383b1efd206bf3297342536b464300d57516f7e89",
+    "limits": {
+      "maximum_non_tyre_half_width_m": 0.95,
+      "maximum_wheelbase_m": 3.4
+    }
+  },
+  "asset_provenance": "Bounded exact-season catalog read; no inspected engineering asset acquired. Explicitly authorized procedural class surrogate.",
+  "found_vs_generated": {
+    "acquired_asset_files": 0,
+    "generated_visual_components": 11,
+    "native_json_origin": "BSD-licensed Chrono templates + explicit model assumptions"
+  },
+  "physics": {
+    "checks": [
+      "real 4-wheel contact/gravity equilibrium",
+      "positive actual inertia/masses",
+      "measured steering/acceleration/braking/turning",
+      "finite tire force/slip response",
+      "actual joint residuals",
+      "half-step numerical comparison",
+      "declared joint aero uncertainty envelope"
+    ],
+    "maximum_constraint_residual": 0.0015060929432082482,
+    "constraint_residual_units": "mixed generalized Chrono constraint coordinates",
+    "maximum_equilibrium_relative_error": 0.00016819836394159918,
+    "timestep_metric_relative_errors": {
+      "baseline:maximum_observed_lateral_acceleration_m_s2": 0.006661051725455938,
+      "baseline:maximum_observed_speed_m_s": 0.007193852471663289,
+      "baseline:mechanical_engine_energy_j": 0.0008381285450348664,
+      "candidate:maximum_observed_lateral_acceleration_m_s2": 0.011514408351093587,
+      "candidate:maximum_observed_speed_m_s": 0.007170102703803807,
+      "candidate:mechanical_engine_energy_j": 0.0006832474286146333
+    },
+    "physical_validation": false,
+    "scope": "Numerical verification of declared educational model, not experimental F1 validation."
+  },
+  "metrics": {
+    "assumed_aero_envelope_candidate_ranges": {
+      "maximum_observed_lateral_acceleration_m_s2": [
+        6.8384458473288,
+        6.942996785525512
+      ],
+      "maximum_observed_speed_m_s": [
+        10.970118706045929,
+        10.972207592507155
+      ],
+      "mechanical_engine_energy_j": [
+        1999341.5087514797,
+        2000327.6246914386
+      ]
+    },
+    "baseline": {
+      "maximum_observed_lateral_acceleration_m_s2": 7.04864124179014,
+      "maximum_observed_speed_m_s": 10.974696685343812,
+      "mechanical_engine_energy_j": 2000078.5586698526
+    },
+    "candidate": {
+      "maximum_observed_lateral_acceleration_m_s2": 6.942996785525512,
+      "maximum_observed_speed_m_s": 10.971575126053525,
+      "mechanical_engine_energy_j": 1999908.5676813503
+    },
+    "candidate_minus_baseline": {
+      "maximum_observed_lateral_acceleration_m_s2": -0.1056444562646277,
+      "maximum_observed_speed_m_s": -0.0031215592902871236,
+      "mechanical_engine_energy_j": -169.99098850227892
+    },
+    "energy_scope": "mechanical engine shaft energy only; fuel/hybrid losses unsupported",
+    "physical_validation": false,
+    "scenario_sha256": "f1d9ee8c1953bc031c6598f6aa86bbf554f629fa4fbac1797d881867d2dcbd58",
+    "speed_scope": "maximum observed in the fixed 13-second road test, not terminal or lap speed"
+  },
+  "mode_sets": {
+    "baseline": [
+      "corner"
+    ],
+    "candidate": [
+      "corner"
+    ]
+  },
+  "artifacts": {
+    "run_manifest": ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/run_manifest.json",
+    "report": ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/report.md",
+    "csv": ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/raw_output.csv",
+    "mesh": ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/asset_or_surrogate.glb",
+    "diagnostic_png": ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/side.png"
+  },
+  "artifact_hashes": {
+    ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/asset_license.json": "815b3ce94047af4347144b312c7f12626c939269534f0525f4c82bea261087d8",
+    ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/asset_or_surrogate.glb": "abf0b70390b6442966e46bf3b8612c0c4b35c840a64e0e5ff98606fe3f114b79",
+    ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/comparison.json": "d48dce413195050168549b0cabfc33313f263bd52652af2d6f8c55a5d464ebae",
+    ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/dynamics.png": "e11bc509bbcc1c790845965a2eda73d0246758000de02ed2e178117b26420ece",
+    ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/episode-through-compare.json": "9bf297952253f0af10ac6b5f46b82696354c2a73be96cad2daf93baad34801f2",
+    ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/front.png": "374e5682414c5d5004884dae9b14cf766c29380e42aa35ab58614676dbf74a25",
+    ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/geometry_manifest.json": "9f9fc3b26d03c90e4754a1f8d1a8b3e21c844d4341edef4525d2a1b397cc8659",
+    ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/LICENSE-CHRONO.txt": "5f625eb4c9e0ddf86db9d1ed9b6adb5b30296ea81919282b2f38c977136bf079",
+    ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/physical_model.json": "3a7cf530da7d06e1169169d7939dafff5157aeb3288c54d009a20706ca64cd69",
+    ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/raw_output.csv": "61d627bb90145bd3fd9212298d68a29c23d455492bd1e7767680962b868f201f",
+    ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/raw_solver_output.json": "56d7bff5301000f52c0a979e9e721046d70e22040eb47d1cca73e3b95bcf8c19",
+    ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/report.md": "b867dae3ade8cd9cc7a2758bbca715c84f65ce90d91dca80a43ca6bab79bf3fd",
+    ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/side.png": "c4de8d3d673a8637067f5a234db42cc29fcddcda8c52abb836463713f4ce3f2f",
+    ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/solver_configuration.json": "41114b6965133e1d46ca0d9938a9965ae5f89fd49aa47fbff24c5a33231e5229",
+    ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/sources.json": "2eb1db3ffa835fc70bf48f08e00e1c36112a405eb427b01467b950bf982c882a",
+    ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/top.png": "e4c50ddac0b7984e243f9212b31ae848749cbabb0668410542736243cf5b41c8",
+    ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/uncertainties.json": "b733d99a6cc6a1f23c60e864aadc336da6782e571efd5a460f931dbc7abcdc31",
+    ".jarvis-runtime/discovery/scenario-projects/scenario-d3fb7a2a94664a45987a9f6ee8370563/verification_report.json": "2ab8214099abf83c0ed40f72478dc1c21d7c0e21eb011cc3eb7ee6903aafbb25",
+    ".jarvis-runtime/discovery/official-sources/68145096a7b72b5b87c2ef7383b1efd206bf3297342536b464300d57516f7e89.pdf": "68145096a7b72b5b87c2ef7383b1efd206bf3297342536b464300d57516f7e89",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/a048ca880eee4e69bb0c3057bb1a2b49/assumed-inputs.json": "8c3cedbbaf0b5b0337c491c3dd8f1f2c5bb8ee912936abc9000a01e61f15700d",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/a048ca880eee4e69bb0c3057bb1a2b49/baseline-components.json": "4d89e5c456c372f3293c0cf5d51c92f3dc120d74ba16360c7b371654ffc15338",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/a048ca880eee4e69bb0c3057bb1a2b49/brake.json": "0f7de9f31df4ff6675978160733d92688af9e4988d453759e6fce9754d36f445",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/a048ca880eee4e69bb0c3057bb1a2b49/chassis.json": "a61d578affabeb55264dc74ca1ca870078187adaac1dbcf87bdb950a4167583d",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/a048ca880eee4e69bb0c3057bb1a2b49/driveline.json": "fb717a1fe68233896e0f39cadf33fa408461724ad40dec6054ac279df4d53d69",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/a048ca880eee4e69bb0c3057bb1a2b49/engine.json": "f5e1e217916ef6576cf337a8ba0d55dba17495e10b1afa57df2e9dd9d07d83a0",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/a048ca880eee4e69bb0c3057bb1a2b49/steering.json": "a79c10f8506bd60d23bb9d5700d6add076364387a9e96baccf0866d2d79bc937",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/a048ca880eee4e69bb0c3057bb1a2b49/suspension.json": "8c2ea1cce68bc6ad10930302daee0754196d5f4cb016d93e36e8fea5381098de",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/a048ca880eee4e69bb0c3057bb1a2b49/template-provenance.json": "fbe63de603bbb3f9a5813e55287a066d71caa8e4e7e1a3ae7da84a23c891b2c4",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/a048ca880eee4e69bb0c3057bb1a2b49/terrain.json": "923e376f398886981556a121feeffe2acab02893fbf5116d460a1e92c1150e05",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/a048ca880eee4e69bb0c3057bb1a2b49/tire.json": "0f3488fa670a93f99be721fa37038ad163254f72302eba7626e21786f29d8376",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/a048ca880eee4e69bb0c3057bb1a2b49/transmission.json": "b5e505abf345e9ef7c95c5696affab8c5ab25a403ee2cf908d19b6dae236ffad",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/a048ca880eee4e69bb0c3057bb1a2b49/vehicle.json": "cb0baf5f64aefc3e9e004db91e8d9e2be2a19798e5ab13494cbdc217e0220ecf",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/a048ca880eee4e69bb0c3057bb1a2b49/wheel.json": "74890af5bb8c7d93d566fddd6a411110e0fca88f6a9804900574d075920004cf",
+    ".jarvis-runtime/discovery/vehicle-runs/050bbd245d3097b4ee9dfda8b131c19a7a253a63ceb30e260a0302c6a66aa74a/fee89fece8f6fef15dd195f3c1047b99/assumed-inputs.json": "f868a49aafe421ff9032d4158bfc34f73c88235c29683296af98c3366f71973b",
+    ".jarvis-runtime/discovery/vehicle-runs/050bbd245d3097b4ee9dfda8b131c19a7a253a63ceb30e260a0302c6a66aa74a/fee89fece8f6fef15dd195f3c1047b99/baseline-components.json": "9cbd40979b712214e1124993cd55b4885ec87d161accb2c476104477c81cfcff",
+    ".jarvis-runtime/discovery/vehicle-runs/050bbd245d3097b4ee9dfda8b131c19a7a253a63ceb30e260a0302c6a66aa74a/fee89fece8f6fef15dd195f3c1047b99/brake.json": "0f7de9f31df4ff6675978160733d92688af9e4988d453759e6fce9754d36f445",
+    ".jarvis-runtime/discovery/vehicle-runs/050bbd245d3097b4ee9dfda8b131c19a7a253a63ceb30e260a0302c6a66aa74a/fee89fece8f6fef15dd195f3c1047b99/candidate-components.json": "0731bd04e5d7b9e9a25c563c1cba3f682ca5032ff7154e8b95d074b0b0c33c1a",
+    ".jarvis-runtime/discovery/vehicle-runs/050bbd245d3097b4ee9dfda8b131c19a7a253a63ceb30e260a0302c6a66aa74a/fee89fece8f6fef15dd195f3c1047b99/chassis.json": "a61d578affabeb55264dc74ca1ca870078187adaac1dbcf87bdb950a4167583d",
+    ".jarvis-runtime/discovery/vehicle-runs/050bbd245d3097b4ee9dfda8b131c19a7a253a63ceb30e260a0302c6a66aa74a/fee89fece8f6fef15dd195f3c1047b99/driveline.json": "fb717a1fe68233896e0f39cadf33fa408461724ad40dec6054ac279df4d53d69",
+    ".jarvis-runtime/discovery/vehicle-runs/050bbd245d3097b4ee9dfda8b131c19a7a253a63ceb30e260a0302c6a66aa74a/fee89fece8f6fef15dd195f3c1047b99/engine.json": "f5e1e217916ef6576cf337a8ba0d55dba17495e10b1afa57df2e9dd9d07d83a0",
+    ".jarvis-runtime/discovery/vehicle-runs/050bbd245d3097b4ee9dfda8b131c19a7a253a63ceb30e260a0302c6a66aa74a/fee89fece8f6fef15dd195f3c1047b99/steering.json": "a79c10f8506bd60d23bb9d5700d6add076364387a9e96baccf0866d2d79bc937",
+    ".jarvis-runtime/discovery/vehicle-runs/050bbd245d3097b4ee9dfda8b131c19a7a253a63ceb30e260a0302c6a66aa74a/fee89fece8f6fef15dd195f3c1047b99/suspension.json": "8c2ea1cce68bc6ad10930302daee0754196d5f4cb016d93e36e8fea5381098de",
+    ".jarvis-runtime/discovery/vehicle-runs/050bbd245d3097b4ee9dfda8b131c19a7a253a63ceb30e260a0302c6a66aa74a/fee89fece8f6fef15dd195f3c1047b99/template-provenance.json": "fbe63de603bbb3f9a5813e55287a066d71caa8e4e7e1a3ae7da84a23c891b2c4",
+    ".jarvis-runtime/discovery/vehicle-runs/050bbd245d3097b4ee9dfda8b131c19a7a253a63ceb30e260a0302c6a66aa74a/fee89fece8f6fef15dd195f3c1047b99/terrain.json": "923e376f398886981556a121feeffe2acab02893fbf5116d460a1e92c1150e05",
+    ".jarvis-runtime/discovery/vehicle-runs/050bbd245d3097b4ee9dfda8b131c19a7a253a63ceb30e260a0302c6a66aa74a/fee89fece8f6fef15dd195f3c1047b99/tire.json": "0f3488fa670a93f99be721fa37038ad163254f72302eba7626e21786f29d8376",
+    ".jarvis-runtime/discovery/vehicle-runs/050bbd245d3097b4ee9dfda8b131c19a7a253a63ceb30e260a0302c6a66aa74a/fee89fece8f6fef15dd195f3c1047b99/transmission.json": "b5e505abf345e9ef7c95c5696affab8c5ab25a403ee2cf908d19b6dae236ffad",
+    ".jarvis-runtime/discovery/vehicle-runs/050bbd245d3097b4ee9dfda8b131c19a7a253a63ceb30e260a0302c6a66aa74a/fee89fece8f6fef15dd195f3c1047b99/vehicle.json": "cb0baf5f64aefc3e9e004db91e8d9e2be2a19798e5ab13494cbdc217e0220ecf",
+    ".jarvis-runtime/discovery/vehicle-runs/050bbd245d3097b4ee9dfda8b131c19a7a253a63ceb30e260a0302c6a66aa74a/fee89fece8f6fef15dd195f3c1047b99/wheel.json": "74890af5bb8c7d93d566fddd6a411110e0fca88f6a9804900574d075920004cf",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/f743c19d926b898fda9fa4248020ca22/assumed-inputs.json": "8c3cedbbaf0b5b0337c491c3dd8f1f2c5bb8ee912936abc9000a01e61f15700d",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/f743c19d926b898fda9fa4248020ca22/baseline-components.json": "ec9f2cb052f3135967bb89af0a85265004ac1348fb7118561b451d0a274e7f8d",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/f743c19d926b898fda9fa4248020ca22/brake.json": "0f7de9f31df4ff6675978160733d92688af9e4988d453759e6fce9754d36f445",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/f743c19d926b898fda9fa4248020ca22/candidate-components.json": "9764c07eb86d70c1ee3ec67d7386272fcf5158fd9eb30f0c5ddb1eabb3a4f62a",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/f743c19d926b898fda9fa4248020ca22/chassis.json": "a61d578affabeb55264dc74ca1ca870078187adaac1dbcf87bdb950a4167583d",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/f743c19d926b898fda9fa4248020ca22/driveline.json": "fb717a1fe68233896e0f39cadf33fa408461724ad40dec6054ac279df4d53d69",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/f743c19d926b898fda9fa4248020ca22/engine.json": "f5e1e217916ef6576cf337a8ba0d55dba17495e10b1afa57df2e9dd9d07d83a0",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/f743c19d926b898fda9fa4248020ca22/steering.json": "a79c10f8506bd60d23bb9d5700d6add076364387a9e96baccf0866d2d79bc937",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/f743c19d926b898fda9fa4248020ca22/suspension.json": "8c2ea1cce68bc6ad10930302daee0754196d5f4cb016d93e36e8fea5381098de",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/f743c19d926b898fda9fa4248020ca22/template-provenance.json": "fbe63de603bbb3f9a5813e55287a066d71caa8e4e7e1a3ae7da84a23c891b2c4",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/f743c19d926b898fda9fa4248020ca22/terrain.json": "923e376f398886981556a121feeffe2acab02893fbf5116d460a1e92c1150e05",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/f743c19d926b898fda9fa4248020ca22/tire.json": "0f3488fa670a93f99be721fa37038ad163254f72302eba7626e21786f29d8376",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/f743c19d926b898fda9fa4248020ca22/transmission.json": "b5e505abf345e9ef7c95c5696affab8c5ab25a403ee2cf908d19b6dae236ffad",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/f743c19d926b898fda9fa4248020ca22/vehicle.json": "cb0baf5f64aefc3e9e004db91e8d9e2be2a19798e5ab13494cbdc217e0220ecf",
+    ".jarvis-runtime/discovery/vehicle-runs/49a58b48ba357acf26d9f2fb3d14cd893f940c2a984b972822d644d13886932d/f743c19d926b898fda9fa4248020ca22/wheel.json": "74890af5bb8c7d93d566fddd6a411110e0fca88f6a9804900574d075920004cf",
+    ".jarvis-runtime/discovery/vehicle-runs/9be43089f07ee92be2a0eb7be128dc656d3346f86eb996bee61a8b2cd505b846/8593cd033f4cd3492085c454085d880c/assumed-inputs.json": "b9fd95dc3b46247b3c07d48c05d5e638fa915c5685b9bfc5d87f5f29b66c393f",
+    ".jarvis-runtime/discovery/vehicle-runs/9be43089f07ee92be2a0eb7be128dc656d3346f86eb996bee61a8b2cd505b846/8593cd033f4cd3492085c454085d880c/baseline-components.json": "41cd78db7d46d1182bea5db039f7314d9d461e46fd79680e977159ac85918edb",
+    ".jarvis-runtime/discovery/vehicle-runs/9be43089f07ee92be2a0eb7be128dc656d3346f86eb996bee61a8b2cd505b846/8593cd033f4cd3492085c454085d880c/brake.json": "0f7de9f31df4ff6675978160733d92688af9e4988d453759e6fce9754d36f445",
+    ".jarvis-runtime/discovery/vehicle-runs/9be43089f07ee92be2a0eb7be128dc656d3346f86eb996bee61a8b2cd505b846/8593cd033f4cd3492085c454085d880c/candidate-components.json": "0c3b3aed6a72faa43eef3b3495d48df53bc8250b72dbc36890f0d298e7e9b8f2",
+    ".jarvis-runtime/discovery/vehicle-runs/9be43089f07ee92be2a0eb7be128dc656d3346f86eb996bee61a8b2cd505b846/8593cd033f4cd3492085c454085d880c/chassis.json": "a61d578affabeb55264dc74ca1ca870078187adaac1dbcf87bdb950a4167583d",
+    ".jarvis-runtime/discovery/vehicle-runs/9be43089f07ee92be2a0eb7be128dc656d3346f86eb996bee61a8b2cd505b846/8593cd033f4cd3492085c454085d880c/driveline.json": "fb717a1fe68233896e0f39cadf33fa408461724ad40dec6054ac279df4d53d69",
+    ".jarvis-runtime/discovery/vehicle-runs/9be43089f07ee92be2a0eb7be128dc656d3346f86eb996bee61a8b2cd505b846/8593cd033f4cd3492085c454085d880c/engine.json": "f5e1e217916ef6576cf337a8ba0d55dba17495e10b1afa57df2e9dd9d07d83a0",
+    ".jarvis-runtime/discovery/vehicle-runs/9be43089f07ee92be2a0eb7be128dc656d3346f86eb996bee61a8b2cd505b846/8593cd033f4cd3492085c454085d880c/steering.json": "a79c10f8506bd60d23bb9d5700d6add076364387a9e96baccf0866d2d79bc937",
+    ".jarvis-runtime/discovery/vehicle-runs/9be43089f07ee92be2a0eb7be128dc656d3346f86eb996bee61a8b2cd505b846/8593cd033f4cd3492085c454085d880c/suspension.json": "8c2ea1cce68bc6ad10930302daee0754196d5f4cb016d93e36e8fea5381098de",
+    ".jarvis-runtime/discovery/vehicle-runs/9be43089f07ee92be2a0eb7be128dc656d3346f86eb996bee61a8b2cd505b846/8593cd033f4cd3492085c454085d880c/template-provenance.json": "fbe63de603bbb3f9a5813e55287a066d71caa8e4e7e1a3ae7da84a23c891b2c4",
+    ".jarvis-runtime/discovery/vehicle-runs/9be43089f07ee92be2a0eb7be128dc656d3346f86eb996bee61a8b2cd505b846/8593cd033f4cd3492085c454085d880c/terrain.json": "923e376f398886981556a121feeffe2acab02893fbf5116d460a1e92c1150e05",
+    ".jarvis-runtime/discovery/vehicle-runs/9be43089f07ee92be2a0eb7be128dc656d3346f86eb996bee61a8b2cd505b846/8593cd033f4cd3492085c454085d880c/tire.json": "0f3488fa670a93f99be721fa37038ad163254f72302eba7626e21786f29d8376",
+    ".jarvis-runtime/discovery/vehicle-runs/9be43089f07ee92be2a0eb7be128dc656d3346f86eb996bee61a8b2cd505b846/8593cd033f4cd3492085c454085d880c/transmission.json": "b5e505abf345e9ef7c95c5696affab8c5ab25a403ee2cf908d19b6dae236ffad",
+    ".jarvis-runtime/discovery/vehicle-runs/9be43089f07ee92be2a0eb7be128dc656d3346f86eb996bee61a8b2cd505b846/8593cd033f4cd3492085c454085d880c/vehicle.json": "cb0baf5f64aefc3e9e004db91e8d9e2be2a19798e5ab13494cbdc217e0220ecf",
+    ".jarvis-runtime/discovery/vehicle-runs/9be43089f07ee92be2a0eb7be128dc656d3346f86eb996bee61a8b2cd505b846/8593cd033f4cd3492085c454085d880c/wheel.json": "74890af5bb8c7d93d566fddd6a411110e0fca88f6a9804900574d075920004cf",
+    ".jarvis-runtime/discovery/vehicle-runs/a8dca75c95bf1c89e185577a04069daaccff1a00de4a4f48c591caaf41b58865/544f9a06e8da8e4b158bb95b531ea9b4/assumed-inputs.json": "2237534075a4ab86a8fec2032752b1317b4c73ab24885820d2cc4362e6c605b1",
+    ".jarvis-runtime/discovery/vehicle-runs/a8dca75c95bf1c89e185577a04069daaccff1a00de4a4f48c591caaf41b58865/544f9a06e8da8e4b158bb95b531ea9b4/baseline-components.json": "09a99126f8519770880e0bf7b32795761c0df8ea67efc364409fc8418040cc4d",
+    ".jarvis-runtime/discovery/vehicle-runs/a8dca75c95bf1c89e185577a04069daaccff1a00de4a4f48c591caaf41b58865/544f9a06e8da8e4b158bb95b531ea9b4/brake.json": "0f7de9f31df4ff6675978160733d92688af9e4988d453759e6fce9754d36f445",
+    ".jarvis-runtime/discovery/vehicle-runs/a8dca75c95bf1c89e185577a04069daaccff1a00de4a4f48c591caaf41b58865/544f9a06e8da8e4b158bb95b531ea9b4/candidate-components.json": "ed4e4084aedaa11ac865d3650218e590276fcd28748d5b711bf467bc7862b88c",
+    ".jarvis-runtime/discovery/vehicle-runs/a8dca75c95bf1c89e185577a04069daaccff1a00de4a4f48c591caaf41b58865/544f9a06e8da8e4b158bb95b531ea9b4/chassis.json": "a61d578affabeb55264dc74ca1ca870078187adaac1dbcf87bdb950a4167583d",
+    ".jarvis-runtime/discovery/vehicle-runs/a8dca75c95bf1c89e185577a04069daaccff1a00de4a4f48c591caaf41b58865/544f9a06e8da8e4b158bb95b531ea9b4/driveline.json": "fb717a1fe68233896e0f39cadf33fa408461724ad40dec6054ac279df4d53d69",
+    ".jarvis-runtime/discovery/vehicle-runs/a8dca75c95bf1c89e185577a04069daaccff1a00de4a4f48c591caaf41b58865/544f9a06e8da8e4b158bb95b531ea9b4/engine.json": "f5e1e217916ef6576cf337a8ba0d55dba17495e10b1afa57df2e9dd9d07d83a0",
+    ".jarvis-runtime/discovery/vehicle-runs/a8dca75c95bf1c89e185577a04069daaccff1a00de4a4f48c591caaf41b58865/544f9a06e8da8e4b158bb95b531ea9b4/steering.json": "a79c10f8506bd60d23bb9d5700d6add076364387a9e96baccf0866d2d79bc937",
+    ".jarvis-runtime/discovery/vehicle-runs/a8dca75c95bf1c89e185577a04069daaccff1a00de4a4f48c591caaf41b58865/544f9a06e8da8e4b158bb95b531ea9b4/suspension.json": "8c2ea1cce68bc6ad10930302daee0754196d5f4cb016d93e36e8fea5381098de",
+    ".jarvis-runtime/discovery/vehicle-runs/a8dca75c95bf1c89e185577a04069daaccff1a00de4a4f48c591caaf41b58865/544f9a06e8da8e4b158bb95b531ea9b4/template-provenance.json": "fbe63de603bbb3f9a5813e55287a066d71caa8e4e7e1a3ae7da84a23c891b2c4",
+    ".jarvis-runtime/discovery/vehicle-runs/a8dca75c95bf1c89e185577a04069daaccff1a00de4a4f48c591caaf41b58865/544f9a06e8da8e4b158bb95b531ea9b4/terrain.json": "923e376f398886981556a121feeffe2acab02893fbf5116d460a1e92c1150e05",
+    ".jarvis-runtime/discovery/vehicle-runs/a8dca75c95bf1c89e185577a04069daaccff1a00de4a4f48c591caaf41b58865/544f9a06e8da8e4b158bb95b531ea9b4/tire.json": "0f3488fa670a93f99be721fa37038ad163254f72302eba7626e21786f29d8376",
+    ".jarvis-runtime/discovery/vehicle-runs/a8dca75c95bf1c89e185577a04069daaccff1a00de4a4f48c591caaf41b58865/544f9a06e8da8e4b158bb95b531ea9b4/transmission.json": "b5e505abf345e9ef7c95c5696affab8c5ab25a403ee2cf908d19b6dae236ffad",
+    ".jarvis-runtime/discovery/vehicle-runs/a8dca75c95bf1c89e185577a04069daaccff1a00de4a4f48c591caaf41b58865/544f9a06e8da8e4b158bb95b531ea9b4/vehicle.json": "cb0baf5f64aefc3e9e004db91e8d9e2be2a19798e5ab13494cbdc217e0220ecf",
+    ".jarvis-runtime/discovery/vehicle-runs/a8dca75c95bf1c89e185577a04069daaccff1a00de4a4f48c591caaf41b58865/544f9a06e8da8e4b158bb95b531ea9b4/wheel.json": "74890af5bb8c7d93d566fddd6a411110e0fca88f6a9804900574d075920004cf"
+  },
+  "independent_offline_audit_passed": true,
+  "limits": [
+    "No exact proprietary team CAD or calibrated F1 aero/tire maps.",
+    "No demonstrated terminal top speed or race-lap prediction.",
+    "Mechanical engine shaft energy excludes fuel/hybrid conversion losses.",
+    "Aero envelope is conditional; other uncertain input ranges are not exhaustively propagated.",
+    "Generated PNGs are mesh/trace diagnostics, not desktop screenshots or physical evidence."
+  ]
+}

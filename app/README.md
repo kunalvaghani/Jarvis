@@ -1,5 +1,155 @@
 # Jarvis — local Windows voice assistant
 
+<!-- A1 REGRESSION 21 BEGIN -->
+**Historical A1 attempt21 regression — 6 November 2026 IST:** **64 targeted checks passed /0 failed/skipped** on unchanged v5 source `c72ebec0f97a…`. Real normal-ingress A1 attempt21 stopped after **21.25s**, zero model calls, four verified stages, blocked at `inspect_asset`: the active vehicle route has no engineering-qualified acquired asset and the new general acquisition subtask is not yet connected to it. No surrogate permission was added, no geometry/physics result produced, no solver call consumed (Chrono27→27; mechanics9/50), no shipped flag changed. **Full A1 remains UNMET.** Next: connect actual acquisition and source-informed mechanical binding, then independent maneuver evidence and rerun. [Actual regression/live evidence](../docs/lab/evidence/scenario-a1-attempt-21-regression.json).
+<!-- A1 REGRESSION 21 END -->
+
+<!-- ASSET PHYSICS CURRENT BEGIN -->
+**Full A-only acquisition checkpoint — 6 November 2026 IST. Full A1/A2 remains UNMET.** Jarvis now autonomously researches and admits both licensed concept sources, reconciles its completed signed-in browser downloads, preserves/hashes originals, imports the real geometry and resumes from retained Journal evidence. No operator file path, selected model URL, CAD/physics JSON or numerical answer was supplied to the live requests. A1 retains a 66,447,808-byte GLB with 221 geometric records; A2 a15,450,491-byte archive with 499 records, including 10 explicitly disconnected visual aggregates. Masses, mechanical roles and joints remain unresolved. Source-informed assembly and the eight independent vehicle experiments are **unimplemented**, not passed.
+
+The approved exact full-A resource scope is active: 100 MB per inert original, four global transfer pairs (two used), matching Journal disk admission 500 MB with prior rows retained, bounded 2 GiB/60s CPU parser profile. Defaults for unrelated projects and shipped flags remain unchanged. The reviewed [resource plan](../docs/lab/FULL_A_ASSET_RUNTIME_PLAN.md) is frozen as originally proposed; the explicit approval is recorded separately in the owned runtime. Mechanics 28/50; Chrono 27/50. No new install, paid use, account grant, hardware action or source script execution.
+
+The browser extension is0.3.8 with unchanged permissions. Actual website downloads completed while archive-event handoff replies were uncertain. Jarvis now retains a global pre-click claim, never repeats that unresolved format action, and reconciles one completed file only when its public source slug/title, observed format/size, creation window, rights and resource admission agree. Its receipt explicitly identifies UI/file provenance; no unobserved archive URL is invented. Signed URLs and account-containing screenshots stay private. Inaccurate/outdated sources are rejected. Dense geometry stays bounded and labelled; it is not declared a functional assembly. A qualified parser revision invalidates only derived evidence, retaining originals, historical states/files and failed attempts.
+
+**Verification:**135 relevant Lab/browser-control regressions passed, zero failures/errors/skips, on unchanged v5 source `68701341a8c0…`; configured strict typing passed 79 files. Normal-access read-only readiness passed without service starts. On that same source, final A1 attempt40 resumed in 10.031s and A2 attempt15 in 18.031s, zero model calls/new downloads/new numerical invocations. Each reverified five source stages, then correctly stopped **blocked** at source-informed mechanical assembly. These are partial live proofs, not full A or a current whole-project release gate. Historical 5,556-pass/161-skip v4 whole regression remains historical. [Exact evidence](../docs/lab/evidence/scenario-a-acquisition-checkpoint-2026-11-06.json) · [Architecture and remaining work](../docs/lab/AUTONOMOUS_ASSET_TO_PHYSICS_ARCHITECTURE.md).
+
+Rendered diagnostics below use actual imported, sampled vertices; they are **not screenshots or physics results**. A1 source: shungi, CC BY4.0, McLaren-inspired concept. A2 source: Qvist_Designs, CC BY4.0, 2026 concept. Public source/attribution links are retained in each image and the evidence report; decimation, projection and geometric colors were added by Jarvis.
+
+![A1 actual decimated source projection](../docs/lab/evidence/images/a1-imported-source-2026-11-06.png)
+![A2 actual decimated source projection](../docs/lab/evidence/images/a2-imported-source-2026-11-06.png)
+<!-- ASSET PHYSICS CURRENT END -->
+
+<!-- SCENARIO A WORKFLOW BEGIN -->
+**Scenario A workflow repair — 6 November 2026 IST.** Corrected A1 (2025) and A2 (2026) pass the assignment's explicitly permitted **conditional F1-class surrogate** scope in 91.125s / 123.813s. Both traverse 13 independently checked stages through the existing brain/Journal, call real CPU Chrono::Vehicle and require zero model calls or operator engineering inputs. Exact team CAD, physical validation and original full A remain unmet.
+
+Full guarded regression: **5,556 passed / 0 failed / 161 skipped**; source stable. Strict configured typing passes 79 files; read-only readiness reports ready. Fresh-process A1 reuse passed in 32.328s, zero model calls and no new solver slots (27→27). Shipped Lab flags remain false; Chrono 27/50, other grants unchanged; the old repair campaign remains paused. No installs, paid usage, service starts, account writes or shared-model/quota changes.
+
+The first A1 pass was withdrawn after final evidence inspection caught a 2026 regulation whose publication date contained 2025. Index/PDF season checks now distinguish regulation identity from publication/copyright dates, with an adversarial regression test. Failed and superseded receipts remain intact. [Correction record](../docs/lab/evidence/scenario-a-season-correction.json).
+
+[Architecture, exact inputs, current audits, native outputs and limitations](../docs/lab/SCENARIO_A_WORKFLOW.md). Remaining: authenticated engineering asset import/reference reconstruction, calibration/real validation, general unknown-tool learning G and paired live control/resource H acceptance. Current fixed routine emits stage progress, rechecks saved evidence, bounds read retries and blocks uncertain writes; it does not implement arbitrary self-modifying repairs.
+
+Actual generated envelope mesh diagnostic (not a screenshot or exact team CAD); native templates retain their Chrono BSD attribution.
+
+![Jarvis-generated 2025 class surrogate mesh diagnostic](../docs/lab/evidence/scenario-a-corrected-2026-11-06/A1/side.png)
+<!-- SCENARIO A WORKFLOW END -->
+
+<!-- A ACCEPTANCE BEGIN -->
+**Full A remains UNMET — 5 November 2026 IST.** Jarvis now checks current-task engineering evidence before each planning step, retains missing requirements in native continuations, and emits durable/live progress on evidence changes. Bounded contract correction, exact-year preservation, source-index/cache presentation and metadata-read admission are repaired. **323 focused tests pass /0 failures/skips**, strict typing79 files and read-only readiness pass; controlled Chrono results independently reproduce. These checks do not establish full autonomous engineering. A1 attempts1–12 and A2 attempts1–2 are terminal and unmet: planner repetition remains, with no autonomous F1 solver run or acquired/native visual asset. Chrono8/50; all shipped flags remain false. Current whole-project regression and full A acceptance remain open; previous 5,456-pass regression is historical. Old repair campaign stays paused; no service restart, paid use, account write or new installation in these final repairs.
+
+[Actual A results, remaining defects and next implementation gates](../docs/lab/A_ACCEPTANCE.md).
+<!-- A ACCEPTANCE END -->
+
+<!-- AH REPAIR BEGIN -->
+**Regression gate PASSED; autonomous A-H acceptance remains OPEN — 2026-11-05 IST.** Complete fixed-source regression: **5,456 passed /0 failed /161 skipped**,1724.485s including setup. All42 original failures resolved; no previously passing test became skipped, failed or missing;31 new passing test IDs. Strict neural typing18 files and final read-only readiness pass. The real autonomous primitive-mechanics smoke passed, with model-created inputs and actual MuJoCo output independently checked; this is not full A-H acceptance. Shared owned-metadata commits, hook compatibility and native Lab transport are repaired. Mechanics5/50; shipped Lab flags remain false; old campaign remains PAUSED_BY_USER. No installs, paid calls, new account writes or service restarts.
+
+[Terminal regression](../docs/lab/evidence/ah-final-regression.json) · [Coverage comparison](../docs/lab/evidence/ah-final-coverage.json) · [Readiness](../docs/lab/evidence/ah-final-readiness.json).
+
+[Current repair status, evidence and next action](../docs/lab/AH_AUTONOMOUS_REPAIR.md).
+<!-- AH REPAIR END -->
+
+<!-- E CURRENT BEGIN -->
+**Discovery Lab Phase E — 2026-11-04 IST:** acceptance harness implemented with actual bounded clock, native DC circuit and durable pendulum-study checks; approved partial audit Doc/Sheet created and read back. **Full A1–H acceptance is UNMET**, with G/H unmet and D/E/F partial. **269 focused tests pass**; neural typing/readiness pass. Final guarded whole-project regression: **5,342 passed / 42 failed / 161 skipped**, 1621.000 s including setup. Exact-ID comparison with D2: 0 new, 0 resolved, 42 remaining failures; 0 Discovery failures. Source hashes unchanged. This is not live H acceptance. Shipped Lab flags remain off; no new dependencies or services. [Case matrix, verified outputs and reproduction](../docs/lab/E_ACCEPTANCE.md) · [Progress](../docs/lab/PROGRESS.md). Earlier phase results below are historical.
+<!-- E CURRENT END -->
+
+<!-- D2 CURRENT BEGIN -->
+**Discovery Lab D2 — 2026-11-04 IST:** 15 new typed service neurons (42 built-in total) reuse existing Google Files, owned browser reads, scouts, local CPU choice and durable jobs. Approved Doc/Sheet creation and full readback pass; scoped long reading, corrected public portal reading and resident CPU choice also pass through final-text brain ingress. **255 focused tests pass**, neural typing/readiness pass. Final frozen-source whole-project regression: **5,328 passed / 42 failed / 161 skipped**, 1592.656 s including setup; 0 new failure IDs, 0 resolved IDs and 0 Discovery failures against the pre-D2 baseline. The exact failure comparison and unchanged source hashes are retained in the terminal receipt. This does not make the pre-existing defects green. Shipped Lab flags remain off; microphone/approval-UI, signed-portal/overnight and full scientific/release gates remain open. [D2 usage, verified outputs and limits](../docs/lab/D2_SERVICES.md) · [Progress](../docs/lab/PROGRESS.md). Earlier phase entries below are historical.
+<!-- D2 CURRENT END -->
+
+**Discovery Lab Phase D — 2026-11-04 IST:** typed inventory/dependency/handler checks now cover 27 built-in Lab neurons, and declared scientific references wire into the same Journal. Text-ingress/backfill/fresh-process/flags-off proof passes;228 focused tests, neural typing and host readiness pass. Final full regression: **5,301 passed / same 42 existing failures / 161 skipped**, no new/Discovery failures, unchanged expanded source fingerprint. [Comparison](../docs/lab/evidence/d-full-final.json). Lab stays off; no new dependency/service/model call. D2 and full scientific/live acceptance remain open. [Usage and evidence](../docs/lab/D_INTEGRATION.md). Earlier entries below are historical checkpoints.
+
+**Discovery Lab C4 + C3 repair — 2026-11-04 IST:** bounded pendulum optimization now uses the existing brain, durable queue and memory; actual constraint/restart/crash/budget proofs pass. Both corrected C3 local proposer calls verified (0.8B: 17.8 s; 9B: 52.5 s). Lab stays off; no installs or paid inference. 208 focused tests and neural typing pass; host readiness is ready. Final full regression: **5,281 passed / same 42 existing failures / 161 skipped**, no new or Discovery failures, unchanged source hash. [Comparison](../docs/lab/evidence/c4-full-final.json). Earlier counts below are historical. [Usage, proof and limits](../docs/lab/C4_OPTIMIZATION.md) · [Current verification](../docs/lab/PROGRESS.md). Scientific G/H, live control and full release acceptance remain open.
+
+Earlier entries below record prior checkpoints.
+
+**C3 live model gate remains unmet:** after the initial 9B/quick timeouts, the user approved two additional scratch-only 9B attempts; both also timed out. All four failures and290 uncertain admission units are retained, and the two-attempt extension is exhausted. Core metadata/cache, provided hypotheses and SR paths pass; the local proposer stays DEGRADED. No product/default quota or flag changed. [Actual extension evidence](../docs/lab/evidence/c3-model-qualification.json) · [C3 scope](../docs/lab/C3_RESEARCH.md).
+
+### Terminal C3 checks — 2026-11-04 IST
+
+**Final C3 whole-project regression: 5,270 passed / 42 failed / 161 skipped**, 1618.750 s including runner setup. The exact same 42 prior failing IDs remain: zero new failures, zero Discovery failures, unchanged source fingerprint. This includes the final theory source-context addition. It is an isolated regression result, not live model-generation, microphone/UI, control or scientific release acceptance. [Terminal comparison](../docs/lab/evidence/c3-full-final.json).
+
+## Discovery Lab C3 core candidate — 2026-11-04 IST
+
+New C3 adapters retrieve anonymous bounded Crossref/arXiv metadata, deduplicate identities, preserve source hashes/date/type and exact short excerpt locators, then run a qualitative hypothesis tournament and independent deterministic skeptic through the existing brain/Journal. Source statements remain insufficient evidence; possible contradictions require context review. Citation-coverage scores are code-computed priorities, never truth probabilities. The supplied-hypothesis path passes independently of model availability.
+
+```text
+lab research "Optical Clocks and Relativity"
+lab lookup doi "10.1126/science.1192720"
+lab review hypotheses "relative/proposals.json"
+lab theory dilation "examples/discovery/clock-dilation.json"
+```
+
+Requires deliberately enabled private `lab.enabled`/`lab.research`; theory also `lab.sim`. Shipped flags remain false. Theory computes 8 s proper time for a declared 10 s interval at beta 0.6 with independent Decimal/analytic checks. Flat-spacetime constant-speed SR only; no backward-travel mechanism or physical validation.
+
+**Live core proof passes** DOI lookup, source review, repeat-cache reuse, supplied three-mechanism/null review and theory. **Generative local proposals are DEGRADED:** configured 9B and explicit 0.8B quick calls timed out at 90/20 s; both failures and unknown-resource reservations are retained. No paid fallback, new model or policy reset. Existing GPU admission governs model requests, so C3 local model work is not described as CPU-only. No further live model attempts were made.
+
+**Verification:** C2 pre-change 225 passes; C3/Lab/brain focused 245 passes. Final theory input/source linking then passed all 20 C3 domain tests and a new live core proof. Strict neural mypy passes on 18 files; actual read-only readiness reports ready. Final whole-project comparison completed against the preceding 5,250/42/161 baseline; see terminal result above. These are scoped checks, not complete scientific/release acceptance. No new UI/screenshot, package, model, paid API, persistent server, Google write or microphone start.
+
+[C3 commands, exact limits and reproduction](../docs/lab/C3_RESEARCH.md) · [Live core proof](../docs/lab/evidence/c3-brain-proof.json) · [Retained model failures](../docs/lab/evidence/c3-limitations.json) · [Progress](../docs/lab/PROGRESS.md). Earlier C2 and other entries retain their historical scope/results.
+
+### Terminal C2 regression — 2026-11-04 IST
+
+**Final post-C2 whole-project regression: 5,250 passed / 42 failed / 161 skipped**, 1553.985 s including runner setup; source fingerprint unchanged. Exactly the same 42 prior failing IDs, zero new failures and zero discovery failures. This is the credential/network/model-isolated regression result, not live UI/microphone/control or scientific release acceptance. [Terminal comparison](../docs/lab/evidence/c2-full-final.json).
+
+## Discovery Lab C2 native pendulum slice — 2026-11-04 IST
+
+Real SciPy ideal-pendulum dynamics now drive an editable native Blender scene, with independent numerical checks, actual hinge/mesh/dimension/trajectory readback, visual OBJ/MTL and CSV/render/source artifacts. Four new explicit neurons reuse the existing brain, Journal, C1 component/parameter/scenario graph, approvals and owned-process helpers. A unit-aware `length delta 0.5 m` reruns the same scenario; measured period changes from **2.0121 s to 2.4636 s**. The source file stays unchanged. Blender displays SciPy motion with a kinematic bob; Bullet/physical validation is not claimed.
+
+```text
+lab build pendulum "examples/discovery/pendulum.json"
+lab build pendulum "examples/discovery/pendulum.json" length delta 0.5 m
+```
+
+Use only with a deliberately enabled private Lab configuration; all four shipped Lab flags remain **false**. Native writing uses the existing approval gate and creates a new owned folder. Trusted fixed headless factory scene, offline mode, disabled autoexec and CPU rendering reuse the installed Blender 5.2.2 LTS; this is not an arbitrary-code sandbox. No new package, driver/model download, service, GPU renderer or paid provider call. Existing brain act / learning shadow and legacy control defaults are preserved.
+
+**Verification:** B6/C1 gate: 205 focused passes and **5,230 passed / 42 failed / 161 skipped** whole-suite, with exactly the same 42 prior failing IDs. Final C2 focused integration: **225 passed / zero failures / zero skips**, unchanged source fingerprint; strict neural mypy passes (18 files), actual read-only launcher readiness reports ready. Final post-C2 whole-project regression has completed; see the terminal comparison above. Readiness is not live feature acceptance.
+
+The user extended known free-local batches to **50 attempts** each: ngspice **37/50**, SciPy pendulum **12/50**, Blender pendulum **16/50**. Existing CPU/disk budgets still apply; paid/unknown tools do not inherit these grants. Synthetic speech-file ASR → ingress → brain → real ngspice passed after attached-unit normalization. Live microphone/approval UI, autonomous unknown-tool learning, live source/Drive corroboration, exact CAD/STEP/FEM/CFD/general C2 expansion and scientific/release A–H remain open. Windows ngspice 47 remains preparation-only.
+
+![Actual CPU Blender render, not a UI screenshot or physical experiment](../docs/lab/evidence/c2-pendulum-preview.png)
+
+Jarvis-owned procedural geometry and numeric output, no third-party artwork. [Usage, installed versions, native artifacts and limits](../docs/lab/C2_PENDULUM.md) · [Progress](../docs/lab/PROGRESS.md) · [Modification log](../docs/lab/MODIFICATIONS.md). Earlier phase sections retain historical counts and scopes.
+
+## Discovery Lab C1 local components/assets — 2026-11-04 IST
+
+New default-off component graphs, explicit dependency invalidation, bounded Pint parameter plans, immutable Journal snapshots and local asset identity/license/hash checks now run through the existing brain. A small inert cache preserves source/credit/lineage; the optional Drive boundary reuses existing reads and is mock-tested only. No new packages, downloader, service or solver execution.
+
+Actual text-ingress proof passes project inspection, a bounded 3-degree change plan, concept-asset inspection and invalid-bound refusal using explicitly synthetic JSON examples. Source files stay unchanged; plans say `PLANNED_NOT_EXECUTED`. **204 focused tests passed**; strict neural mypy passes (18 files); actual readiness reports ready. Shipped Lab flags remain off, the ngspice count remains 24/24, and earlier whole-suite results are historical. Live providers, independent asset corroboration, spoken/autonomous learning and full scientific/release acceptance remain open.
+
+[C1 commands, examples and limitations](../docs/lab/C1_COMPONENTS.md) · [Progress](../docs/lab/PROGRESS.md). Earlier phase sections below are historical checkpoints.
+
+
+## Discovery Lab: bounded ngspice proof — 2026-11-04 IST
+
+Current verification: **177 focused tests passed**, strict neural mypy passes (18 files), actual launcher readiness reports ready. [Scoped receipt](../docs/lab/evidence/ngspice-regression.json). Whole-project regression for this extension and live control/voice gates remain open.
+
+The default-off Lab now has a fixed ideal DC divider path: `lab simulate divider 10 V 1000 ohm 1000 ohm`. User-approved extracted Debian ngspice 44.2 libraries run through the existing hardened Linux RepositorySandbox; no system install, Docker image change or host execution. Actual vectors pass independent checks and persist in the existing brain Journal.
+
+Operator-assisted golden cases, three verified brain requests, qualification promotion and fresh-process learned reuse passed. Final learning/reuse: **19.407 s / 3.313 s**. **24/24 approved attempts consumed (including the explicitly approved four-attempt extension)**, including two retained failed initial calls. A changed implementation invalidated its prior qualification and was requalified. Shipped flags stay off; proof uses a scratch Journal/configuration. Spoken-input, autonomous tool acquisition and full scientific/release acceptance remain open; earlier whole-suite results predate this extension.
+
+[Proof, usage and limitations](../docs/lab/FOUNDATIONS.md) · [Current progress](../docs/lab/PROGRESS.md).
+
+
+## Discovery Lab foundations candidate — earlier checkpoint, 2026-11-04 IST
+
+The user authorized Phase B on `lab/phase-b-foundations`. New default-off modules add strict scientific records in the existing brain Journal, four typed Lab neurons, real isolated Pint conversions, golden qualification and limited learned-adapter reuse. Existing brain/router/queue/approvals are reused. Six existing Google tool contracts/read-write classifications were corrected. Shipped Lab flags stay **off**; existing brain act / neural learning shadow and legacy control defaults are preserved.
+
+Fresh full follow-up: **5,181 passed / 42 failed / 161 skipped**, no new failing IDs against the 5,160/45/161 baseline under the documented isolation limits. Focused: **218 passed / one skipped**, strict neural mypy passes, launcher readiness passes. This is partial foundations verification, not live scientific or release acceptance. Approved ngspice preparation completed; **ngspice was not executed**, and B6, general solver learning, live control and A–H remain open. No UI change or screenshot is claimed.
+
+An existing baseline assertion exposed OAuth fields; logs were sanitized and later tests deny credential reads. Displayed output cannot be retracted; Google rotation/reconnection remains user-controlled. No authorization reset or campaign resume occurred.
+
+[Foundations and usage](../docs/lab/FOUNDATIONS.md) · [Progress and evidence](../docs/lab/PROGRESS.md) · [Approvals](../docs/lab/DEPENDENCY_APPROVALS.md). Earlier audit-only entries below are historical.
+
+
+## Universal Discovery Lab: audit and integration plan — 2026-11-04 IST
+
+The full user-supplied [v2 specification](../docs/specs/JARVIS_Universal_Discovery_Lab_v2.md) and [master build prompt](../docs/specs/MASTER_BUILD_PROMPT.md) are saved. The [Gate A plan](../docs/lab/INTEGRATION_PLAN.md) keeps new domain logic in new files while reusing Jarvis's brain, memory owners, model routing, scheduler, approvals, GPU admission, Blender and control paths. No Lab capability is implemented yet; Phase A remains partial and its explicit review gate precedes Phase B.
+
+Fresh source inspection found **306 neurons, 426 synapses, 148/148 ToolSpecs registered, 91 configured MCP entries, 12 bundled/custom skill files and 405 indexed Python modules**. The separate custom Blender connector's 203 actions lack individual neurons in the configured source registry; seven existing aggregate Blender routes/methods/verifiers are present. Registration is not live availability or scientific verification. Neural execution is off; six previously promoted speed/control flags stay on. The proposed unified scientific memory API and nested discovery-skill loader need reconciliation with real code.
+
+**Verification:** 72 existing neural-registration/learning/mode/flag/benchmark-oracle tests passed in 3.06 s with network and subprocesses denied. An initial larger selection had 89 passes, four failures and four errors caused by incompatible isolation requirements and a Windows temporary rename denial; these cases remain unvalidated, not product fixes. Full regression, live PC/browser accuracy and mean task time, loaded-model VRAM, current Blender version/connection and all scientific acceptance cases are unexecuted. WSL distribution listing returned access denied. No UI change or new screenshot is claimed.
+
+No existing application source/configuration/dependency was changed. No installation, model load, connector activation, app start/restart or repair-campaign resume occurred. Runtime observation did not find a running Jarvis engine; stale heartbeat and existing stop state were preserved, so no hang diagnosis or recovery is claimed. [Audit](../docs/lab/AUDIT.md) · [Baseline limits](../docs/lab/BASELINE.md) · [Neuron inventory](../docs/lab/NEURON_INVENTORY.md) · [Memory model](../docs/lab/MEMORY_MODEL.md) · [Progress](../docs/lab/PROGRESS.md) · [Acceptance](../docs/lab/ACCEPTANCE_RESULTS.md).
+
 ## Repository consolidation — 2026-11-04 IST
 
 `main` contains the combined development history; `codex` and `claude` are the two working branches. Earlier branch tips are ancestors of the consolidated history. Historical benchmark summaries and run-boundary timestamps in [benchmarks/results/](benchmarks/results/) are retained as recorded evidence, including failed runs; they do not establish current release acceptance. The imported legacy baseline has unrelated desktop observations redacted. The Blender parsing fixture remains explicitly simulated. This consolidation changes no application code and runs no live feature tests or paused repair campaign. Outstanding acceptance remains in the [cumulative handoff](docs/CLAUDE_HANDOFF.md).

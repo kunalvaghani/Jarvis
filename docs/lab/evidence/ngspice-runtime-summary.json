@@ -1,0 +1,75 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "authorization": "user approved Linux preparation and up to 20 sandbox tests",
+  "downloaded_bytes": 2641104,
+  "extracted_bytes": 9405810,
+  "host_install": false,
+  "maintainer_scripts_executed": false,
+  "solver_executed": false,
+  "packages": [
+    {
+      "package": "libngspice0",
+      "version": "44.2+ds-1",
+      "url": "https://deb.debian.org/debian/pool/main/n/ngspice/libngspice0_44.2+ds-1_amd64.deb",
+      "bytes": 2503956,
+      "sha256": "d1b9dec8b93f8785c6e8bf6ecea05fc94d6b4c7e60ee8e7df0589e3a2a62822a"
+    },
+    {
+      "package": "libgomp1",
+      "version": "14.2.0-19",
+      "url": "https://deb.debian.org/debian/pool/main/g/gcc-14/libgomp1_14.2.0-19_amd64.deb",
+      "bytes": 137148,
+      "sha256": "72b7a1a33c48f3195efeb044111b34ae684b1e640bb6495c832443b798601cd5"
+    }
+  ],
+  "licenses": {
+    "ngspice": "BSD main with per-file LGPL-2, GPL-2+, BSD-4, PostgreSQL and other exceptions; copyright retained",
+    "libgomp": "GPL with GCC Runtime Library Exception; official copyright retained"
+  },
+  "runtime": {
+    "ready": true,
+    "problems": [],
+    "image_id": "sha256:fc3e504b26346d8fcfcadbb393fb7020c4f2b92c81f78c188b3711d2f40a9e0e",
+    "version": "44.2+ds-1",
+    "environment": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\discovery\\tools\\ngspice-linux-44.2",
+    "library_hashes": {
+      "libngspice0/usr/lib/x86_64-linux-gnu/libngspice.so.0.0.12": "8b24e526865425243ee57efa9dcbdde99e7220393eb77a1ab863e849a2e0d761",
+      "libgomp1/usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0": "6456b504ac347bd50c419667440b691f6966ad8aff5309d2f06c977fe2f9debe"
+    },
+    "worker_sha256": "a136be74ab3583010230d911a07ec89dae3418d0fcfdd0434215e2803455da96",
+    "max_invocations": 24,
+    "used_slots": 24
+  },
+  "current_golden": {
+    "case": "ngspice_dc_divider",
+    "passed": true,
+    "implementation_sha256": "fa43e26ad09ebdf2bf03eaa10be4221b1d6db60967b7f0a262b3dcf09b331be3",
+    "python": "3.11.9",
+    "seconds": 8.672000000020489,
+    "details": [
+      "actual sandbox solver output independently checked: artifact://sha256/8856b6ab9671fb0bad6bf7caf9935134658d0cd24d6790aa74e0d8a7fa125289",
+      "actual sandbox solver output independently checked: artifact://sha256/090e5fa3300c069517a3c3e61cc7a29369793ef17dc4eb6e12da7f956463a48d",
+      "actual sandbox solver output independently checked: artifact://sha256/9a6458d93d602dfbcdcd6080a829752457caa681eb4c27553abba8d19a234d14"
+    ]
+  },
+  "previous_capability_status": "DEGRADED",
+  "current_capability_status": "VERIFIED",
+  "experiment_records": 21,
+  "failed_attempts": 2,
+  "successful_solver_calls": 22,
+  "voice_acceptance": "NOT_RUN",
+  "autonomous_tool_research_install": "NOT_IMPLEMENTED",
+  "prior_qualifications": [
+    {
+      "id": "discovery.learned.1da2f62acbc546cf@v1",
+      "verification": "DEGRADED"
+    },
+    {
+      "id": "discovery.learned.e3bf901c05cd43de@v1",
+      "verification": "DEGRADED"
+    }
+  ],
+  "execution_authorization": "user approved 20 initial attempts plus four additional; total 24, exhausted",
+  "current_golden_matches_source": true,
+  "proof_cap_enforced_without_solver_dispatch": true
+}

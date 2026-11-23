@@ -27,7 +27,24 @@ class BrainService:
         options = (config.get('neural') if isinstance(config, dict) else None) or {}
         path = journal_path or (APP / options['journal'] if options.get('journal') else None)
         self.journal = Journal(path)
-        self.registry = Registry(self.journal).refresh()
+        from ..flags import enabled
+        if enabled(config, 'lab', 'enabled'):
+            from ..discovery.catalog import sources
+            from ..discovery.c1 import sources as c1_sources
+            from ..discovery.c2 import sources as c2_sources
+            from ..discovery.c3 import sources as c3_sources
+            from ..discovery.c4 import sources as c4_sources
+            from ..discovery.d import sources as d_sources
+            from ..discovery.d2 import sources as d2_sources
+            from ..discovery.mechanical_flow import sources as mechanics_sources
+            all_sources = mechanics_sources(config, d2_sources(config, d_sources(config, c4_sources(config, c3_sources(config, c2_sources(config, c1_sources(config, sources(config))))))))
+            from ..discovery.vehicle_flow import sources as vehicle_sources
+            from ..discovery.asset_search import sources as asset_sources
+            from ..discovery.scenario_project import sources as scenario_sources
+            from ..discovery.asset_pipeline import sources as geometry_sources
+            self.registry = Registry(self.journal, sources=geometry_sources(config,scenario_sources(config,asset_sources(config,vehicle_sources(config, all_sources))))).refresh()
+        else:
+            self.registry = Registry(self.journal).refresh()
         self.graph = CapabilityGraph.from_registry(self.registry, self.journal)
         self.router = Router(self.graph, self.journal)
         self.dispatcher = self._dispatcher()
@@ -36,7 +53,34 @@ class BrainService:
     def _dispatcher(self) -> Any:
         from .adapters import adapters_for
         from .dispatcher import Dispatcher
-        return Dispatcher(self.graph, self.journal, adapters_for(self.graph))
+        found = adapters_for(self.graph)
+        from ..flags import enabled
+        if enabled(self.config, 'lab', 'enabled'):
+            from ..discovery.integration import adapters
+            found.update(adapters(self.graph, self.journal, self.registry))
+            from ..discovery.c1 import adapters as c1_adapters
+            found.update(c1_adapters(self.graph, self.journal))
+            from ..discovery.c2 import adapters as c2_adapters
+            found.update(c2_adapters(self.graph, self.journal))
+            from ..discovery.c3 import adapters as c3_adapters
+            found.update(c3_adapters(self.graph, self.journal))
+            from ..discovery.c4 import adapters as c4_adapters
+            found.update(c4_adapters(self.graph, self.journal))
+            from ..discovery.d import adapters as d_adapters
+            found.update(d_adapters(self.graph, self.journal, self.registry, found))
+            from ..discovery.d2 import adapters as d2_adapters
+            found.update(d2_adapters(self.graph, self.journal))
+            from ..discovery.mechanical_flow import adapters as mechanics_adapters
+            found.update(mechanics_adapters(self.graph, self.journal))
+            from ..discovery.vehicle_flow import adapters as vehicle_adapters
+            found.update(vehicle_adapters(self.graph, self.journal))
+            from ..discovery.asset_search import adapters as asset_adapters
+            found.update(asset_adapters(self.graph, self.journal))
+            from ..discovery.scenario_project import adapters as scenario_adapters
+            found.update(scenario_adapters(self.graph,self.journal))
+            from ..discovery.asset_pipeline import adapters as geometry_adapters
+            found.update(geometry_adapters(self.graph,self.journal))
+        return Dispatcher(self.graph, self.journal, found)
 
     def rebuild(self) -> int:
         """Re-read every source (new tools, MCP tools, approved neurons) and journal a new version if it changed."""

@@ -1,0 +1,147 @@
+{
+  "date_local": "2026-11-06 Asia/Calcutta",
+  "full_A_acceptance": "UNMET",
+  "scope": "Autonomous licensed-source acquisition, bounded import and retained-source resume; not functional or physical acceptance",
+  "source_sha256": "68701341a8c07d31dd0893a44d70cca44ce4934ff9bb5d2904f6343644a1e75a",
+  "regression": {
+    "passed": 135,
+    "failed": 0,
+    "skipped": 0,
+    "errors": 0,
+    "seconds": 52.29700000000594,
+    "source_sha256_before": "68701341a8c07d31dd0893a44d70cca44ce4934ff9bb5d2904f6343644a1e75a",
+    "source_sha256_after": "68701341a8c07d31dd0893a44d70cca44ce4934ff9bb5d2904f6343644a1e75a"
+  },
+  "strict_typing": {
+    "passed": true,
+    "files": 79
+  },
+  "readiness": {
+    "status": "ready outside restricted context",
+    "services_started": false,
+    "note": "Restricted-context Docker/Ollama errors were access limitations; normal-access read-only check passed."
+  },
+  "cases": {
+    "A1": {
+      "attempt": 40,
+      "status": "BLOCKED_SOURCE_MECHANICS_UNIMPLEMENTED",
+      "full_acceptance_passed": false,
+      "seconds": 10.031000000002678,
+      "model_calls": 0,
+      "source_sha256_before": "68701341a8c07d31dd0893a44d70cca44ce4934ff9bb5d2904f6343644a1e75a",
+      "source_sha256_after": "68701341a8c07d31dd0893a44d70cca44ce4934ff9bb5d2904f6343644a1e75a",
+      "verified_stages": [
+        "resolve_target",
+        "requirements_and_sources",
+        "discover_assets",
+        "validate_provenance",
+        "inspect_asset"
+      ],
+      "original": {
+        "sha256": "51485dc78941018ff6ee9211aed3e609a70513615c12762835d43271e81abf19",
+        "bytes": 66447808,
+        "file_format": "glb"
+      },
+      "source": {
+        "source_url": "https://sketchfab.com/3d-models/f1-2025-mclaren-mcl39-c6194270002b401bb25be7e35ab56e34",
+        "creator": "shunqi",
+        "license_spdx": "CC-BY-4.0",
+        "identity_status": "author_declared_concept"
+      },
+      "geometry": {
+        "records": 221,
+        "triangles": 1088576,
+        "disconnected_aggregates": 0,
+        "units": "m",
+        "physical_validation": false,
+        "mechanical_roles": "UNRESOLVED",
+        "worker_sha256": "3dfcf46ae07b06d0369433790210c25fbbd979efde9f5b668c707635525040ac",
+        "invocation_slot": 27,
+        "cpu_s": 5.0,
+        "resource_usage": {
+          "committed_memory_limit_bytes": 2147483648,
+          "peak_process_committed_bytes": 474693632,
+          "user_cpu_limit_s": 60,
+          "wall_timeout_s": 75
+        }
+      },
+      "diagnostic": {
+        "relative_file": "docs/lab/evidence/images/a1-imported-source-2026-11-06.png",
+        "sha256": "817610547243db6d509bd8a31ae1261a460d2e1acfdafff24d237d930de39e16",
+        "scope": "Rendered orthographic projection of actual decimated source vertices; not a screenshot, functional rig or physics result"
+      },
+      "resume_new_downloads": 0,
+      "resume_new_numerical_invocations": 0
+    },
+    "A2": {
+      "attempt": 15,
+      "status": "BLOCKED_SOURCE_MECHANICS_UNIMPLEMENTED",
+      "full_acceptance_passed": false,
+      "seconds": 18.031000000002678,
+      "model_calls": 0,
+      "source_sha256_before": "68701341a8c07d31dd0893a44d70cca44ce4934ff9bb5d2904f6343644a1e75a",
+      "source_sha256_after": "68701341a8c07d31dd0893a44d70cca44ce4934ff9bb5d2904f6343644a1e75a",
+      "verified_stages": [
+        "resolve_target",
+        "requirements_and_sources",
+        "discover_assets",
+        "validate_provenance",
+        "inspect_asset"
+      ],
+      "original": {
+        "sha256": "f127b51602e751e95ddd340d1f307765497e14f8abea54cedecb097f9b2d1fec",
+        "bytes": 15450491,
+        "file_format": "zip"
+      },
+      "source": {
+        "source_url": "https://sketchfab.com/3d-models/f1-2026-concept-polygon-model-ea3bde709b1e4dc9b0ec8557d106ed42",
+        "creator": "Qvist_Designs",
+        "license_spdx": "CC-BY-4.0",
+        "identity_status": "author_declared_concept"
+      },
+      "geometry": {
+        "records": 499,
+        "triangles": 1164142,
+        "disconnected_aggregates": 10,
+        "units": "m",
+        "physical_validation": false,
+        "mechanical_roles": "UNRESOLVED",
+        "worker_sha256": "3dfcf46ae07b06d0369433790210c25fbbd979efde9f5b668c707635525040ac",
+        "invocation_slot": 26,
+        "cpu_s": 5.359375,
+        "resource_usage": {
+          "committed_memory_limit_bytes": 2147483648,
+          "peak_process_committed_bytes": 504991744,
+          "user_cpu_limit_s": 60,
+          "wall_timeout_s": 75
+        }
+      },
+      "diagnostic": {
+        "relative_file": "docs/lab/evidence/images/a2-imported-source-2026-11-06.png",
+        "sha256": "d6cb15dd216b454ad956d69b3e075046255588d65d2795694ac4dc6f9ca27234",
+        "scope": "Rendered orthographic projection of actual decimated source vertices; not a screenshot, functional rig or physics result"
+      },
+      "resume_new_downloads": 0,
+      "resume_new_numerical_invocations": 0
+    }
+  },
+  "remaining": [
+    "Source-informed mechanical decomposition, frame resolution, functional rig and native editable authoring integration",
+    "Eight independently verified vehicle maneuvers and controlled baseline/candidate comparisons",
+    "Live interactive rig/trajectory verification and final full acceptance/regression"
+  ],
+  "shipped_flags_activated": false,
+  "paid_usage": false,
+  "resources": {
+    "mechanics_used": 28,
+    "mechanics_limit": 50,
+    "chrono_used": 27,
+    "chrono_limit": 50,
+    "full_A_transfer_pairs_used": 2,
+    "full_A_transfer_pairs_limit": 4,
+    "approval": "Explicit user approval of docs/lab/FULL_A_ASSET_RUNTIME_PLAN.md; frozen reviewed proposal retained unchanged",
+    "maximum_original_bytes": 100000000,
+    "matching_Journal_disk_admission_bytes": 500000000,
+    "prior_charges_and_failures_retained": true
+  }
+}

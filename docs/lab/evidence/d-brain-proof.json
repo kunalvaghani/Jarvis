@@ -1,0 +1,3827 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "operator_assisted": true,
+  "real_C4_source_unchanged": true,
+  "original_source_sha256": "5b16ef529763b5dd3d2523f0d5e5e7ac4554da61b981e77214efcc1fd984bd09",
+  "new_model_solver_native_calls": 0,
+  "new_dependencies": [],
+  "first": {
+    "before": {
+      "diff": {
+        "added": [
+          "discovery.assets.inspect_local@v1",
+          "discovery.components.inspect@v1",
+          "discovery.electronics.divider@v1",
+          "discovery.geometry.pendulum@v1",
+          "discovery.hypotheses.load@v1",
+          "discovery.hypotheses.propose@v2",
+          "discovery.hypotheses.skeptic@v1",
+          "discovery.integration.audit@v1",
+          "discovery.literature.collect@v1",
+          "discovery.literature.remember@v1",
+          "discovery.literature.review@v1",
+          "discovery.mechanics.pendulum@v1",
+          "discovery.optimization.advance@v1",
+          "discovery.parameters.plan@v1",
+          "discovery.status@v1",
+          "discovery.theory.dilation@v1",
+          "discovery.units.convert@v1",
+          "discovery.verify.c1@v1",
+          "discovery.verify.dilation@v1",
+          "discovery.verify.divider@v1",
+          "discovery.verify.integration@v1",
+          "discovery.verify.literature@v1",
+          "discovery.verify.optimization@v1",
+          "discovery.verify.pendulum@v1",
+          "discovery.verify.pendulum_native@v1",
+          "discovery.verify.status@v1",
+          "discovery.verify.units@v1"
+        ],
+        "changed": [],
+        "removed": []
+      },
+      "evidence_status": "INSUFFICIENT_EVIDENCE",
+      "inventory": {
+        "descriptor_sha256": "c91a89b63c7ba42027e29431380ffd127a1f616a1991e4160e601f11e9e805ea",
+        "issues": [],
+        "nodes": [
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c1:adapters.<locals>.run",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.assets.inspect_local@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c1",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/component-planning/SKILL.md",
+            "skill_sha256": "1de3e327897b11186a6e9cefcdaff1d8bbc5c865ec3aa1a637daf8e9c5c59939",
+            "status": "active",
+            "test_ref": "tests/test_discovery_components.py",
+            "test_sha256": "d44d5adadb59853be1f698e217fe6e3831bbfda54fe95b3e0737b9373154239e",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c1:adapters.<locals>.run",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.components.inspect@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c1",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/component-planning/SKILL.md",
+            "skill_sha256": "1de3e327897b11186a6e9cefcdaff1d8bbc5c865ec3aa1a637daf8e9c5c59939",
+            "status": "active",
+            "test_ref": "tests/test_discovery_components.py",
+            "test_sha256": "d44d5adadb59853be1f698e217fe6e3831bbfda54fe95b3e0737b9373154239e",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.integration:adapters.<locals>.simulate_divider",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Capability",
+              "Tool",
+              "Skill",
+              "LearningEpisode",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.electronics.divider@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.integration",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+            "skill_sha256": "9b275ac11dced9a718d5b61aceb80ca2970b34a0a610809dd37bbd1fda017ab6",
+            "status": "active",
+            "test_ref": "tests/test_discovery_foundations.py",
+            "test_sha256": "ac723f72b9e8d55bba38db57a927803a5dea0a50fae0a22e1ad0f46575a8f509",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c2:adapters.<locals>.build",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "run",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": true,
+            "node_id": "discovery.geometry.pendulum@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c2",
+            "requires": [
+              "discovery.verify.pendulum@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/pendulum-lab/SKILL.md",
+            "skill_sha256": "facaa149ac8ee70817df4e58c3eb91e52c2bd71dfd893291a401a1b91905bf17",
+            "status": "active",
+            "test_ref": "tests/test_discovery_pendulum.py",
+            "test_sha256": "5bb9312a8f0999526caee29de86d2ddd8f72439ef4127775fdf7530e833106de",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.collect",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.hypotheses.load@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.analyse",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "collection",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "existing_local_router",
+            "needs_approval": false,
+            "node_id": "discovery.hypotheses.propose@v2",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [
+              "discovery.hypotheses.load@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 2
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.critique",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "review",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.hypotheses.skeptic@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [
+              "discovery.literature.review@v1",
+              "discovery.hypotheses.propose@v2"
+            ],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.d:adapters.<locals>.audit",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Capability",
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "Component",
+              "Scenario",
+              "Experiment",
+              "RunArtifact",
+              "Parameter",
+              "Tool",
+              "Skill",
+              "LearningEpisode"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.integration.audit@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.d",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/integration-audit/SKILL.md",
+            "skill_sha256": "84ab83e534ccc72e765032029cb65e289ab5623a6bbe4d9dfec01ef0c14da4f5",
+            "status": "active",
+            "test_ref": "tests/test_discovery_wiring.py",
+            "test_sha256": "fa0bbb311d4dbd64ad72039a415e3874abc9663684f83a897a15a44e2ef51b93",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.collect",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.literature.collect@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.save",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "review",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "ranking",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.literature.remember@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [
+              "discovery.verify.literature@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.analyse",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "collection",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.literature.review@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [
+              "discovery.literature.collect@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c2:adapters.<locals>.run",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.mechanics.pendulum@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c2",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/pendulum-lab/SKILL.md",
+            "skill_sha256": "facaa149ac8ee70817df4e58c3eb91e52c2bd71dfd893291a401a1b91905bf17",
+            "status": "active",
+            "test_ref": "tests/test_discovery_pendulum.py",
+            "test_sha256": "5bb9312a8f0999526caee29de86d2ddd8f72439ef4127775fdf7530e833106de",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c4:adapters.<locals>.act",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.optimization.advance@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c4",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/bounded-optimization/SKILL.md",
+            "skill_sha256": "fa8d3928911a52317389c8011191fb79a6794d2830081f2420344edc6e41addc",
+            "status": "active",
+            "test_ref": "tests/test_discovery_optimization.py",
+            "test_sha256": "81cc5ce2e530e18297e0fa6e0701d544b4cc586fc71ebb022edfc39855b9c5d1",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c1:adapters.<locals>.run",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.parameters.plan@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c1",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/component-planning/SKILL.md",
+            "skill_sha256": "1de3e327897b11186a6e9cefcdaff1d8bbc5c865ec3aa1a637daf8e9c5c59939",
+            "status": "active",
+            "test_ref": "tests/test_discovery_components.py",
+            "test_sha256": "d44d5adadb59853be1f698e217fe6e3831bbfda54fe95b3e0737b9373154239e",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.integration:adapters.<locals>.status",
+            "handler_present": true,
+            "inputs": [],
+            "memory_kinds": [
+              "Capability",
+              "Tool",
+              "Skill",
+              "LearningEpisode",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.status@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.integration",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+            "skill_sha256": "9b275ac11dced9a718d5b61aceb80ca2970b34a0a610809dd37bbd1fda017ab6",
+            "status": "active",
+            "test_ref": "tests/test_discovery_foundations.py",
+            "test_sha256": "ac723f72b9e8d55bba38db57a927803a5dea0a50fae0a22e1ad0f46575a8f509",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.theory",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.theory.dilation@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.integration:adapters.<locals>.convert_units",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Capability",
+              "Tool",
+              "Skill",
+              "LearningEpisode",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.units.convert@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.integration",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+            "skill_sha256": "9b275ac11dced9a718d5b61aceb80ca2970b34a0a610809dd37bbd1fda017ab6",
+            "status": "active",
+            "test_ref": "tests/test_discovery_foundations.py",
+            "test_sha256": "ac723f72b9e8d55bba38db57a927803a5dea0a50fae0a22e1ad0f46575a8f509",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c1:adapters.<locals>.verify",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.c1@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.c1",
+            "requires": [
+              "discovery.components.inspect@v1",
+              "discovery.assets.inspect_local@v1",
+              "discovery.parameters.plan@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/component-planning/SKILL.md",
+            "skill_sha256": "1de3e327897b11186a6e9cefcdaff1d8bbc5c865ec3aa1a637daf8e9c5c59939",
+            "status": "active",
+            "test_ref": "tests/test_discovery_components.py",
+            "test_sha256": "d44d5adadb59853be1f698e217fe6e3831bbfda54fe95b3e0737b9373154239e",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.theory_check",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.dilation@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [
+              "discovery.theory.dilation@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.integration:adapters.<locals>.verify_divider",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Capability",
+              "Tool",
+              "Skill",
+              "LearningEpisode",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.divider@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.integration",
+            "requires": [
+              "discovery.electronics.divider@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+            "skill_sha256": "9b275ac11dced9a718d5b61aceb80ca2970b34a0a610809dd37bbd1fda017ab6",
+            "status": "active",
+            "test_ref": "tests/test_discovery_foundations.py",
+            "test_sha256": "ac723f72b9e8d55bba38db57a927803a5dea0a50fae0a22e1ad0f46575a8f509",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.d:adapters.<locals>.check",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Capability",
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "Component",
+              "Scenario",
+              "Experiment",
+              "RunArtifact",
+              "Parameter",
+              "Tool",
+              "Skill",
+              "LearningEpisode"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.integration@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.d",
+            "requires": [
+              "discovery.integration.audit@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/integration-audit/SKILL.md",
+            "skill_sha256": "84ab83e534ccc72e765032029cb65e289ab5623a6bbe4d9dfec01ef0c14da4f5",
+            "status": "active",
+            "test_ref": "tests/test_discovery_wiring.py",
+            "test_sha256": "fa0bbb311d4dbd64ad72039a415e3874abc9663684f83a897a15a44e2ef51b93",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.check",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "collection",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "review",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "ranking",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.literature@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [
+              "discovery.hypotheses.skeptic@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c4:adapters.<locals>.check",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.optimization@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.c4",
+            "requires": [
+              "discovery.optimization.advance@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/bounded-optimization/SKILL.md",
+            "skill_sha256": "fa8d3928911a52317389c8011191fb79a6794d2830081f2420344edc6e41addc",
+            "status": "active",
+            "test_ref": "tests/test_discovery_optimization.py",
+            "test_sha256": "81cc5ce2e530e18297e0fa6e0701d544b4cc586fc71ebb022edfc39855b9c5d1",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c2:adapters.<locals>.verify_math",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "run",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.pendulum@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.c2",
+            "requires": [
+              "discovery.mechanics.pendulum@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/pendulum-lab/SKILL.md",
+            "skill_sha256": "facaa149ac8ee70817df4e58c3eb91e52c2bd71dfd893291a401a1b91905bf17",
+            "status": "active",
+            "test_ref": "tests/test_discovery_pendulum.py",
+            "test_sha256": "5bb9312a8f0999526caee29de86d2ddd8f72439ef4127775fdf7530e833106de",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c2:adapters.<locals>.verify_native",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "run",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "native",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.pendulum_native@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.c2",
+            "requires": [
+              "discovery.geometry.pendulum@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/pendulum-lab/SKILL.md",
+            "skill_sha256": "facaa149ac8ee70817df4e58c3eb91e52c2bd71dfd893291a401a1b91905bf17",
+            "status": "active",
+            "test_ref": "tests/test_discovery_pendulum.py",
+            "test_sha256": "5bb9312a8f0999526caee29de86d2ddd8f72439ef4127775fdf7530e833106de",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.integration:adapters.<locals>.verify_status",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Capability",
+              "Tool",
+              "Skill",
+              "LearningEpisode",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.status@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.integration",
+            "requires": [
+              "discovery.status@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+            "skill_sha256": "9b275ac11dced9a718d5b61aceb80ca2970b34a0a610809dd37bbd1fda017ab6",
+            "status": "active",
+            "test_ref": "tests/test_discovery_foundations.py",
+            "test_sha256": "ac723f72b9e8d55bba38db57a927803a5dea0a50fae0a22e1ad0f46575a8f509",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.integration:adapters.<locals>.verify_units",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Capability",
+              "Tool",
+              "Skill",
+              "LearningEpisode",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.units@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.integration",
+            "requires": [
+              "discovery.units.convert@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+            "skill_sha256": "9b275ac11dced9a718d5b61aceb80ca2970b34a0a610809dd37bbd1fda017ab6",
+            "status": "active",
+            "test_ref": "tests/test_discovery_foundations.py",
+            "test_sha256": "ac723f72b9e8d55bba38db57a927803a5dea0a50fae0a22e1ad0f46575a8f509",
+            "verification": "UNVERIFIED",
+            "version": 1
+          }
+        ],
+        "passed": true,
+        "qualification_scope": "contracts and retained proof, not physical validation",
+        "registered_count": 27
+      },
+      "memory": {
+        "complete": true,
+        "edge_count": 0,
+        "issues": [],
+        "kind_counts": {
+          "Capability": 27,
+          "Experiment": 4,
+          "RunArtifact": 4,
+          "Source": 3
+        },
+        "notices": [],
+        "passed": true,
+        "pending_links": 12,
+        "record_count": 38
+      },
+      "operation": "audit integration",
+      "passed": false,
+      "physical_validation": false,
+      "previous_ref": null,
+      "scope": "contract/reference integration audit; no solver, model, permission change or scientific promotion",
+      "templates": {
+        "execution": "none",
+        "issues": [],
+        "passed": true,
+        "workflows": [
+          "discovery.status",
+          "discovery.units",
+          "discovery.divider",
+          "discovery.c1.project",
+          "discovery.c1.asset",
+          "discovery.c1.parameter",
+          "discovery.c2.simulate",
+          "discovery.c2.build",
+          "discovery.c3.research",
+          "discovery.c3.lookup_doi",
+          "discovery.c3.review_hypotheses",
+          "discovery.c3.hypothesize",
+          "discovery.c3.hypothesize_quick",
+          "discovery.c3.theory_dilation",
+          "discovery.c4",
+          "discovery.c4",
+          "discovery.c4",
+          "discovery.c4",
+          "discovery.c4",
+          "discovery.c4",
+          "discovery.c4",
+          "discovery.d",
+          "discovery.d"
+        ]
+      }
+    },
+    "after": {
+      "diff": {
+        "added": [],
+        "changed": [],
+        "removed": []
+      },
+      "evidence_status": "INSUFFICIENT_EVIDENCE",
+      "inventory": {
+        "descriptor_sha256": "c91a89b63c7ba42027e29431380ffd127a1f616a1991e4160e601f11e9e805ea",
+        "issues": [],
+        "nodes": [
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c1:adapters.<locals>.run",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.assets.inspect_local@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c1",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/component-planning/SKILL.md",
+            "skill_sha256": "1de3e327897b11186a6e9cefcdaff1d8bbc5c865ec3aa1a637daf8e9c5c59939",
+            "status": "active",
+            "test_ref": "tests/test_discovery_components.py",
+            "test_sha256": "d44d5adadb59853be1f698e217fe6e3831bbfda54fe95b3e0737b9373154239e",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c1:adapters.<locals>.run",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.components.inspect@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c1",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/component-planning/SKILL.md",
+            "skill_sha256": "1de3e327897b11186a6e9cefcdaff1d8bbc5c865ec3aa1a637daf8e9c5c59939",
+            "status": "active",
+            "test_ref": "tests/test_discovery_components.py",
+            "test_sha256": "d44d5adadb59853be1f698e217fe6e3831bbfda54fe95b3e0737b9373154239e",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.integration:adapters.<locals>.simulate_divider",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Capability",
+              "Tool",
+              "Skill",
+              "LearningEpisode",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.electronics.divider@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.integration",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+            "skill_sha256": "9b275ac11dced9a718d5b61aceb80ca2970b34a0a610809dd37bbd1fda017ab6",
+            "status": "active",
+            "test_ref": "tests/test_discovery_foundations.py",
+            "test_sha256": "ac723f72b9e8d55bba38db57a927803a5dea0a50fae0a22e1ad0f46575a8f509",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c2:adapters.<locals>.build",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "run",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": true,
+            "node_id": "discovery.geometry.pendulum@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c2",
+            "requires": [
+              "discovery.verify.pendulum@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/pendulum-lab/SKILL.md",
+            "skill_sha256": "facaa149ac8ee70817df4e58c3eb91e52c2bd71dfd893291a401a1b91905bf17",
+            "status": "active",
+            "test_ref": "tests/test_discovery_pendulum.py",
+            "test_sha256": "5bb9312a8f0999526caee29de86d2ddd8f72439ef4127775fdf7530e833106de",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.collect",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.hypotheses.load@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.analyse",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "collection",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "existing_local_router",
+            "needs_approval": false,
+            "node_id": "discovery.hypotheses.propose@v2",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [
+              "discovery.hypotheses.load@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 2
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.critique",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "review",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.hypotheses.skeptic@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [
+              "discovery.literature.review@v1",
+              "discovery.hypotheses.propose@v2"
+            ],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.d:adapters.<locals>.audit",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Capability",
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "Component",
+              "Scenario",
+              "Experiment",
+              "RunArtifact",
+              "Parameter",
+              "Tool",
+              "Skill",
+              "LearningEpisode"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.integration.audit@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.d",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/integration-audit/SKILL.md",
+            "skill_sha256": "84ab83e534ccc72e765032029cb65e289ab5623a6bbe4d9dfec01ef0c14da4f5",
+            "status": "active",
+            "test_ref": "tests/test_discovery_wiring.py",
+            "test_sha256": "fa0bbb311d4dbd64ad72039a415e3874abc9663684f83a897a15a44e2ef51b93",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.collect",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.literature.collect@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.save",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "review",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "ranking",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.literature.remember@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [
+              "discovery.verify.literature@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.analyse",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "collection",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.literature.review@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [
+              "discovery.literature.collect@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c2:adapters.<locals>.run",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.mechanics.pendulum@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c2",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/pendulum-lab/SKILL.md",
+            "skill_sha256": "facaa149ac8ee70817df4e58c3eb91e52c2bd71dfd893291a401a1b91905bf17",
+            "status": "active",
+            "test_ref": "tests/test_discovery_pendulum.py",
+            "test_sha256": "5bb9312a8f0999526caee29de86d2ddd8f72439ef4127775fdf7530e833106de",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c4:adapters.<locals>.act",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.optimization.advance@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c4",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/bounded-optimization/SKILL.md",
+            "skill_sha256": "fa8d3928911a52317389c8011191fb79a6794d2830081f2420344edc6e41addc",
+            "status": "active",
+            "test_ref": "tests/test_discovery_optimization.py",
+            "test_sha256": "81cc5ce2e530e18297e0fa6e0701d544b4cc586fc71ebb022edfc39855b9c5d1",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c1:adapters.<locals>.run",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.parameters.plan@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c1",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/component-planning/SKILL.md",
+            "skill_sha256": "1de3e327897b11186a6e9cefcdaff1d8bbc5c865ec3aa1a637daf8e9c5c59939",
+            "status": "active",
+            "test_ref": "tests/test_discovery_components.py",
+            "test_sha256": "d44d5adadb59853be1f698e217fe6e3831bbfda54fe95b3e0737b9373154239e",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.integration:adapters.<locals>.status",
+            "handler_present": true,
+            "inputs": [],
+            "memory_kinds": [
+              "Capability",
+              "Tool",
+              "Skill",
+              "LearningEpisode",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.status@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.integration",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+            "skill_sha256": "9b275ac11dced9a718d5b61aceb80ca2970b34a0a610809dd37bbd1fda017ab6",
+            "status": "active",
+            "test_ref": "tests/test_discovery_foundations.py",
+            "test_sha256": "ac723f72b9e8d55bba38db57a927803a5dea0a50fae0a22e1ad0f46575a8f509",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.theory",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.theory.dilation@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.integration:adapters.<locals>.convert_units",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Capability",
+              "Tool",
+              "Skill",
+              "LearningEpisode",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.units.convert@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.integration",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+            "skill_sha256": "9b275ac11dced9a718d5b61aceb80ca2970b34a0a610809dd37bbd1fda017ab6",
+            "status": "active",
+            "test_ref": "tests/test_discovery_foundations.py",
+            "test_sha256": "ac723f72b9e8d55bba38db57a927803a5dea0a50fae0a22e1ad0f46575a8f509",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c1:adapters.<locals>.verify",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.c1@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.c1",
+            "requires": [
+              "discovery.components.inspect@v1",
+              "discovery.assets.inspect_local@v1",
+              "discovery.parameters.plan@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/component-planning/SKILL.md",
+            "skill_sha256": "1de3e327897b11186a6e9cefcdaff1d8bbc5c865ec3aa1a637daf8e9c5c59939",
+            "status": "active",
+            "test_ref": "tests/test_discovery_components.py",
+            "test_sha256": "d44d5adadb59853be1f698e217fe6e3831bbfda54fe95b3e0737b9373154239e",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.theory_check",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.dilation@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [
+              "discovery.theory.dilation@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.integration:adapters.<locals>.verify_divider",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Capability",
+              "Tool",
+              "Skill",
+              "LearningEpisode",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.divider@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.integration",
+            "requires": [
+              "discovery.electronics.divider@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+            "skill_sha256": "9b275ac11dced9a718d5b61aceb80ca2970b34a0a610809dd37bbd1fda017ab6",
+            "status": "active",
+            "test_ref": "tests/test_discovery_foundations.py",
+            "test_sha256": "ac723f72b9e8d55bba38db57a927803a5dea0a50fae0a22e1ad0f46575a8f509",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.d:adapters.<locals>.check",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Capability",
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "Component",
+              "Scenario",
+              "Experiment",
+              "RunArtifact",
+              "Parameter",
+              "Tool",
+              "Skill",
+              "LearningEpisode"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.integration@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.d",
+            "requires": [
+              "discovery.integration.audit@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/integration-audit/SKILL.md",
+            "skill_sha256": "84ab83e534ccc72e765032029cb65e289ab5623a6bbe4d9dfec01ef0c14da4f5",
+            "status": "active",
+            "test_ref": "tests/test_discovery_wiring.py",
+            "test_sha256": "fa0bbb311d4dbd64ad72039a415e3874abc9663684f83a897a15a44e2ef51b93",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.check",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "collection",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "review",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "ranking",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.literature@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [
+              "discovery.hypotheses.skeptic@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c4:adapters.<locals>.check",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.optimization@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.c4",
+            "requires": [
+              "discovery.optimization.advance@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/bounded-optimization/SKILL.md",
+            "skill_sha256": "fa8d3928911a52317389c8011191fb79a6794d2830081f2420344edc6e41addc",
+            "status": "active",
+            "test_ref": "tests/test_discovery_optimization.py",
+            "test_sha256": "81cc5ce2e530e18297e0fa6e0701d544b4cc586fc71ebb022edfc39855b9c5d1",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c2:adapters.<locals>.verify_math",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "run",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.pendulum@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.c2",
+            "requires": [
+              "discovery.mechanics.pendulum@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/pendulum-lab/SKILL.md",
+            "skill_sha256": "facaa149ac8ee70817df4e58c3eb91e52c2bd71dfd893291a401a1b91905bf17",
+            "status": "active",
+            "test_ref": "tests/test_discovery_pendulum.py",
+            "test_sha256": "5bb9312a8f0999526caee29de86d2ddd8f72439ef4127775fdf7530e833106de",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c2:adapters.<locals>.verify_native",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "run",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "native",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.pendulum_native@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.c2",
+            "requires": [
+              "discovery.geometry.pendulum@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/pendulum-lab/SKILL.md",
+            "skill_sha256": "facaa149ac8ee70817df4e58c3eb91e52c2bd71dfd893291a401a1b91905bf17",
+            "status": "active",
+            "test_ref": "tests/test_discovery_pendulum.py",
+            "test_sha256": "5bb9312a8f0999526caee29de86d2ddd8f72439ef4127775fdf7530e833106de",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.integration:adapters.<locals>.verify_status",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Capability",
+              "Tool",
+              "Skill",
+              "LearningEpisode",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.status@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.integration",
+            "requires": [
+              "discovery.status@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+            "skill_sha256": "9b275ac11dced9a718d5b61aceb80ca2970b34a0a610809dd37bbd1fda017ab6",
+            "status": "active",
+            "test_ref": "tests/test_discovery_foundations.py",
+            "test_sha256": "ac723f72b9e8d55bba38db57a927803a5dea0a50fae0a22e1ad0f46575a8f509",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.integration:adapters.<locals>.verify_units",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Capability",
+              "Tool",
+              "Skill",
+              "LearningEpisode",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.units@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.integration",
+            "requires": [
+              "discovery.units.convert@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+            "skill_sha256": "9b275ac11dced9a718d5b61aceb80ca2970b34a0a610809dd37bbd1fda017ab6",
+            "status": "active",
+            "test_ref": "tests/test_discovery_foundations.py",
+            "test_sha256": "ac723f72b9e8d55bba38db57a927803a5dea0a50fae0a22e1ad0f46575a8f509",
+            "verification": "UNVERIFIED",
+            "version": 1
+          }
+        ],
+        "passed": true,
+        "qualification_scope": "contracts and retained proof, not physical validation",
+        "registered_count": 27
+      },
+      "memory": {
+        "complete": true,
+        "edge_count": 12,
+        "issues": [],
+        "kind_counts": {
+          "Capability": 27,
+          "Experiment": 4,
+          "RunArtifact": 4,
+          "Source": 3
+        },
+        "notices": [],
+        "passed": true,
+        "pending_links": 0,
+        "record_count": 38
+      },
+      "operation": "memory wire",
+      "passed": true,
+      "physical_validation": false,
+      "previous_ref": "artifact://sha256/e046b2938ba57cfffb074b6bdafbee0a9b8a065277cc0d6d3c10543f2dba040b",
+      "scope": "contract/reference integration audit; no solver, model, permission change or scientific promotion",
+      "templates": {
+        "execution": "none",
+        "issues": [],
+        "passed": true,
+        "workflows": [
+          "discovery.status",
+          "discovery.units",
+          "discovery.divider",
+          "discovery.c1.project",
+          "discovery.c1.asset",
+          "discovery.c1.parameter",
+          "discovery.c2.simulate",
+          "discovery.c2.build",
+          "discovery.c3.research",
+          "discovery.c3.lookup_doi",
+          "discovery.c3.review_hypotheses",
+          "discovery.c3.hypothesize",
+          "discovery.c3.hypothesize_quick",
+          "discovery.c3.theory_dilation",
+          "discovery.c4",
+          "discovery.c4",
+          "discovery.c4",
+          "discovery.c4",
+          "discovery.c4",
+          "discovery.c4",
+          "discovery.c4",
+          "discovery.d",
+          "discovery.d"
+        ]
+      }
+    },
+    "flags_off_refused": true
+  },
+  "reuse": {
+    "reused": {
+      "diff": {
+        "added": [],
+        "changed": [],
+        "removed": []
+      },
+      "evidence_status": "INSUFFICIENT_EVIDENCE",
+      "inventory": {
+        "descriptor_sha256": "c91a89b63c7ba42027e29431380ffd127a1f616a1991e4160e601f11e9e805ea",
+        "issues": [],
+        "nodes": [
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c1:adapters.<locals>.run",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.assets.inspect_local@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c1",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/component-planning/SKILL.md",
+            "skill_sha256": "1de3e327897b11186a6e9cefcdaff1d8bbc5c865ec3aa1a637daf8e9c5c59939",
+            "status": "active",
+            "test_ref": "tests/test_discovery_components.py",
+            "test_sha256": "d44d5adadb59853be1f698e217fe6e3831bbfda54fe95b3e0737b9373154239e",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c1:adapters.<locals>.run",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.components.inspect@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c1",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/component-planning/SKILL.md",
+            "skill_sha256": "1de3e327897b11186a6e9cefcdaff1d8bbc5c865ec3aa1a637daf8e9c5c59939",
+            "status": "active",
+            "test_ref": "tests/test_discovery_components.py",
+            "test_sha256": "d44d5adadb59853be1f698e217fe6e3831bbfda54fe95b3e0737b9373154239e",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.integration:adapters.<locals>.simulate_divider",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Capability",
+              "Tool",
+              "Skill",
+              "LearningEpisode",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.electronics.divider@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.integration",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+            "skill_sha256": "9b275ac11dced9a718d5b61aceb80ca2970b34a0a610809dd37bbd1fda017ab6",
+            "status": "active",
+            "test_ref": "tests/test_discovery_foundations.py",
+            "test_sha256": "ac723f72b9e8d55bba38db57a927803a5dea0a50fae0a22e1ad0f46575a8f509",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c2:adapters.<locals>.build",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "run",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": true,
+            "node_id": "discovery.geometry.pendulum@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c2",
+            "requires": [
+              "discovery.verify.pendulum@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/pendulum-lab/SKILL.md",
+            "skill_sha256": "facaa149ac8ee70817df4e58c3eb91e52c2bd71dfd893291a401a1b91905bf17",
+            "status": "active",
+            "test_ref": "tests/test_discovery_pendulum.py",
+            "test_sha256": "5bb9312a8f0999526caee29de86d2ddd8f72439ef4127775fdf7530e833106de",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.collect",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.hypotheses.load@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.analyse",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "collection",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "existing_local_router",
+            "needs_approval": false,
+            "node_id": "discovery.hypotheses.propose@v2",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [
+              "discovery.hypotheses.load@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 2
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.critique",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "review",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.hypotheses.skeptic@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [
+              "discovery.literature.review@v1",
+              "discovery.hypotheses.propose@v2"
+            ],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.d:adapters.<locals>.audit",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Capability",
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "Component",
+              "Scenario",
+              "Experiment",
+              "RunArtifact",
+              "Parameter",
+              "Tool",
+              "Skill",
+              "LearningEpisode"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.integration.audit@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.d",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/integration-audit/SKILL.md",
+            "skill_sha256": "84ab83e534ccc72e765032029cb65e289ab5623a6bbe4d9dfec01ef0c14da4f5",
+            "status": "active",
+            "test_ref": "tests/test_discovery_wiring.py",
+            "test_sha256": "fa0bbb311d4dbd64ad72039a415e3874abc9663684f83a897a15a44e2ef51b93",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.collect",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.literature.collect@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.save",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "review",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "ranking",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.literature.remember@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [
+              "discovery.verify.literature@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.analyse",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "collection",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.literature.review@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [
+              "discovery.literature.collect@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c2:adapters.<locals>.run",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.mechanics.pendulum@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c2",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/pendulum-lab/SKILL.md",
+            "skill_sha256": "facaa149ac8ee70817df4e58c3eb91e52c2bd71dfd893291a401a1b91905bf17",
+            "status": "active",
+            "test_ref": "tests/test_discovery_pendulum.py",
+            "test_sha256": "5bb9312a8f0999526caee29de86d2ddd8f72439ef4127775fdf7530e833106de",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c4:adapters.<locals>.act",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.optimization.advance@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c4",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/bounded-optimization/SKILL.md",
+            "skill_sha256": "fa8d3928911a52317389c8011191fb79a6794d2830081f2420344edc6e41addc",
+            "status": "active",
+            "test_ref": "tests/test_discovery_optimization.py",
+            "test_sha256": "81cc5ce2e530e18297e0fa6e0701d544b4cc586fc71ebb022edfc39855b9c5d1",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c1:adapters.<locals>.run",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.parameters.plan@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c1",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/component-planning/SKILL.md",
+            "skill_sha256": "1de3e327897b11186a6e9cefcdaff1d8bbc5c865ec3aa1a637daf8e9c5c59939",
+            "status": "active",
+            "test_ref": "tests/test_discovery_components.py",
+            "test_sha256": "d44d5adadb59853be1f698e217fe6e3831bbfda54fe95b3e0737b9373154239e",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.integration:adapters.<locals>.status",
+            "handler_present": true,
+            "inputs": [],
+            "memory_kinds": [
+              "Capability",
+              "Tool",
+              "Skill",
+              "LearningEpisode",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.status@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.integration",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+            "skill_sha256": "9b275ac11dced9a718d5b61aceb80ca2970b34a0a610809dd37bbd1fda017ab6",
+            "status": "active",
+            "test_ref": "tests/test_discovery_foundations.py",
+            "test_sha256": "ac723f72b9e8d55bba38db57a927803a5dea0a50fae0a22e1ad0f46575a8f509",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.theory",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.theory.dilation@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.integration:adapters.<locals>.convert_units",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Capability",
+              "Tool",
+              "Skill",
+              "LearningEpisode",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.units.convert@v1",
+            "outputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "provider": "jarvis.discovery.integration",
+            "requires": [],
+            "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+            "skill_sha256": "9b275ac11dced9a718d5b61aceb80ca2970b34a0a610809dd37bbd1fda017ab6",
+            "status": "active",
+            "test_ref": "tests/test_discovery_foundations.py",
+            "test_sha256": "ac723f72b9e8d55bba38db57a927803a5dea0a50fae0a22e1ad0f46575a8f509",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c1:adapters.<locals>.verify",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.c1@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.c1",
+            "requires": [
+              "discovery.components.inspect@v1",
+              "discovery.assets.inspect_local@v1",
+              "discovery.parameters.plan@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/component-planning/SKILL.md",
+            "skill_sha256": "1de3e327897b11186a6e9cefcdaff1d8bbc5c865ec3aa1a637daf8e9c5c59939",
+            "status": "active",
+            "test_ref": "tests/test_discovery_components.py",
+            "test_sha256": "d44d5adadb59853be1f698e217fe6e3831bbfda54fe95b3e0737b9373154239e",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.theory_check",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.dilation@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [
+              "discovery.theory.dilation@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.integration:adapters.<locals>.verify_divider",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Capability",
+              "Tool",
+              "Skill",
+              "LearningEpisode",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.divider@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.integration",
+            "requires": [
+              "discovery.electronics.divider@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+            "skill_sha256": "9b275ac11dced9a718d5b61aceb80ca2970b34a0a610809dd37bbd1fda017ab6",
+            "status": "active",
+            "test_ref": "tests/test_discovery_foundations.py",
+            "test_sha256": "ac723f72b9e8d55bba38db57a927803a5dea0a50fae0a22e1ad0f46575a8f509",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.d:adapters.<locals>.check",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Capability",
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "Component",
+              "Scenario",
+              "Experiment",
+              "RunArtifact",
+              "Parameter",
+              "Tool",
+              "Skill",
+              "LearningEpisode"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.integration@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.d",
+            "requires": [
+              "discovery.integration.audit@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/integration-audit/SKILL.md",
+            "skill_sha256": "84ab83e534ccc72e765032029cb65e289ab5623a6bbe4d9dfec01ef0c14da4f5",
+            "status": "active",
+            "test_ref": "tests/test_discovery_wiring.py",
+            "test_sha256": "fa0bbb311d4dbd64ad72039a415e3874abc9663684f83a897a15a44e2ef51b93",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c3:adapters.<locals>.check",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "collection",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "review",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "ranking",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Claim",
+              "Hypothesis",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.literature@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.c3",
+            "requires": [
+              "discovery.hypotheses.skeptic@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/literature-investigation/SKILL.md",
+            "skill_sha256": "e4b95dbf5ba4ae4948ba198d1510d98d1e98b777bda535c979cd7e84b3ae0581",
+            "status": "active",
+            "test_ref": "tests/test_discovery_research.py",
+            "test_sha256": "9a164ada0c8c3820da4dda57edb3a322ac136a6e3926bf0a9c08baef3ce4da29",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c4:adapters.<locals>.check",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.optimization@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.c4",
+            "requires": [
+              "discovery.optimization.advance@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/bounded-optimization/SKILL.md",
+            "skill_sha256": "fa8d3928911a52317389c8011191fb79a6794d2830081f2420344edc6e41addc",
+            "status": "active",
+            "test_ref": "tests/test_discovery_optimization.py",
+            "test_sha256": "81cc5ce2e530e18297e0fa6e0701d544b4cc586fc71ebb022edfc39855b9c5d1",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c2:adapters.<locals>.verify_math",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "run",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.pendulum@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.c2",
+            "requires": [
+              "discovery.mechanics.pendulum@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/pendulum-lab/SKILL.md",
+            "skill_sha256": "facaa149ac8ee70817df4e58c3eb91e52c2bd71dfd893291a401a1b91905bf17",
+            "status": "active",
+            "test_ref": "tests/test_discovery_pendulum.py",
+            "test_sha256": "5bb9312a8f0999526caee29de86d2ddd8f72439ef4127775fdf7530e833106de",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.c2:adapters.<locals>.verify_native",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "run",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "native",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Source",
+              "Component",
+              "Parameter",
+              "Scenario",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.pendulum_native@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.c2",
+            "requires": [
+              "discovery.geometry.pendulum@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/pendulum-lab/SKILL.md",
+            "skill_sha256": "facaa149ac8ee70817df4e58c3eb91e52c2bd71dfd893291a401a1b91905bf17",
+            "status": "active",
+            "test_ref": "tests/test_discovery_pendulum.py",
+            "test_sha256": "5bb9312a8f0999526caee29de86d2ddd8f72439ef4127775fdf7530e833106de",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.integration:adapters.<locals>.verify_status",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Capability",
+              "Tool",
+              "Skill",
+              "LearningEpisode",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.status@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.integration",
+            "requires": [
+              "discovery.status@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+            "skill_sha256": "9b275ac11dced9a718d5b61aceb80ca2970b34a0a610809dd37bbd1fda017ab6",
+            "status": "active",
+            "test_ref": "tests/test_discovery_foundations.py",
+            "test_sha256": "ac723f72b9e8d55bba38db57a927803a5dea0a50fae0a22e1ad0f46575a8f509",
+            "verification": "UNVERIFIED",
+            "version": 1
+          },
+          {
+            "contract": "explicit",
+            "eligibility_reasons": [],
+            "eligible": true,
+            "entrypoint": "jarvis.discovery.integration:adapters.<locals>.verify_units",
+            "handler_present": true,
+            "inputs": [
+              {
+                "name": "request",
+                "required": true,
+                "type": "Report"
+              },
+              {
+                "name": "report",
+                "required": true,
+                "type": "Report"
+              }
+            ],
+            "memory_kinds": [
+              "Capability",
+              "Tool",
+              "Skill",
+              "LearningEpisode",
+              "Experiment",
+              "RunArtifact"
+            ],
+            "model_hint": "none",
+            "needs_approval": false,
+            "node_id": "discovery.verify.units@v1",
+            "outputs": [
+              {
+                "name": "verdict",
+                "required": true,
+                "type": "Verdict"
+              }
+            ],
+            "provider": "jarvis.discovery.integration",
+            "requires": [
+              "discovery.units.convert@v1"
+            ],
+            "skill_ref": "jarvis/skills/discovery/lab-evidence/SKILL.md",
+            "skill_sha256": "9b275ac11dced9a718d5b61aceb80ca2970b34a0a610809dd37bbd1fda017ab6",
+            "status": "active",
+            "test_ref": "tests/test_discovery_foundations.py",
+            "test_sha256": "ac723f72b9e8d55bba38db57a927803a5dea0a50fae0a22e1ad0f46575a8f509",
+            "verification": "UNVERIFIED",
+            "version": 1
+          }
+        ],
+        "passed": true,
+        "qualification_scope": "contracts and retained proof, not physical validation",
+        "registered_count": 27
+      },
+      "memory": {
+        "complete": true,
+        "edge_count": 12,
+        "issues": [],
+        "kind_counts": {
+          "Capability": 27,
+          "Experiment": 4,
+          "RunArtifact": 4,
+          "Source": 3
+        },
+        "notices": [],
+        "passed": true,
+        "pending_links": 0,
+        "record_count": 38
+      },
+      "operation": "audit integration",
+      "passed": true,
+      "physical_validation": false,
+      "previous_ref": "artifact://sha256/e046b2938ba57cfffb074b6bdafbee0a9b8a065277cc0d6d3c10543f2dba040b",
+      "scope": "contract/reference integration audit; no solver, model, permission change or scientific promotion",
+      "templates": {
+        "execution": "none",
+        "issues": [],
+        "passed": true,
+        "workflows": [
+          "discovery.status",
+          "discovery.units",
+          "discovery.divider",
+          "discovery.c1.project",
+          "discovery.c1.asset",
+          "discovery.c1.parameter",
+          "discovery.c2.simulate",
+          "discovery.c2.build",
+          "discovery.c3.research",
+          "discovery.c3.lookup_doi",
+          "discovery.c3.review_hypotheses",
+          "discovery.c3.hypothesize",
+          "discovery.c3.hypothesize_quick",
+          "discovery.c3.theory_dilation",
+          "discovery.c4",
+          "discovery.c4",
+          "discovery.c4",
+          "discovery.c4",
+          "discovery.c4",
+          "discovery.c4",
+          "discovery.c4",
+          "discovery.d",
+          "discovery.d"
+        ]
+      }
+    },
+    "no_external_replay": true
+  },
+  "off": {
+    "no_lab_import": true,
+    "no_lab_neurons": true,
+    "no_lab_tables": true
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "state": "PREPARED_PENDING_APPROVAL",
+  "folder_id": "0AMVTcmM1XWY0Uk9PVA",
+  "folder_url": "https://drive.google.com/drive/folders/0AMVTcmM1XWY0Uk9PVA",
+  "destination": "My Drive root (no Jarvis folder exists; no folder will be created)",
+  "source_history_unchanged": true,
+  "writes": 0,
+  "source_model_solver_calls": 0,
+  "requests": {
+    "report": {
+      "title": "Jarvis D2 qualification report 2026-11-04",
+      "parent_id": "0AMVTcmM1XWY0Uk9PVA",
+      "artifact_id": "d2-qualification-summary"
+    },
+    "table": {
+      "title": "Jarvis D2 qualification sheet 2026-11-04",
+      "parent_id": "0AMVTcmM1XWY0Uk9PVA",
+      "experiment_ids": [
+        "study-d7e2564b03c83ab14cc4c176d9fda3ab-trial-0-experiment",
+        "study-d7e2564b03c83ab14cc4c176d9fda3ab-trial-2-experiment"
+      ],
+      "metric": "period",
+      "source_path": "metrics.measured_period_s"
+    }
+  },
+  "deliveries": [
+    {
+      "id": "delivery-aaa68516f2dc8ab6353774c12f7a9aa7d84fb5285e8b58c8a3a2039f4ef8c7b0",
+      "payload": {
+        "input_refs": [
+          "artifact://sha256/6141129b9e4292c322c12c66e5420b7d0637d5456055273595d024ced5cf178b"
+        ],
+        "kind": "report",
+        "parent_id": "0AMVTcmM1XWY0Uk9PVA",
+        "source_ids": [
+          "study-d7e2564b03c83ab14cc4c176d9fda3ab-input"
+        ],
+        "text": "Jarvis D2 qualification report 2026-11-04\nEvidence: SIMULATION_PASSED_WITH_ASSUMPTIONS\nPhysical validation is not established by this export.\nSource artifact: d2-qualification-summary\nSHA-256: dc097c7a940ada8d62ccbc3e55d3b7ca49a39279b31264bb060c5465c1979c9f\n\n{\"evidence_status\": \"SIMULATION_PASSED_WITH_ASSUMPTIONS\", \"physical_validation\": false, \"purpose\": \"D2 delivery qualification from retained conditional C4 results; not a new physical result\", \"recorded_periods_s\": [1.4248997019994853, 2.012098142789198], \"solver\": \"scipy.integrate.solve_ivp\", \"solver_version\": \"1.15.3\"}",
+        "title": "Jarvis D2 qualification report 2026-11-04"
+      }
+    },
+    {
+      "id": "delivery-00a0b563f8d6b217e91c0e434a5754006a9b9a1b5e1d880acd335f4018dd5935",
+      "payload": {
+        "expected_sum": "3.4369978447886833",
+        "input_refs": [
+          "artifact://sha256/cd3fe9a3336c385023a8b46c2db63431208cafcf3c2ca501177d217718f670eb",
+          "artifact://sha256/aacd2a31bce09f14ff103b797a1b6482d3dccadff3501c55049717f54301c5eb"
+        ],
+        "kind": "table",
+        "parent_id": "0AMVTcmM1XWY0Uk9PVA",
+        "rows": [
+          [
+            "Experiment",
+            "Value",
+            "Unit",
+            "Evidence"
+          ],
+          [
+            "study-d7e2564b03c83ab14cc4c176d9fda3ab-trial-0-experiment",
+            "1.4248997019994853",
+            "s",
+            "SIMULATION_PASSED_WITH_ASSUMPTIONS"
+          ],
+          [
+            "study-d7e2564b03c83ab14cc4c176d9fda3ab-trial-2-experiment",
+            "2.012098142789198",
+            "s",
+            "SIMULATION_PASSED_WITH_ASSUMPTIONS"
+          ],
+          [
+            "Total",
+            "=SUM(B2:B3)",
+            "s",
+            "Formula over recorded values; not a feasibility claim"
+          ]
+        ],
+        "source_ids": [
+          "study-d7e2564b03c83ab14cc4c176d9fda3ab-input"
+        ],
+        "title": "Jarvis D2 qualification sheet 2026-11-04"
+      }
+    }
+  ]
+}

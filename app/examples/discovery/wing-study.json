@@ -1,0 +1,105 @@
+{
+  "id": "wing-study",
+  "components": [
+    {
+      "id": "chassis",
+      "name": "chassis",
+      "reality_class": "P1",
+      "justification": "Synthetic component/dependency demonstration; no engineering geometry or solver validation."
+    },
+    {
+      "id": "wing",
+      "name": "front wing",
+      "parent_id": "chassis",
+      "reality_class": "P1",
+      "missing": [
+        "unmeasured internal geometry"
+      ],
+      "justification": "Synthetic component/dependency demonstration; no engineering geometry or solver validation."
+    }
+  ],
+  "parameters": [
+    {
+      "component_id": "wing",
+      "path": "geometry.flap_angle",
+      "mutable": true,
+      "parameter": {
+        "id": "wing.angle",
+        "name": "flap angle",
+        "lower": 0.0,
+        "upper": 20.0,
+        "quantity": {
+          "value": 10.0,
+          "unit": "degree",
+          "origin": "source",
+          "source_ref": "user-study"
+        }
+      }
+    }
+  ],
+  "computations": [
+    {
+      "id": "wing.geometry",
+      "component_id": "wing",
+      "kind": "geometry"
+    },
+    {
+      "id": "wing.mesh",
+      "component_id": "wing",
+      "kind": "mesh"
+    },
+    {
+      "id": "wing.aero",
+      "component_id": "wing",
+      "kind": "aero"
+    },
+    {
+      "id": "car.handling",
+      "component_id": "chassis",
+      "kind": "mechanics"
+    },
+    {
+      "id": "chassis.thermal",
+      "component_id": "chassis",
+      "kind": "thermal"
+    }
+  ],
+  "dependencies": [
+    {
+      "source": "wing.angle",
+      "target": "wing.geometry"
+    },
+    {
+      "source": "wing.geometry",
+      "target": "wing.mesh"
+    },
+    {
+      "source": "wing.mesh",
+      "target": "wing.aero"
+    },
+    {
+      "source": "wing.aero",
+      "target": "car.handling"
+    }
+  ],
+  "scenario": {
+    "id": "dry-track",
+    "name": "fixed dry reference",
+    "seed": 7,
+    "parameters": [
+      {
+        "id": "world.gravity",
+        "name": "gravity",
+        "quantity": {
+          "value": 9.81,
+          "unit": "m/s^2",
+          "origin": "source",
+          "source_ref": "test-definition"
+        }
+      }
+    ],
+    "assumptions": [
+      "Synthetic fixed scenario for integrity checks only; no vehicle simulation."
+    ]
+  }
+}

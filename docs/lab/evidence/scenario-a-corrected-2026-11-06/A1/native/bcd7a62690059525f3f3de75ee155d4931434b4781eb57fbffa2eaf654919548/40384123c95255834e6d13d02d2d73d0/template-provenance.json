@@ -1,0 +1,17 @@
+{
+  "origin": "Project Chrono 10.0.0 Sedan JSON topology",
+  "license": "BSD-3-Clause",
+  "template_sha256": {
+    "sedan/chassis/Sedan_Chassis.json": "18ffc5935cc49ef06fcb49f88d5e84d198da922d5a14d72961885c310deadd09",
+    "sedan/suspension/Sedan_DoubleWishbone.json": "7fe4624e1ea9f367cda41780f1c255a4c7da579fd29f073d7ab55d11dad0bbf5",
+    "sedan/wheel/Sedan_Wheel.json": "cb272839e50b8b45b150c902d9e7a24b8cefed67e770d2f866a3a44e23c13f2a",
+    "sedan/tire/Sedan_TMeasyTire.json": "74a8bbf8cff3b7c1afeda9d884aed18b51d2c10c81ab83fc11cb2874e7e9e4f4",
+    "sedan/vehicle/Sedan_Vehicle.json": "6605c1fa5798e80b3c62fd16dc7d25bd5ed9f0321129ddddd0dc2c5e8ee7821e",
+    "sedan/brake/Sedan_BrakeSimple.json": "f3bde37975dc833fd39342bc8f0ebf67b634c52b7524eca4ce6371e58f55463e",
+    "sedan/steering/Sedan_RackPinion.json": "828071b626be2ef9b0f63d2ff06097b22372a1739fa902583519801cfe8bca02",
+    "sedan/driveline/Sedan_Driveline2WD.json": "80dd661a9c20ed7eb3e00cda148ccbe0ad4a0150f49b97dafa9d98a755696457",
+    "sedan/powertrain/Sedan_AutomaticTransmissionSimpleMap.json": "ff5148d3d51b1f6f13785e0bb8ae31d0032c2bb2c7ef228cc7f811b411687590",
+    "terrain/RigidPlane.json": "404e283a64b565c3143174738727e23bcbb8d8b6d29e064ffb1f10556bc0fd9a"
+  },
+  "limitations": "Assumed geometry and mechanical subcomponents; not actual F1 engineering data."
+}

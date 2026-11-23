@@ -387,9 +387,8 @@ class Realtime:
         if self.storage_failed: return False
         try:
             self.path.parent.mkdir(parents=True,exist_ok=True)
-            temp=self.path.with_suffix('.tmp')
-            temp.write_text(json.dumps({'seen':self.seen},ensure_ascii=False),encoding='utf-8')
-            temp.replace(self.path)
+            from .checkpoint_io import write_checkpoint
+            write_checkpoint(self.path,json.dumps({'seen': self.seen}, ensure_ascii=False),(self.path).parent)
             return True
         except OSError:
             self.storage_failed=True

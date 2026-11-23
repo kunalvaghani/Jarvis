@@ -1,0 +1,73 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "mode": "learn",
+  "operator_assisted": true,
+  "voice_acceptance": "NOT_RUN",
+  "seconds": 20.594000000040978,
+  "capability": {
+    "id": "discovery.learned.2c3ddbd96ab243ba@v1",
+    "revision": 2,
+    "evidence_status": "INSUFFICIENT_EVIDENCE",
+    "justification": "Golden and three distinct independently verified Journal goals passed.",
+    "source_ids": [
+      "debian-ngspice-44.2"
+    ],
+    "kind": "Capability",
+    "neuron_id": "discovery.learned.2c3ddbd96ab243ba@v1",
+    "intents": [
+      "reuse qualified ngspice"
+    ],
+    "verification": "VERIFIED",
+    "golden_ref": "artifact://sha256/c4ec01de1845c146bf2d76d9174e93c9eb5018c30a5d79d5d7263ab5b03002e7"
+  },
+  "goals": [
+    {
+      "request": "lab simulate divider 5 V 1000 ohm 1000 ohm",
+      "goal_id": "g-e3d1ef1196934ac0",
+      "seconds": 2.8439999999827705,
+      "fired": [
+        "discovery.electronics.divider@v1",
+        "discovery.verify.divider@v1",
+        "motor.report@v1"
+      ],
+      "answer": "{'vectors': {'input_v': 5.0, 'output_v': 2.5, 'supply_current_a': -0.0025}, 'solver': 'ngspice-shared', 'solver_version': '44.2', 'netlist_sha256': 'df52fe885117c9a29e11b20a6ab32c28398e4c01d56136b1e86e1380dad78e5f', 'cpu_s': 0.011060353999999994, 'input': {'supply_v': 5.0, 'upper_ohm': 1000.0, 'lower_ohm': 1000.0}, 'image_id': 'sha256:fc3e504b26346d8fcfcadbb393fb7020c4f2b92c81f78c188b3711d2f40a9e0e', 'request_ref': 'artifact://sha256/f721af34e2236d2c7fa463432d2725e4ec9c5d3b42a8551a971e0753b1121a42', 'proof_slot': 27, 'checks': ['voltage-source constraint', 'independent Ohm-law solution', 'source-current sign', 'Kirchhoff current balance'], 'evidence_status': 'SIMULATION_PASSED_WITH_ASSUMPTIONS', 'justification': 'Ideal linear DC resistors and ideal voltage source; no physical validation or temperature model.', 'solver_ref': 'artifact://sha256/43b59a45ec87361ecc78e858e37320f10bdba3ebff2dd2b2dff19a98ab9ea5ad', 'request_digest': 'dabe41074507789e166f489b3b2a66a4f6c53f474930d4a0934e6586d10f8bef'}\n\n(Checked: actual sandbox receipt; independent Ohm/Kirchhoff checks.)"
+    },
+    {
+      "request": "lab simulate divider 9 V 2000 ohm 1000 ohm",
+      "goal_id": "g-3ee69975d7864735",
+      "seconds": 3.0310000000172295,
+      "fired": [
+        "discovery.electronics.divider@v1",
+        "discovery.verify.divider@v1",
+        "motor.report@v1"
+      ],
+      "answer": "{'vectors': {'input_v': 9.0, 'output_v': 3.0, 'supply_current_a': -0.0030000000000000005}, 'solver': 'ngspice-shared', 'solver_version': '44.2', 'netlist_sha256': '0120346ef49e6dabc093343f205b9be81a5bd342507875507d8033a40de73c69', 'cpu_s': 0.009504962000000006, 'input': {'supply_v': 9.0, 'upper_ohm': 2000.0, 'lower_ohm': 1000.0}, 'image_id': 'sha256:fc3e504b26346d8fcfcadbb393fb7020c4f2b92c81f78c188b3711d2f40a9e0e', 'request_ref': 'artifact://sha256/fefbc36f2b68c2515a99833a7457fc22591d5d53c480fbb1e259bf9b46a43706', 'proof_slot': 28, 'checks': ['voltage-source constraint', 'independent Ohm-law solution', 'source-current sign', 'Kirchhoff current balance'], 'evidence_status': 'SIMULATION_PASSED_WITH_ASSUMPTIONS', 'justification': 'Ideal linear DC resistors and ideal voltage source; no physical validation or temperature model.', 'solver_ref': 'artifact://sha256/1d55ae19ce39c426de94071cb3c1cd4eaca6d741cb2fe20996bb1050f79f8d05', 'request_digest': 'd10100fa905772a213f5a19b06f4c34ab3f5f39c9d3a7a7c603aba50ab703fa7'}\n\n(Checked: actual sandbox receipt; independent Ohm/Kirchhoff checks.)"
+    },
+    {
+      "request": "lab simulate divider 0 V 1000 ohm 2000 ohm",
+      "goal_id": "g-3164a50c7ca54fd6",
+      "seconds": 3.375,
+      "fired": [
+        "discovery.electronics.divider@v1",
+        "discovery.verify.divider@v1",
+        "motor.report@v1"
+      ],
+      "answer": "{'vectors': {'input_v': 0.0, 'output_v': 0.0, 'supply_current_a': 0.0}, 'solver': 'ngspice-shared', 'solver_version': '44.2', 'netlist_sha256': '9d6c67e8cc501af08f6a5c67f22813f20846d36ce00f152d7d11fd858117f5aa', 'cpu_s': 0.010362499999999997, 'input': {'supply_v': 0.0, 'upper_ohm': 1000.0, 'lower_ohm': 2000.0}, 'image_id': 'sha256:fc3e504b26346d8fcfcadbb393fb7020c4f2b92c81f78c188b3711d2f40a9e0e', 'request_ref': 'artifact://sha256/d46355ff43ebff09a1cef058adb93d341f3ef5cf7c8f20df14fc49c0d7954fd3', 'proof_slot': 29, 'checks': ['voltage-source constraint', 'independent Ohm-law solution', 'source-current sign', 'Kirchhoff current balance'], 'evidence_status': 'SIMULATION_PASSED_WITH_ASSUMPTIONS', 'justification': 'Ideal linear DC resistors and ideal voltage source; no physical validation or temperature model.', 'solver_ref': 'artifact://sha256/2bf0c833489310186d97f097c84379b388e9cfcb7230c2aa4d7ec7e24c04b6cb', 'request_digest': '45cd73a29d1c98289dc864d53bd08368cf6ab42f32b609b4a7f26ac4f13aa787'}\n\n(Checked: actual sandbox receipt; independent Ohm/Kirchhoff checks.)"
+    }
+  ],
+  "experiment_records": 27,
+  "runtime": {
+    "ready": true,
+    "problems": [],
+    "image_id": "sha256:fc3e504b26346d8fcfcadbb393fb7020c4f2b92c81f78c188b3711d2f40a9e0e",
+    "version": "44.2+ds-1",
+    "environment": "D:\\Kunals GitHub Repo\\Jarvis\\app\\.jarvis-runtime\\discovery\\tools\\ngspice-linux-44.2",
+    "library_hashes": {
+      "libngspice0/usr/lib/x86_64-linux-gnu/libngspice.so.0.0.12": "8b24e526865425243ee57efa9dcbdde99e7220393eb77a1ab863e849a2e0d761",
+      "libgomp1/usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0": "6456b504ac347bd50c419667440b691f6966ad8aff5309d2f06c977fe2f9debe"
+    },
+    "worker_sha256": "a136be74ab3583010230d911a07ec89dae3418d0fcfdd0434215e2803455da96",
+    "max_invocations": 50,
+    "used_slots": 30
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "passed": 202,
+  "failed": 0,
+  "skipped": 0,
+  "errors": 0,
+  "collection_errors": [],
+  "exit_code": 0,
+  "seconds": 63.48499999998603,
+  "source_sha256_before": "10b328cf4faaa89cb9ab895b08c318eee3da9147462327fad446e4244e44015a",
+  "source_sha256_after": "10b328cf4faaa89cb9ab895b08c318eee3da9147462327fad446e4244e44015a",
+  "isolation": "production credential files/external network/local model and Blender traffic denied; fixture loopback allowed",
+  "output_policy": "counts and test identifiers only; no assertion payloads"
+}

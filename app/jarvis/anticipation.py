@@ -178,13 +178,8 @@ class Anticipation:
             return False
         try:
             path = self._path('state.json')
-            temporary = self._path('state.tmp')
-            temporary.write_text(json.dumps(dict(version=1, feedback=self.feedback,
-                paused=self.paused,
-                public_research_authorized='public_research' in self.grants,
-                preparations=[{k: v for k, v in row.items() if k != 'content'}
-                              for row in self.rows[-8:]]), ensure_ascii=False), encoding='utf-8')
-            temporary.replace(path)
+            from .checkpoint_io import write_checkpoint
+            write_checkpoint(path,json.dumps(dict(version=1, feedback=self.feedback, paused=self.paused, public_research_authorized='public_research' in self.grants, preparations=[{k: v for k, v in row.items() if k != 'content'} for row in self.rows[-8:]]), ensure_ascii=False),(path).parent)
             return True
         except (OSError, ValueError) as exc:
             self.storage_failed = True

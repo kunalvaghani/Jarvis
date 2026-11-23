@@ -1,0 +1,112 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "retained_failed_goals": [
+    {
+      "goal_id": "g-1aed9ba923f14ddf",
+      "text": "lab hypothesize \"c3-review-6bb6b724f4620bf9f0b65920b34090ef\"",
+      "state": "failed",
+      "stop_reason": "review failed: ValueError: The local brain timed out. Try a shorter task."
+    },
+    {
+      "goal_id": "g-9e122ca48c9648a8",
+      "text": "lab hypothesize quick \"c3-review-0a9c06d9e9cd7e46c927c5e6408c69e3\"",
+      "state": "failed",
+      "stop_reason": "review failed: ValueError: The local brain timed out. Try a shorter task."
+    },
+    {
+      "goal_id": "g-f347deee335b4758",
+      "text": "lab hypothesize \"c3-review-fa9a25959610274bdcdc8a0b73499afb\"",
+      "state": "failed",
+      "stop_reason": "review failed: ValueError: The local brain timed out. Try a shorter task."
+    },
+    {
+      "goal_id": "g-58b4fafcead94104",
+      "text": "lab hypothesize \"c3-review-fa9a25959610274bdcdc8a0b73499afb\"",
+      "state": "failed",
+      "stop_reason": "review failed: ValueError: The local brain timed out. Try a shorter task."
+    }
+  ],
+  "local_model_reservations": [
+    {
+      "cpu_s": 90.0,
+      "state": "uncertain"
+    },
+    {
+      "cpu_s": 20.0,
+      "state": "uncertain"
+    },
+    {
+      "cpu_s": 90.0,
+      "state": "uncertain"
+    },
+    {
+      "cpu_s": 90.0,
+      "state": "uncertain"
+    }
+  ],
+  "cpu_measurement": "290 admission units remain charged uncertain across four model calls; not measured worker CPU use.",
+  "provider_receipts": [
+    {
+      "provider": "arxiv",
+      "papers": 0,
+      "retrieved_at": "2026-11-04T09:25:28.248300+00:00",
+      "raw_sha256": "c2d71ebfd4d3a7baae0789fd3558ca4dfdaa24888750dc830617b6119ed8726e"
+    },
+    {
+      "provider": "crossref",
+      "papers": 4,
+      "retrieved_at": "2026-11-04T09:19:49.740433+00:00",
+      "raw_sha256": "e40166de6112e97ff08ef3cf4af38d4396f47d556862a1d3789cdf0398c4d8a5"
+    }
+  ],
+  "provider_errors": [],
+  "proposer_status": "DEGRADED",
+  "current_c3_capabilities": [
+    {
+      "id": "discovery.literature.collect@v1",
+      "status": "UNVERIFIED"
+    },
+    {
+      "id": "discovery.hypotheses.load@v1",
+      "status": "UNVERIFIED"
+    },
+    {
+      "id": "discovery.literature.review@v1",
+      "status": "UNVERIFIED"
+    },
+    {
+      "id": "discovery.hypotheses.propose@v1",
+      "status": "DEGRADED"
+    },
+    {
+      "id": "discovery.hypotheses.skeptic@v1",
+      "status": "UNVERIFIED"
+    },
+    {
+      "id": "discovery.verify.literature@v1",
+      "status": "UNVERIFIED"
+    },
+    {
+      "id": "discovery.literature.remember@v1",
+      "status": "UNVERIFIED"
+    },
+    {
+      "id": "discovery.theory.dilation@v1",
+      "status": "UNVERIFIED"
+    },
+    {
+      "id": "discovery.verify.dilation@v1",
+      "status": "UNVERIFIED"
+    }
+  ],
+  "source": "existing scratch Journal only; no source/account configuration changes",
+  "approved_extension": {
+    "private_cpu_allowance": 300,
+    "prior_default": 120,
+    "additional_attempts_approved": 2,
+    "additional_attempts_used": 2,
+    "outcome": "both timed out",
+    "grant_exhausted": true,
+    "default_policy_changed": false
+  }
+}

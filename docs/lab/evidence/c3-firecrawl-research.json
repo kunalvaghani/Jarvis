@@ -1,0 +1,32 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "purpose": "C3 compact local structured proposal diagnosis",
+  "successful_calls": [
+    {
+      "kind": "search",
+      "query": "site:docs.ollama.com structured outputs num_predict context length",
+      "job_id": "01a1a61a-0993-710e-8a37-99738e2b485c",
+      "plan_credits": 2
+    },
+    {
+      "kind": "scrape",
+      "url": "https://docs.ollama.com/capabilities/structured-outputs",
+      "job_id": "01a1a61a-b0fb-7658-9442-7d50ac0b431b",
+      "plan_credits": 1
+    }
+  ],
+  "official_sources": [
+    "https://docs.ollama.com/capabilities/structured-outputs",
+    "https://docs.ollama.com/context-length",
+    "https://docs.ollama.com/modelfile",
+    "https://docs.ollama.com/api/generate"
+  ],
+  "net_recorded_plan_credits": 3,
+  "credit_refund": 0,
+  "feedback_results": [
+    "400 INVALID_BODY, retryable=false",
+    "409 FEEDBACK_WINDOW_EXPIRED, retryable=false"
+  ],
+  "purchase": false,
+  "inference": "Direct bounded JSON and smaller prompts may reduce generation burden; source documentation alone does not establish the cause of prior timeouts."
+}

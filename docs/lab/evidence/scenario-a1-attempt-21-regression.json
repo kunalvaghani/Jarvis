@@ -1,0 +1,66 @@
+{
+  "date_local": "2026-11-06 Asia/Calcutta",
+  "case": "A1",
+  "attempt": 21,
+  "status": "BLOCKED_FULL_A1_UNMET",
+  "full_acceptance_passed": false,
+  "regression": {
+    "passed": 64,
+    "failed": 0,
+    "skipped": 0,
+    "errors": 0,
+    "seconds": 7.547000000005937
+  },
+  "source_sha256": "c72ebec0f97a4ecca0b6e084cd7c3637f254316d1ab4a684d5d29ff85cad1d11",
+  "source_unchanged": true,
+  "live_seconds": 21.25,
+  "model_calls": 0,
+  "surrogate_fallback_authorized": false,
+  "operator_supplied_assets_or_solver_inputs": false,
+  "stages": [
+    {
+      "stage": "resolve_target",
+      "category": "verified",
+      "attempts": 1,
+      "seconds": 0.0
+    },
+    {
+      "stage": "requirements_and_sources",
+      "category": "verified",
+      "attempts": 1,
+      "seconds": 17.781000000002678
+    },
+    {
+      "stage": "discover_assets",
+      "category": "verified",
+      "attempts": 1,
+      "seconds": 0.9840000000040163
+    },
+    {
+      "stage": "validate_provenance",
+      "category": "verified",
+      "attempts": 1,
+      "seconds": 0.0
+    },
+    {
+      "stage": "inspect_asset",
+      "category": "blocked",
+      "attempts": 1,
+      "seconds": 0.0
+    }
+  ],
+  "blocked_stage": "inspect_asset",
+  "blocker": "Active vehicle route has no engineering-qualified acquired asset. It blocks at inspect_asset and offers labelled class-surrogate permission. The registered acquisition-to-geometry subtask is not yet connected to this natural-language vehicle route.",
+  "geometry_manifest": null,
+  "physical_manifest": null,
+  "solver_configuration": null,
+  "validated_metrics": null,
+  "chrono_slots_before": 27,
+  "chrono_slots_after": 27,
+  "mechanics_slots_after": 9,
+  "approvals_requested": 0,
+  "paid_usage": false,
+  "global_flags_changed": false,
+  "scope": "Targeted A1 regression and one real normal-ingress attempt. No full-suite, autonomous acquired-asset success, screenshot observation or physical validation claimed.",
+  "next_action": "Connect rights-qualified acquisition/inspection and source-informed mechanical assembly to the vehicle workflow; implement independent maneuver evidence before rerunning full A1. Do not grant a surrogate merely to turn this test green."
+}

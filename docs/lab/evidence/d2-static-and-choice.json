@@ -1,0 +1,25 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "neural_mypy": {
+    "passed": true,
+    "files": 18,
+    "command": "app/.venv/Scripts/python.exe -B -m mypy --config-file mypy.ini jarvis/neural (cwd app)"
+  },
+  "readiness": {
+    "status": "ready",
+    "scope": "dependencies_and_configured_services",
+    "missing": [],
+    "incomplete": [],
+    "live_inference_checked": false,
+    "services_started": false
+  },
+  "cpu_choice_readback": {
+    "selected_ref": "red",
+    "confidence": 0.9848,
+    "method": "existing local Laya; no cloud backup; abstains below threshold",
+    "attempts": 1,
+    "cpu_admission_units_retained": 5,
+    "C3_scratch_calls": 0
+  },
+  "source_sha256": "7e0d7d5206cd8642a6ef08ef5ec05547c893646f608e61ae0552fa67b15560f9"
+}

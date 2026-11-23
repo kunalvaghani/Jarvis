@@ -294,9 +294,8 @@ def build_index(config, cancelled=lambda: False, max_directories=30000, max_seco
 
 
 def _atomic_text(path, contents):
-    temp = path.with_name(path.name + ".new")
-    temp.write_text(contents, encoding="utf-8")
-    temp.replace(path)
+    from .checkpoint_io import write_checkpoint
+    write_checkpoint(path,contents,(path).parent)
 
 
 def write_tools_note(vault, data):

@@ -1,0 +1,50 @@
+{
+  "date_local": "2026-11-04 Asia/Calcutta",
+  "scope": "synthetic C1 source/dependency integrity, not vehicle/physics acceptance",
+  "goals": [
+    {
+      "request": "lab inspect project \"examples/discovery/wing-study.json\"",
+      "goal_id": "g-ebbb71c87db348b1",
+      "seconds": 0.046999999962281436,
+      "fired": [
+        "discovery.components.inspect@v1",
+        "discovery.verify.c1@v1",
+        "motor.report@v1"
+      ],
+      "answer": "{'workflow': 'project', 'input_sha256': '39e434f0bc08643a1a55dc7dab270e0b8a2d6f898cd90f26523ad6e87674977e', 'result': {'project_id': 'wing-study', 'revision': 1, 'project_sha256': 'c5f2bab24a598675c9be647cc3299bf5614589cc2cef00e098af54fa1f7bf74b', 'scenario_sha256': '49f55f25bb72c519a8dbacef6ca7d5cf76101ce9da41eaf0070379a8e63675c9', 'components': [{'id': 'chassis', 'parent_id': None, 'reality_class': 'P1', 'unknown_mass': True, 'missing': []}, {'id': 'wing', 'parent_id': 'chassis', 'reality_class': 'P1', 'unknown_mass': True, 'missing': ['unmeasured internal geometry']}], 'parameters': [{'id': 'wing.angle', 'component_id': 'wing', 'path': 'geometry.flap_angle', 'mutable': True, 'affected': ['wing.geometry', 'wing.mesh', 'wing.aero', 'car.handling']}], 'dependency_count': 4, 'solver_executed': False, 'evidence_status': 'MODEL_CONSISTENT', 'justification': 'Assembly and explicit dependency integrity checked; supplied claims are not independently validated.'}}\n\n(Checked: scoped input hash, typed graph/asset checks and deterministic replay.)"
+    },
+    {
+      "request": "lab plan parameter \"examples/discovery/wing-study.json\" wing.angle delta 3 degree",
+      "goal_id": "g-820569265cac4859",
+      "seconds": 4.438000000023749,
+      "fired": [
+        "discovery.parameters.plan@v1",
+        "discovery.verify.c1@v1",
+        "motor.report@v1"
+      ],
+      "answer": "{'workflow': 'parameter', 'input_sha256': '39e434f0bc08643a1a55dc7dab270e0b8a2d6f898cd90f26523ad6e87674977e', 'result': {'baseline_sha256': 'c5f2bab24a598675c9be647cc3299bf5614589cc2cef00e098af54fa1f7bf74b', 'candidate_sha256': '33f5fe2c1f86be3b3c505b6195fb5c152dcda1e055c320621e284e2704f1ee8c', 'scenario_sha256': '49f55f25bb72c519a8dbacef6ca7d5cf76101ce9da41eaf0070379a8e63675c9', 'before': {'id': 'wing.angle', 'revision': 1, 'evidence_status': 'INSUFFICIENT_EVIDENCE', 'justification': '', 'source_ids': [], 'kind': 'Parameter', 'name': 'flap angle', 'quantity': {'value': 10.0, 'unit': 'degree', 'origin': 'source', 'source_ref': 'user-study'}, 'lower': 0.0, 'upper': 20.0}, 'after': {'id': 'wing.angle', 'revision': 2, 'evidence_status': 'INSUFFICIENT_EVIDENCE', 'justification': '', 'source_ids': [], 'kind': 'Parameter', 'name': 'flap angle', 'quantity': {'value': 13.0, 'unit': 'degree', 'origin': 'source', 'source_ref': 'user-parameter-request'}, 'lower': 0.0, 'upper': 20.0}, 'invalidated': ['wing.geometry', 'wing.mesh', 'wing.aero', 'car.handling'], 'disposition': 'PLANNED_NOT_EXECUTED', 'evidence_status': 'MODEL_CONSISTENT'}}\n\n(Checked: scoped input hash, typed graph/asset checks and deterministic replay.)"
+    },
+    {
+      "request": "lab inspect asset \"examples/discovery/asset-dossier.json\"",
+      "goal_id": "g-e6f16f10355243c7",
+      "seconds": 0.0470000000204891,
+      "fired": [
+        "discovery.assets.inspect_local@v1",
+        "discovery.verify.c1@v1",
+        "motor.report@v1"
+      ],
+      "answer": "{'workflow': 'asset', 'input_sha256': '09794ff7e0341fa9112d82fb136246dbe03f1bbc111dd4d70aedea485575d972', 'result': {'asset_state': 'FOUND_VISUAL_ONLY', 'hard_rejects': [], 'gaps': ['source describes concept; not exact engineering CAD', 'identity mismatch: year', 'identity mismatch: rule_set', 'dimensions have not been checked', 'functional separation has not been checked'], 'weights': {'identity': 0, 'provenance': 20, 'dimensions': 0, 'functional': 0, 'license': 10, 'format': 10, 'resources': 0}, 'score': 40, 'substitution_requires_approval': True, 'identity_basis': 'supplied metadata, not independent engineering validation', 'evidence_status': 'INSUFFICIENT_EVIDENCE', 'justification': 'Metadata and declared reuse rights checked; no independent CAD, license or physics validation.', 'file_sha256': '39759b4a61cccbc6a7c133e97b5e7e7b8083dfb134bd81b19325ba310c82a31c', 'file_bytes': 140, 'executed': False}}\n\n(Checked: scoped input hash, typed graph/asset checks and deterministic replay.)"
+    }
+  ],
+  "invalid_bound_refused": true,
+  "source_files_unchanged": true,
+  "typed_components": 2,
+  "typed_sources": 2,
+  "project_snapshots": 1,
+  "ngspice_slots_before": 24,
+  "ngspice_slots_after": 24,
+  "c1_nodes_when_flags_off": 0,
+  "voice_acceptance": "NOT_RUN",
+  "live_drive_or_asset_provider": "NOT_RUN",
+  "new_dependencies": 0
+}
