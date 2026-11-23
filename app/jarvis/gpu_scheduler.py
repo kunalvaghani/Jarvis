@@ -123,8 +123,45 @@ def configured():
     return policy
 
 
+_NVML = {}
+
+
+def _nvml_memory():
+    """The same numbers nvidia-smi reports, read in-process from the driver's NVML library (microseconds instead
+    of a ~90 ms subprocess per inference request; ~1.5 s when the laptop GPU was idle). None = use nvidia-smi."""
+    import ctypes
+    try:
+        if 'device' not in _NVML:
+            _NVML['device'] = None
+            library = ctypes.WinDLL('nvml.dll') if os.name == 'nt' else ctypes.CDLL('libnvidia-ml.so.1')
+            if library.nvmlInit_v2() != 0:
+                return None
+            count = ctypes.c_uint()
+            if library.nvmlDeviceGetCount_v2(ctypes.byref(count)) != 0 or count.value != 1:
+                return None  # Same rule as below: never guess multi-GPU placement.
+            handle = ctypes.c_void_p()
+            if library.nvmlDeviceGetHandleByIndex_v2(0, ctypes.byref(handle)) != 0:
+                return None
+            _NVML.update(library=library, device=handle)
+        if _NVML['device'] is None:
+            return None
+
+        class Info(ctypes.Structure):  # nvmlMemory_v2_t: "used" excludes driver-reserved memory, as nvidia-smi shows
+            _fields_ = [('version', ctypes.c_uint), ('total', ctypes.c_ulonglong), ('reserved', ctypes.c_ulonglong),
+                        ('free', ctypes.c_ulonglong), ('used', ctypes.c_ulonglong)]
+        info = Info(version=ctypes.sizeof(Info) | (2 << 24))
+        if _NVML['library'].nvmlDeviceGetMemoryInfo_v2(_NVML['device'], ctypes.byref(info)) != 0:
+            return None
+        return {'total_mb': int(info.total // 1048576), 'used_mb': int(-(-info.used // 1048576))}  # rounded up, as nvidia-smi
+    except (OSError, AttributeError):
+        return None
+
+
 def memory():
     """Read available physical VRAM only; unknown hardware means CPU admission."""
+    fast = _nvml_memory()
+    if fast is not None:
+        return fast
     try:
         result=subprocess.run(['nvidia-smi','--query-gpu=memory.total,memory.used',
             '--format=csv,noheader,nounits'],capture_output=True,text=True,timeout=2,

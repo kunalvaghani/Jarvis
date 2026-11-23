@@ -25,6 +25,9 @@ class ScheduledQueue:
         self.closed = False
         self.last_resource = {}
         self.heartbeat = clock()
+        # Wakes lane threads when work is queued or a running task releases its locks, instead of each lane
+        # polling every 25 ms (12 ms average delay per hand-off). The 25 ms poll stays as the fallback.
+        self.changed = threading.Condition(threading.Lock())
         if recover:
             self.graph.migrate()
             self.store.recover()
@@ -77,7 +80,12 @@ class ScheduledQueue:
                 self.graph.set_dependencies(identity, spec.get('graph_dependencies', deps))
             self.items[identity] = item
             token.task_id = identity
-            return identity
+        self._wake()
+        return identity
+
+    def _wake(self):
+        with self.changed:
+            self.changed.notify_all()
 
     def _check_cycle(self, identity, dependencies):
         todo, seen = list(dependencies), set()
@@ -190,9 +198,11 @@ class ScheduledQueue:
             result = self._take(lane)
             if result is not None:
                 return result
-            if time.monotonic() >= deadline:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
                 break
-            time.sleep(.025)
+            with self.changed:
+                self.changed.wait(min(.025, remaining))
         raise queue.Empty
 
     def outcome(self, state, detail, checkpoint=None):
@@ -276,6 +286,7 @@ class ScheduledQueue:
             self.held.difference_update(active['locks'])
             self.local.identity = None
             self.local.inputs = []
+        self._wake()  # Its locks are free: a waiting task may start now.
 
     def control(self, action, identity=None, value=None):
         with self.lock:

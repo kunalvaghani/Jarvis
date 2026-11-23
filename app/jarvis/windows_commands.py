@@ -15,7 +15,25 @@ CATALOG_SHA = '4aa30d24803f01cf43d463af41734fb2dee79d508bda46996e783b74679f5b85'
 SOURCE_SHA = 'e86e22949a53a28b41832e06eebe4080f23d6a1ded0e5486a7edd31076ff91a5'
 
 
+_CATALOG = {}
+
+
 def catalog():
+    # Every spoken/typed command is matched against this catalog. Re-reading, hashing and parsing both files cost
+    # ~5 ms per command; the verified rows are reused until either file changes (any change is re-verified).
+    now = time.monotonic()
+    if 'rows' in _CATALOG and now - _CATALOG['checked'] < 1.0:
+        return _CATALOG['rows']  # file metadata is re-read at most once a second (a Windows stat is ~0.13 ms)
+    stamp = tuple((s.st_mtime_ns, s.st_size) for s in ((ROOT / 'catalog.json').stat(),
+                                                       (ROOT / 'Jarvis_Windows_11_Commands.json').stat()))
+    if _CATALOG.get('stamp') != stamp:
+        _CATALOG.pop('rows', None)
+        _CATALOG.update(stamp=stamp, rows=_verified_catalog())
+    _CATALOG['checked'] = now
+    return _CATALOG['rows']
+
+
+def _verified_catalog():
     raw = (ROOT / 'catalog.json').read_bytes()
     source = (ROOT / 'Jarvis_Windows_11_Commands.json').read_bytes()
     # Git text checkout conversion must not invalidate pinned JSON recipes.
@@ -46,6 +64,18 @@ def match(text):
     if re.match(r"^(?:do not|don't|never|why|what|how)\b", text):
         return None
     rows = catalog()
+    if _CATALOG.get('aliases_for') is not rows:
+        _CATALOG.update(aliases=_aliases(rows), aliases_for=rows)
+    aliases = _CATALOG['aliases']
+    # Prefer a semantic launch over a keyboard equivalent or duplicate query.
+    matches = aliases.get(text, [])
+    if len(matches) > 1:
+        launching = [i for i in matches if i <= 94 and rows[i-1]['command'].startswith('Start-Process')]
+        matches = launching if len(launching) == 1 else matches
+    return matches[0] if len(matches) == 1 else None
+
+
+def _aliases(rows):
     aliases = {}
     for r in rows:
         names = [r['task'].casefold()]
@@ -60,12 +90,7 @@ def match(text):
     aliases.update({'open settings':[37], 'open chrome':[66], 'open edge':[65],
                     'open vscode':[70], 'open vs code':[70], 'open store':[75],
                     'open camera app':[1], 'open camera':[1], 'open youtube':[88]})
-    # Prefer a semantic launch over a keyboard equivalent or duplicate query.
-    matches = aliases.get(text, [])
-    if len(matches) > 1:
-        launching = [i for i in matches if i <= 94 and rows[i-1]['command'].startswith('Start-Process')]
-        matches = launching if len(launching) == 1 else matches
-    return matches[0] if len(matches) == 1 else None
+    return aliases
 
 
 def parse(text):

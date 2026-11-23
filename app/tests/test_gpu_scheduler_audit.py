@@ -137,7 +137,9 @@ def test_catalog(number,tmp_path):
             assert engine._resources_ok() is False
         test_unknown_resource_reading_defers_learning()
     elif number==11:
-        with patch('jarvis.gpu_scheduler.subprocess.run',side_effect=FileNotFoundError()):assert gpu.memory() is None
+        with patch('jarvis.gpu_scheduler.subprocess.run',side_effect=FileNotFoundError()), \
+                patch('jarvis.gpu_scheduler._nvml_memory',return_value=None):
+            assert gpu.memory() is None  # no NVML and no nvidia-smi: unknown hardware
         assert gpu.allocation('qwen3.5:9b',4096,gpu.settings(),None)==0
     elif number==15:
         test_malformed_lease_state_is_rejected_before_liveness_or_write(tmp_path,{'active':{'pid':-1},'pending':[]})

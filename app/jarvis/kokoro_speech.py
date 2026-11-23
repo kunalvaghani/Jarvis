@@ -30,19 +30,46 @@ def speed(value):
         return 1.0
 
 
+CACHE_LIMIT, CACHE_TEXT = 96, 48
+_cache = collections.OrderedDict()  # (text, voice, speed) -> (audio, rate): short phrases replay with no synthesis
+# Said often enough that their audio is prepared once the worker is ready (no synthesis delay when needed).
+COMMON = ("On it.", "Sure.", "Okay.", "One moment.", "Done.", "Got it.", "Yes?", "Sorry, I didn't catch that.")
+COMMON_HI = ("ठीक है।", "हाँ, कर रहा हूँ।", "एक सेकंड।", "हो गया।")
+
+
 def synthesize(voice, text, options):
     """One phrase (or a whole short text) as audio; used directly and by the streaming worker."""
     from .natural_voice import voice_style, language_for
     selected = options.get("voice", "am_michael")
-    style = voice_style(voice, selected)
     pacing = speed(options.get("speed", 1))
+    key = (text, str(selected), round(pacing, 3)) if len(text) <= CACHE_TEXT else None
+    if key is not None and key in _cache:
+        _cache.move_to_end(key)
+        audio, rate = _cache[key]
+        return audio.copy(), rate
+    style = voice_style(voice, selected)
     adapter = getattr(voice, "_jarvis_speed_session", None)
     if adapter is not None:
         adapter.pacing = pacing
     audio, rate = voice.create(text, voice=style, speed=pacing, lang=language_for(selected))
     if not audio.size:
         raise ValueError("Kokoro produced no audio.")
+    if key is not None:
+        _cache[key] = (audio.copy(), rate)
+        while len(_cache) > CACHE_LIMIT:
+            _cache.popitem(last=False)
     return audio, rate
+
+
+def prepare_common(voice, english_voice, hindi_voice=None, stop=lambda: False, pace=1.0):
+    """Synthesize the common short replies into the cache (worker idle time only)."""
+    for text, selected in [(t, english_voice) for t in COMMON] + [(t, hindi_voice) for t in COMMON_HI if hindi_voice]:
+        if stop():
+            return
+        try:
+            synthesize(voice, text, {"voice": selected, "speed": pace})
+        except Exception:
+            continue
 
 
 class SpeedSession:
@@ -269,11 +296,20 @@ def serve(loader=None, renderer=None, coalesce=False):
         def synthesis():
             empty = object()
             held = empty
+            prepared, english = False, None
             while True:
+                if held is empty and not prepared and english and requests.empty():
+                    # Idle after the first reply: prepare the common short replies in the voice actually used.
+                    prepared = True
+                    prepare_common(voice, english[0], 'hm_omega' if 'hm_omega' in getattr(voice, 'voices', ()) else None,
+                                   stop=lambda: not requests.empty(), pace=english[1])
                 request = requests.get() if held is empty else held
                 held = empty
                 if request is None:
                     return
+                spec = str(request.get("voice", ""))
+                if spec and not spec.startswith(("hf_", "hm_", "ff_")):
+                    english = (spec, speed(request.get("speed", 1)))
                 stale = Stale(request)
                 if stale.is_set():
                     continue

@@ -75,8 +75,26 @@ def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec='seconds')
 
 
+_SERVERS: Dict[str, Any] = {}
+
+
 def learned_servers() -> List[Dict[str, Any]]:
-    """Tool servers the learner integrated: name and their tools' descriptions (from their companion guides)."""
+    """Tool servers the learner integrated: name and their tools' descriptions (from their companion guides).
+    Asked on every parsed command, so the scan is reused until the custom-skills folder changes."""
+    now = time.monotonic()
+    if _SERVERS.get('root') == str(CUSTOM) and now - _SERVERS.get('checked', -9.0) < 1.0:
+        return list(_SERVERS['rows'])  # folder metadata is re-read at most once a second
+    try:
+        stamp: Any = CUSTOM.stat().st_mtime_ns
+    except OSError:
+        return []
+    if _SERVERS.get('root') != str(CUSTOM) or _SERVERS.get('stamp') != stamp:
+        _SERVERS.update(root=str(CUSTOM), stamp=stamp, rows=_scan_servers())
+    _SERVERS['checked'] = now
+    return list(_SERVERS['rows'])
+
+
+def _scan_servers() -> List[Dict[str, Any]]:
     rows = []
     for marker in CUSTOM.glob('*/.learned_from'):
         try:

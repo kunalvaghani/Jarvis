@@ -97,6 +97,11 @@ def stream_json(payload, timeout_seconds, cancelled=lambda: False, role='cleanup
     from .gpu_scheduler import configured, Lease, allocation, memory
     policy=configured()
     if not policy['enabled']:return _stream_json(payload,timeout_seconds,cancelled)
+    if payload.get('model') in {'qwen3.5:0.8b','qwen2.5:0.5b'} and not policy['helper_gpu']:
+        # CPU helpers never get GPU layers (allocation() returns 0), so they need no GPU lease or VRAM probe, and
+        # unloading them after each call (keep_alive 0) made every intent check / cleanup / chat reply reload the
+        # model: 4.6 s instead of 0.3 s, so the 3 s intent check always timed out. They stay warm in RAM.
+        return _stream_json({**payload,'options':{**payload.get('options',{}),'num_gpu':0}},timeout_seconds,cancelled)
     started=time.monotonic()
     lease=Lease(role,payload['model'],{**policy,'wait_seconds':max(1,min(policy['wait_seconds'],int(timeout_seconds)))},cancelled=cancelled)
     admitted=lease.acquire()

@@ -179,7 +179,7 @@ class Speech:
                 self.streamed = ""
                 self.cancel()
                 return
-            boundary = max(content.rfind(mark, len(spoken)) for mark in (". ", "! ", "? ", "\n\n"))
+            boundary = max(content.rfind(mark, len(spoken)) for mark in (". ", "! ", "? ", "। ", "\n\n"))  # । ends Hindi sentences
             if f5:
                 from .speech_normalizer import opening_clause
                 # A sentence can finish at the stream edge before another token arrives.
@@ -511,6 +511,11 @@ class Speech:
                 french_voice = self.options.get('french_voice', 'ff_siwis')
                 french_kokoro = (language == 'fr' and 'kokoro' not in self.failed_backends
                     and french_voice in kokoro_voices(base / 'models/voices/kokoro').get('fr', ()))
+                # Hindi (and Hinglish written in Devanagari) is spoken by Kokoro's Hindi voice in the same warm worker.
+                # The Piper fallback started a new process per reply and shut the warm English voice down.
+                hindi_voice = self.options.get('hindi_voice', 'hm_omega')
+                hindi_kokoro = (language == 'hi' and 'kokoro' not in self.failed_backends
+                    and hindi_voice in kokoro_voices(base / 'models/voices/kokoro').get('hi', ()))
                 if language in {'fr', 'gu'} and language not in installed and not french_kokoro:
                     if language not in self.missing_languages:
                         self.missing_languages.add(language)
@@ -526,7 +531,7 @@ class Speech:
                 name = installed[language].stem if language in installed else (
                     {'hi': 'hi_IN-rohan-medium', 'en': 'en_GB-alan-medium'}.get(language, language + '_missing'))
                 base = Path(__file__).resolve().parent.parent
-                kokoro = french_kokoro or (language == "en" and (self.options.get("engine") == "kokoro" or 'f5' in self.failed_backends) and 'kokoro' not in self.failed_backends)
+                kokoro = french_kokoro or hindi_kokoro or (language == "en" and (self.options.get("engine") == "kokoro" or 'f5' in self.failed_backends) and 'kokoro' not in self.failed_backends)
                 voice_model = base / "models" / "voices" / ("kokoro/kokoro-v1.0.onnx" if kokoro else name + ".onnx")
                 voices = base / "models/voices/kokoro/voices-v1.0.bin"
                 if not voice_model.is_file() or (kokoro and not voices.is_file()):
@@ -540,9 +545,11 @@ class Speech:
                     # Sent without waiting: the worker plays it right after what is already queued.
                     try:
                         self._kokoro_send(generation, {
-                            "text": content, "voice": french_voice if french_kokoro else self.options.get("voice", "am_michael:60,am_fenrir:40"),
-                            "speed": self.options.get("speed", 1.0), "natural": False if french_kokoro else self.options.get("natural", True),
-                            "breaths": False if french_kokoro else self.options.get("breaths", True),
+                            "text": content, "voice": french_voice if french_kokoro else hindi_voice if hindi_kokoro
+                                else self.options.get("voice", "am_michael:60,am_fenrir:40"),
+                            # The natural phrasing rules (numbers, breaths) are English; other languages are read as written.
+                            "speed": self.options.get("speed", 1.0), "natural": False if french_kokoro or hindi_kokoro else self.options.get("natural", True),
+                            "breaths": False if french_kokoro or hindi_kokoro else self.options.get("breaths", True),
                             "breath_level": self.options.get("breath_level", .012)}, content, engine='kokoro')
                         continue
                     except VoiceStartupError:

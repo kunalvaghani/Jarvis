@@ -375,10 +375,36 @@ class App:
                 self.actions.suggest_until = time.monotonic() + self.config.get("suggestion_seconds", 90)
         elif kind in {"partial", "final"} and self.actions.suggest_enabled:
             self.actions.suggest_until = time.monotonic() + self.config.get("suggestion_seconds", 90)
+        if kind in App.SPOKEN_NOW:
+            App._speak_now(self, kind, message)
         if _guard is not None:
             self.events.put(('response_guard', (kind, message, _guard)))
         else:
             self.events.put((kind, message))
+
+    # Replies are spoken from the thread that produced them (Speech is thread-safe), not from the UI event drain:
+    # that added up to 16 ms (more while the island animates) before the first word. The drain still updates the UI.
+    SPOKEN_NOW = frozenset({'answer_stream', 'answer_error', 'answer', 'spoken_reply'})
+
+    def _quiet(self):
+        ingress = getattr(getattr(self, 'actions', None), 'ingress', None)
+        return bool(ingress and ingress.quiet())
+
+    def _speak_now(self, kind, message):
+        speech = getattr(self, 'speech', None)
+        if speech is None:
+            return
+        try:
+            if kind == 'answer_stream':
+                if isinstance(message, dict) and 'text' in message:  # Phase-only updates change nothing spoken.
+                    speech.stream(message['text'] or '', message.get('active', True), phase=message.get('phase'))
+            elif kind == 'answer_error':
+                if speech.streamed is not None:
+                    speech.cancel()
+            elif not App._quiet(self):
+                speech.say(message)
+        except Exception as exc:  # A voice failure never breaks the task that reported its answer.
+            self.events.put(('warning', 'Voice output failed: ' + type(exc).__name__))
 
     def voice_decision(self, approved):
         """A spoken yes/no answers the card on screen when it was heard; if that card changes first, nothing is decided."""
@@ -535,13 +561,9 @@ class App:
                 self.ui_activity = 'thinking' if message.get('active', True) else ''
                 # Finished sentences are spoken while the rest is still being written; the
                 # final answer then adds only what was not spoken yet. Never logged per token.
-                if 'text' in message:  # Phase-only updates carry no text and change nothing spoken.
-                    self.speech.stream(message['text'] or '', message.get('active', True), phase=message.get('phase'))
-                continue
+                continue  # Spoken already by report() (_speak_now).
             elif kind == 'answer_error':
                 self.ui_activity = ''
-                if self.speech.streamed is not None:
-                    self.speech.cancel()
                 self.log_line('warning', message)
                 continue
             elif kind == "partial":
@@ -581,14 +603,12 @@ class App:
                 self.ui_activity = "thinking" if kind == "thinking" else ""
                 self.log_line(kind, message)
                 if kind == "answer":
-                    self.live.set(message[:450])
-                    self.speech.say(message) if not (getattr(self.actions, 'ingress', None) and self.actions.ingress.quiet()) else None
+                    self.live.set(message[:450])  # Spoken already by report() (_speak_now).
             elif kind == "stop_speech":
                 self.speech.cancel()  # "Stop talking; I have a question": silence now, keep listening.
             elif kind == "spoken_reply":
                 self.ui_activity = ""
-                self.live.set(message[:450])
-                self.speech.say(message) if not (getattr(self.actions, 'ingress', None) and self.actions.ingress.quiet()) else None
+                self.live.set(message[:450])  # Spoken already by report() (_speak_now).
             elif kind == "screen_offer":
                 self.question.set(message[:700])  # Screen pre-awareness: answer with yes, no, or the detail.
                 self.live.set(message[:450])

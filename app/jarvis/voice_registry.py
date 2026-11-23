@@ -11,7 +11,7 @@ def kokoro_voices(directory):
         with np.load(directory / 'voices-v1.0.bin', allow_pickle=False) as bank:
             names = tuple(bank.keys())
         return {language: tuple(name for name in names if name.startswith(prefixes))
-                for language, prefixes in {'en': ('af_', 'am_', 'bf_', 'bm_'), 'fr': ('ff_',)}.items()
+                for language, prefixes in {'en': ('af_', 'am_', 'bf_', 'bm_'), 'fr': ('ff_',), 'hi': ('hf_', 'hm_')}.items()
                 if any(name.startswith(prefixes) for name in names)}
     except (OSError, ValueError, TypeError):
         return {}

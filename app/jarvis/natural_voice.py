@@ -176,15 +176,17 @@ def split_phrases(text, longest=230):
         sentences = [s.strip() for s in SENTENCE.split(" ".join(paragraph.split())) if s.strip()]
         merged = []
         for sentence in sentences:
-            if merged and len(merged[-1].split()) < 4 and not merged[-1].endswith("?"):
+            # Tiny sentences join the next, except the very first: "Sure." is spoken (and synthesized, ~0.4 s)
+            # on its own so audio starts while the rest is still being synthesized.
+            if merged and len(merged[-1].split()) < 4 and not merged[-1].endswith("?") and (phrases or len(merged) > 1):
                 merged[-1] += " " + sentence
             else:
                 merged.append(sentence)
         for index, sentence in enumerate(merged):
             pieces = [sentence]
-            if not phrases and len(sentence) > 90:
+            if not phrases and len(sentence) > 48:
                 # Start speaking sooner: a long opening sentence breaks at its first natural clause.
-                cut = next((m.start() for m in re.finditer(r"[,;:] ", sentence) if 25 <= m.start() <= 110), -1)
+                cut = next((m.start() for m in re.finditer(r"[,;:] ", sentence) if 12 <= m.start() <= 110), -1)
                 if cut > 0:
                     pieces = [sentence[:cut + 1].strip(), sentence[cut + 1:].strip()]
             while len(pieces[-1]) > longest:
@@ -208,7 +210,8 @@ def plan(text, base_speed=1.0, rng=None, breaths=True):
     phrases = split_phrases(tts_text(text))
     for index, (phrase, mid_sentence, paragraph_end) in enumerate(phrases):
         words = len(phrase.split())
-        speed, gain = base_speed * rng.uniform(.97, 1.03), 1.0
+        # Short phrases ("On it.", "Sure.") keep the exact speed so their audio can be reused from the cache.
+        speed, gain = base_speed * (rng.uniform(.97, 1.03) if words > 3 else 1.0), 1.0
         if PLAYFUL.search(phrase):
             speed *= 1.04
         elif EXCITED.search(phrase) or phrase.endswith("!"):
@@ -232,8 +235,7 @@ def plan(text, base_speed=1.0, rng=None, breaths=True):
         # People breathe before a longer stretch of speech, not before every phrase.
         breath = bool(breaths and index > 0 and not phrases[index - 1][1] and words >= 9
                       and words_since_breath >= 12 and rng.random() < .65)
-        if breaths and index == 0 and len(phrases) > 2 and rng.random() < .35:
-            breath = True
+        # No breath before the first phrase: it would delay the first word by ~0.35 s.
         words_since_breath = 0 if breath else words_since_breath + words
         rows.append(Phrase(phrase, round(min(1.2, max(.85, speed)), 3), round(pause, 3), breath, gain))
     return rows
@@ -308,4 +310,6 @@ def language_for(spec):
     first = str(spec).split(",")[0].strip()
     if first.startswith('ff_'):
         return 'fr-fr'
+    if first.startswith(('hf_', 'hm_')):
+        return 'hi'  # Kokoro's Hindi voices need Hindi phonemes (en-us made 3.9 s of speech into 5.1 s of noise)
     return "en-gb" if first.startswith("b") else "en-us"
