@@ -25,14 +25,38 @@ MAX_UPLOAD = 20 * 1024 * 1024
 
 def available(base: Any = None) -> bool:
     """Connected Google API whose sign-in includes Drive (drive.file; reads also need drive.readonly)."""
+    # Local only: the planner's tool list asks this on every build, so it must never refresh the sign-in over
+    # the network (that took up to 20 s per build with an expired token). The first real Drive call refreshes it.
     from . import gmail_api
     if gmail_api.status(base) != 'connected':
         return False
+    return SCOPE in stored_scopes(Path(base) if base else Path(__file__).resolve().parent.parent)
+
+
+_SCOPE_CACHE: Dict[str, Any] = {}
+
+
+def stored_scopes(base: Path) -> frozenset:
+    """Scopes of the saved sign-in, read locally (no network, no refresh); cached until the token file changes.
+    Kept here, not in gmail_api.py: that file's hash is part of the Gmail connection check."""
+    from . import gmail_api
+    path = gmail_api.directory(base) / 'token.dpapi'
     try:
-        creds = gmail_api.credentials(Path(base) if base else Path(__file__).resolve().parent.parent)
+        stamp = path.stat().st_mtime_ns
+    except OSError:
+        return frozenset()
+    cached = _SCOPE_CACHE.get(str(path))
+    if cached and cached[0] == stamp:
+        return cached[1]
+    try:
+        import win32crypt
+        raw = win32crypt.CryptUnprotectData(path.read_bytes(), None, None, None, 0)[1]
+        scopes = json.loads(raw).get('scopes') or []
+        result = frozenset(scopes.split() if isinstance(scopes, str) else scopes)
     except Exception:
-        return False
-    return bool(getattr(creds, 'scopes', None) and SCOPE in creds.scopes)
+        result = frozenset()
+    _SCOPE_CACHE[str(path)] = (stamp, result)
+    return result
 
 
 def quoted(name: str) -> str:
